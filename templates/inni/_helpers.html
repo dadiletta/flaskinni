@@ -1,0 +1,21 @@
+{% macro header(title, id) %}
+
+    <header class="masthead bg-primary text-white text-center" id="{{ id }}">
+      <div class="container">
+        <h1 class="text-uppercase mb-0">{{ title }}</h1>
+      </div>
+    </header>
+
+{% endmacro %}
+
+
+
+
+{% macro header_with_image(title, id, file) %}
+
+    <header class="masthead bg-primary text-white text-center" id="{{ id }}">
+        <img class="img-fluid mb-5 d-block mx-auto" src="{{ file }}" alt="article_image">
+        <h1 class="text-uppercase mb-0">{{ title }}</h1>
+    </header>
+
+{% endmacro %}

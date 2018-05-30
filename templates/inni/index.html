@@ -1,0 +1,197 @@
+{% extends "base.html" %} 
+
+{% block title %}Welcome{% endblock %} 
+
+{% block content %}
+   <!-- Header -->
+    <header class="masthead bg-primary text-white text-center">
+      <div class="container">
+        <img class="img-fluid mb-5 d-block mx-auto" src="{{ url_for('static', filename='img/profile.png') }}" alt="">
+        <h1 class="text-uppercase mb-0">Flaskinni</h1>
+        <hr class="star-light">
+        <h2 class="font-weight-light mb-0">Use this guide and code to start your project</h2>
+      </div>
+    </header>
+
+    <!-- Portfolio Grid Section -->
+    <section class="portfolio" id="guide">
+      <div class="container">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Guide</h2>
+        <hr class="star-dark mb-5">
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-1">
+              <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+                <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+                  <i class="fa fa-search-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="{{ url_for('static', filename='img/portfolio/cabin.png') }}" alt="">
+            </a>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-2">
+              <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+                <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+                  <i class="fa fa-search-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="{{ url_for('static', filename='img/portfolio/cake.png') }}" alt="">
+            </a>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-3">
+              <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+                <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+                  <i class="fa fa-search-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="{{ url_for('static', filename='img/portfolio/circus.png') }}" alt="">
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="bg-primary text-white mb-0" id="code">
+      <div class="container">
+        <h2 class="text-center text-uppercase text-white">Code</h2>
+        <hr class="star-light mb-5">
+        <div class="row">
+          <div class="col-lg-4 ml-auto">
+            <p class="lead">Flaskinni is a project that stands ontop of amazing projects like Flask, Bootstrap, SQLAlchemy, and courses like Jorge Escobar's on Udemy. Using the materials that taught us, we combined them together to offer this guide.</p>
+          </div>
+          <div class="col-lg-4 mr-auto">
+            <p class="lead">Use the Google Doc linked above to get yourself setup. Follow along with tutorial videos in the doc as well as in Mr. Escobar's Flask course on Udemy. We'll walk you through some concepts before jumping right in on your own app.</p>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <a class="btn btn-xl btn-outline-light" target="_blank" href="https://github.com/dadiletta/Flaskinni">
+            <i class="fa fa-github mr-2"></i>
+            Star us on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <div class="container">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Contact Me</h2>
+        <hr class="star-dark mb-5">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
+            <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
+            <form name="sentMessage" id="contactForm" novalidate="novalidate">
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                  <label>Name</label>
+                  <input class="form-control" id="name" type="text" placeholder="Name" required="required" data-validation-required-message="Please enter your name.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                  <label>Email Address</label>
+                  <input class="form-control" id="email" type="email" placeholder="Email Address" required="required" data-validation-required-message="Please enter your email address.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                  <label>Phone Number</label>
+                  <input class="form-control" id="phone" type="tel" placeholder="Phone Number" required="required" data-validation-required-message="Please enter your phone number.">
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                  <label>Message</label>
+                  <textarea class="form-control" id="message" rows="5" placeholder="Message" required="required" data-validation-required-message="Please enter a message."></textarea>
+                  <p class="help-block text-danger"></p>
+                </div>
+              </div>
+              <br>
+              <div id="success"></div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-xl" id="sendMessageButton">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+        <!-- Portfolio Modals -->
+
+    <!-- Portfolio Modal 1 -->
+    <div class="portfolio-modal mfp-hide" id="portfolio-modal-1">
+      <div class="portfolio-modal-dialog bg-white">
+        <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
+          <i class="fa fa-3x fa-times"></i>
+        </a>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-lg-10 mx-auto">
+              <h2 class="text-secondary text-uppercase mb-0">Web Dev Guide</h2>
+              <hr class="star-dark mb-5">
+              <iframe style="width:100%; min-height:400px;" src="https://docs.google.com/document/d/e/2PACX-1vShDfhUDJaftXPF5r35OfCOz8lqnc8d3-ZEP17dwrjfhPMJMwvL6mUyZiW04K567PIfE1n0e5y2lC8Y/pub?embedded=true"></iframe>
+              <p class="mb-5">Checkout our <a href="https://docs.google.com/document/d/1goCM1waUqJzR1s_0fq49jf3EEELUjyftqo3SXLQ0XPQ/edit#" target="_blank">guide on Google Docs.</a> Follow this document and become a web developer.</p>
+              <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+                <i class="fa fa-close"></i>
+                Close Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Modal 2 -->
+    <div class="portfolio-modal mfp-hide" id="portfolio-modal-2">
+      <div class="portfolio-modal-dialog bg-white">
+        <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
+          <i class="fa fa-3x fa-times"></i>
+        </a>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-lg-10 mx-auto">
+              <h2 class="text-secondary text-uppercase mb-0">Web Dev Guide</h2>
+              <hr class="star-dark mb-5">
+              <iframe style="width:100%; min-height:400px;" src="https://docs.google.com/document/d/e/2PACX-1vShDfhUDJaftXPF5r35OfCOz8lqnc8d3-ZEP17dwrjfhPMJMwvL6mUyZiW04K567PIfE1n0e5y2lC8Y/pub?embedded=true"></iframe>
+              <p class="mb-5">Checkout our <a href="https://docs.google.com/document/d/1goCM1waUqJzR1s_0fq49jf3EEELUjyftqo3SXLQ0XPQ/edit#" target="_blank">guide on Google Docs.</a> Follow this document and become a web developer.</p>
+              <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+                <i class="fa fa-close"></i>
+                Close Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Modal 3 -->
+    <div class="portfolio-modal mfp-hide" id="portfolio-modal-3">
+      <div class="portfolio-modal-dialog bg-white">
+        <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
+          <i class="fa fa-3x fa-times"></i>
+        </a>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-lg-10 mx-auto">
+              <h2 class="text-secondary text-uppercase mb-0">Web Dev Guide</h2>
+              <hr class="star-dark mb-5">
+              <iframe style="width:100%; min-height:400px;" src="https://docs.google.com/document/d/e/2PACX-1vShDfhUDJaftXPF5r35OfCOz8lqnc8d3-ZEP17dwrjfhPMJMwvL6mUyZiW04K567PIfE1n0e5y2lC8Y/pub?embedded=true"></iframe>
+              <p class="mb-5">Checkout our <a href="https://docs.google.com/document/d/1goCM1waUqJzR1s_0fq49jf3EEELUjyftqo3SXLQ0XPQ/edit#" target="_blank">guide on Google Docs.</a> Follow this document and become a web developer.</p>
+              <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+                <i class="fa fa-close"></i>
+                Close Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %} 

@@ -1,0 +1,17 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<span style="text-align:center;">
+    <h1>Flaskinni Uses Flask-Admin</h1>
+    <h5>Nice to meet you, boss!</h5>
+</span>
+
+<p>This paragraph is in written in the /templates/admin/index.html file. Its very
+presence overwrites the default template which is burried in the venv folder. This
+little page extends (was built on top of) the admin master, which extends the admin base which extends
+the theme base. <i>Whew!</i></p>
+
+<p>This admin pannel could be more seemlessly implemented into the Bootstrap 
+theme. But it's such a well-structured module, I figured it was neater to have
+it running in its own bubble within the theme's template.</p>
+{% endblock %}

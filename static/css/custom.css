@@ -1,0 +1,63 @@
+/**
+Welcome to my project's custom CSS file. 
+https://coolors.co/b9d8c2-9ac2c9-8aa1b1-4a5043-ffcb47
+
+PRIMARY: #b9d8c2
+--- dark: 31583D
+--- bright: 7CDE98
+
+SECONDARY: 9ac2c9
+
+ALT SECONDARY: 8aa1b1
+
+BACKGROUND: 4a5043
+
+ACCENT: ffcb47
+
+*/
+
+/*********************/
+/****** General ******/
+/*********************/
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, #mainNav {
+    font-family: 'Acme', sans-serif;
+}
+
+
+.flash-container .alert {
+    z-index: 9999 !important;
+    position: absolute;
+    float: left;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 15%;
+}
+
+/*********************/
+/****** Blog *********/
+/*********************/
+
+#blog .card:hover {
+    box-shadow: 2px 2px 10px black;
+}
+#blog .card {
+    margin: 25px;
+    transition: all ease-in-out 0.3s;
+}
+
+header#postheader {
+    padding-top: 6rem;
+}
+
+/*********************/
+/***** Nav fixes *****/
+/*********************/
+
+a#navbarDropdown {
+    padding-top: 1rem!important;
+}

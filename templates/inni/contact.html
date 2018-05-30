@@ -1,0 +1,24 @@
+{% extends "base.html" %} 
+
+{% block title %}Contact{% endblock %} 
+
+{% block content %}
+{% from "inni/_helpers.html" import header %}
+{{ header("Contact", "contactheader") }}
+   {% from "_formhelpers.html" import render_field, render_field_clean %}
+<section>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-6">   
+               <form method="POST" action="{{ url_for('contact')}}">
+                  {{ form.hidden_tag() }}
+                  {{ render_field(form.name, class='form-control') }}
+                  {{ render_field(form.email, class='form-control') }}
+                  {{ render_field(form.message, class='form-control', rows=10) }}
+                  {{ render_field_clean(form.submit, class='btn btn-default') }}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>                
+{% endblock %}
