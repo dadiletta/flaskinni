@@ -1,0 +1,31 @@
+
+version: '3'
+services:
+  db:
+    image: "postgres:10"
+    restart: always
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+    env_file:
+      - .env
+    networks:
+      - db_nw
+    container_name: flaskinni_db_1
+  
+  flaskapp:
+    build: .
+    volumes:
+      - /Users/adilettad/Projects/flaskinni:/flaskinni
+    networks:
+      - db_nw
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+    container_name: flaskinni_app_1
+
+networks:
+  db_nw:
+    driver: bridge
+volumes:
+  dbdata:

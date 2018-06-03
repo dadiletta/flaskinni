@@ -34,13 +34,13 @@ python-dateutil==2.6.1
 python-editor==1.0.3
 python-slugify==1.2.4
 pytz==2017.3
-regex==2017.12.12
 ruamel.yaml==0.15.35
 six==1.11.0
 speaklater==1.3
-SQLAlchemy==1.2.0
+SQLAlchemy==1.2.8
 tzlocal==1.5.1
 Unidecode==0.4.21
+uWSGI==2.0.17
 visitor==0.1.3
 Werkzeug==0.14.1
 WTForms==2.1
