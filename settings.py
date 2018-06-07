@@ -11,7 +11,7 @@ POSTGRES = {
     'user': private.DB_USERNAME,
     'pw': private.DB_PASSWORD,
     'db': private.BLOG_DATABASE_NAME,
-    'host': "db",
+    'host': 'db',
     'port': '5432',
 }
 SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\

@@ -6,8 +6,10 @@ services:
     restart: always
     volumes:
       - "dbdata:/var/lib/postgresql/data"
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_USER=ubuntu
+      - POSTGRES_PASSWORD=ubuntu
+      - POSTGRES_DB=db
     networks:
       - db_nw
     container_name: flaskinni_db_1
