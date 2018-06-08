@@ -2,28 +2,17 @@ import os
 import private
 
 SECRET_KEY = private.SECRET_KEY
-DEBUG = private.DEBUG
 
-BLOG_DATABASE_NAME = private.BLOG_DATABASE_NAME
-DB_HOST = os.getenv('IP', '0.0.0.0')
 DEBUG=private.DEBUG
 POSTGRES = {
     'user': private.DB_USERNAME,
     'pw': private.DB_PASSWORD,
     'db': private.BLOG_DATABASE_NAME,
-    'host': 'db',
+    'host': os.environ.get("DB_HOST", default=os.getenv('IP', '0.0.0.0')),
     'port': '5432',
 }
 SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-
-'''
-# this was used before we switch from MySQL to PostgreSQL
-DB_USERNAME = private.DB_USERNAME
-DB_PASSWORD = private.DB_PASSWORD
-DB_URI = "mysql+pymysql://%s:%s@%s/%s" % (DB_USERNAME, DB_PASSWORD, DB_HOST, BLOG_DATABASE_NAME)
-SQLALCHEMY_DATABASE_URI = DB_URI
-'''
 
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 UPLOADED_IMAGES_DEST = private.UPLOADED_IMAGES_DEST

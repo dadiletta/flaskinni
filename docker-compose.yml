@@ -6,10 +6,8 @@ services:
     restart: always
     volumes:
       - "dbdata:/var/lib/postgresql/data"
-    environment:
-      - POSTGRES_USER=ubuntu
-      - POSTGRES_PASSWORD=ubuntu
-      - POSTGRES_DB=db
+    env_file:
+      - docker.env
     networks:
       - db_nw
     container_name: flaskinni_db_1
@@ -17,7 +15,9 @@ services:
   flaskapp:
     build: .
     volumes:
-      - /Users/adilettad/Projects/flaskinni:/flaskinni
+      - /Users/adilettad/Projects/flaskinni:/app/flaskinni
+    env_file:
+      - docker.env
     networks:
       - db_nw
     depends_on:

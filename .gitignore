@@ -2,6 +2,7 @@ __pycache__/
 .idea/
 private.py
 .env
+*.env
 
 migrations/
 
