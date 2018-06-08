@@ -7,23 +7,23 @@ DEBUG=private.DEBUG
 POSTGRES = {
     'user': private.DB_USERNAME,
     'pw': private.DB_PASSWORD,
-    'db': private.BLOG_DATABASE_NAME,
+    'db': private.DATABASE_NAME,
     'host': os.environ.get("DB_HOST", default=os.getenv('IP', '0.0.0.0')),
-    'port': '5432',
+    'port': os.environ.get("DB_PORT", default='5432')
 }
 SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-SQLALCHEMY_TRACK_MODIFICATIONS = True
+SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", True)
 UPLOADED_IMAGES_DEST = private.UPLOADED_IMAGES_DEST
 UPLOADED_IMAGES_URL = private.UPLOADED_IMAGES_URL
 
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 SESSION_PROTECTION = 'strong'
 # activate flask elements
-SECURITY_REGISTERABLE = True
-SECURITY_CONFIRMABLE = True
-SECURITY_RECOVERABLE = True
+SECURITY_REGISTERABLE = os.environ.get("SECURITY_REGISTERABLE", True)
+SECURITY_CONFIRMABLE = os.environ.get("SECURITY_CONFIRMABLE", True)
+SECURITY_RECOVERABLE = os.environ.get("SECURITY_RECOVERABLE", True)
 SECURITY_PASSWORD_HASH = private.SECURITY_PASSWORD_HASH
 SECURITY_PASSWORD_SALT = private.SECURITY_PASSWORD_SALT
 SECURITY_POST_LOGIN_VIEW = '/my_account'   # controls what page you see after login
