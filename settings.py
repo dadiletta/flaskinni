@@ -8,8 +8,8 @@ POSTGRES = {
     'user': private.DB_USERNAME,
     'pw': private.DB_PASSWORD,
     'db': private.DATABASE_NAME,
-    'host': os.environ.get("DB_HOST", default=os.getenv('IP', '0.0.0.0')),
-    'port': os.environ.get("DB_PORT", default='5432')
+    'host': os.environ.get("DB_HOST", os.getenv('IP', '0.0.0.0')),
+    'port': os.environ.get("DB_PORT", '5432')
 }
 SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
