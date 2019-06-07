@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% block linkitem %}blogpost-link{% endblock %}
 {% block title %}Blog Post{% endblock %}
 
 {% block head %}
@@ -8,37 +9,40 @@
 
 {% block content %}
 
-{% from "inni/_helpers.html" import header %}
-{% if action=="new" %}
-  {{ header("New Blog Post", "blogheader") }}
-{% else %}
-  {{ header("Edit Blog Post", "blogheader") }}
-{% endif %}
-<section>
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-md-10">
-              {% from "_formhelpers.html" import render_field %}
-              {% if action=="new" %}<form method="POST" action="{{ url_for('new_post')}}" enctype="multipart/form-data" role="form">{% else %}<form method="POST" action="{{ url_for('edit_post', post_id=post.id)}}" enctype="multipart/form-data" role="form">
-                {% endif %}
-                {{ form.hidden_tag() }}
-          
-                {% if post and post.image %}
-                <img src="{{ post.imgsrc }}" height="80px" class="img-rounded">
-                {% endif %}
-          
-                {{ render_field(form.image, class='form-control') }}
-                {{ render_field(form.title, class='form-control') }}
-                {{ render_field(form.subtitle, class='form-control') }}
-                {{ render_field(form.body, class='form-control', rows=10) }}
-          
-                {% if action=="new" %}<button type="submit" class="btn btn-default">Post</button>{% else %}
-                <button type="submit" class="btn btn-default">Update</button>{% endif %}
-          
-              </form>
-            </div>
-        </div>
-    </div>
-</section>
+
+<div class="container-fluid">
+  
+  {% from "inni/_helpers.html" import header %}
+    {% if action=="new" %}
+      {{ header("New Blog Post", "blogheader") }}
+    {% else %}
+      {{ header("Edit Blog Post", "blogheader") }}
+  {% endif %}
+  
+  <div class="container">
+      <div class="row justify-content-md-center">
+          <div class="col-md-10">
+            {% from "_formhelpers.html" import render_field %}
+            {% if action=="new" %}<form method="POST" action="{{ url_for('new_post')}}" enctype="multipart/form-data" role="form">{% else %}<form method="POST" action="{{ url_for('edit_post', post_id=post.id)}}" enctype="multipart/form-data" role="form">
+              {% endif %}
+              {{ form.hidden_tag() }}
+
+              {% if post and post.image %}
+              <img src="{{ post.imgsrc }}" height="80px" class="img-rounded">
+              {% endif %}
+
+              {{ render_field(form.image, class='form-control') }}
+              {{ render_field(form.title, class='form-control') }}
+              {{ render_field(form.subtitle, class='form-control') }}
+              {{ render_field(form.body, class='form-control', rows=10) }}
+
+              {% if action=="new" %}<button type="submit" class="btn btn-primary">Post</button>{% else %}
+              <button type="submit" class="btn btn-primary">Update</button>{% endif %}
+
+            </form>
+          </div>
+      </div>
+  </div>
+</div>
 
 {% endblock %}

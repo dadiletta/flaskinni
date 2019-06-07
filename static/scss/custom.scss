@@ -1,0 +1,43 @@
+@import "sb-admin-2.scss";
+
+/**********************************/
+/***********  GLOBAL  *************/
+/**********************************/
+
+
+/* ( colors => _variables.scss )  */
+
+#hero {
+	margin-top: -70px;
+	margin-bottom:50px;
+	justify-content: center; 
+}
+
+#hero img {
+	width: 50%;
+}
+
+/**********************************/
+/************  LOGO  **************/
+/**********************************/
+
+#logo-img {
+	max-width:100%;
+}
+
+.navbar-nav.sidebar .sidebar-brand #logo-small {
+	display: none;
+}
+
+.navbar-nav.sidebar.toggled .sidebar-brand #logo-small {
+	display: flex;
+	width: 38%;
+}
+
+.userpage-logo {
+    min-height: 50px;
+    margin-top: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

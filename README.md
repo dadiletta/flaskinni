@@ -9,12 +9,17 @@
     |--------------------------------------------------------------------------|
     |--------------------------------------------------------------------------|
 # Flaskinni
+### [Documentation](https://gilmour.gitbook.io/compsci/web-development)
 This is meant to be an open-source template for Flask applications. Flask is an amazing framework because it 's so simple and minimal. It's a great way learn web development as you have to build all the scaffolding that Rails and other frameworks build for you. However, assembling the many helpful Flask modules can be a real chore. Flaskinni helps by bundling many of these resources. It's intended to serve as a starting point for students who have been studying Flask and are now ready to start a larger project.
 
+
 All documentation maintained here:
-https://gilmour.gitbook.io/compsci/web-development
+
 
 
 ### Credits
 Example of combining Flask-Security and Flask-Admin by Steve Saporta - April 15, 2014
-Minimal template: https://startbootstrap.com/template-overviews/clean-blog/
+[Bootstrap](https://getbootstrap.com/docs/4.0/utilities/flex/)
+[Bootstrap Template](https://startbootstrap.com/themes/sb-admin-2/)
+[Flask](http://flask.pocoo.org/)
+

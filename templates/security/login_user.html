@@ -1,29 +1,66 @@
 {% extends "base.html" %} 
 
-{% block title %}Welcome{% endblock %} 
+{% block title %}Login{% endblock %} 
 
-{% block content %}
+{% block body_classes %}bg-gradient-primary{% endblock %}
+{% block btt %} {% endblock %}
+{% block plugin_js %} {% endblock %}
 
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
-{% from "inni/_helpers.html" import header %}
-{{ header("Login", "login_header") }}
 
-<section id="login">
+{% block wrapper %}
+
   <div class="container">
-    <div class="row justify-content-md-center">
-      <div class='col-md-6'>
-        <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
-          {{ login_user_form.hidden_tag() }}
-          {{ render_field_with_errors(login_user_form.email) }}
-          {{ render_field_with_errors(login_user_form.password) }}
-          {{ render_field_with_errors(login_user_form.remember) }}
-          {{ render_field(login_user_form.next) }}
-          {{ render_field(login_user_form.submit, class='btn btn-primary') }}
-        </form>
-        {% include "security/_menu.html" %}
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+      
+      <a href="{{ url_for('index') }}" class="col-sm-6 userpage-logo" style="background-image:url({{ url_for('static', filename='img/Flaskinni.png')}});">
+      </a>
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Login</h1>
+                  </div>
+                  <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form" class="user login-form">
+                    {{ login_user_form.hidden_tag() }}
+                    {{ render_field_with_errors(login_user_form.email, class="form-control form-control-user", placeholder="Email")}}
+                    {{ render_field_with_errors(login_user_form.password, class="form-control form-control-user", placeholder="Password")}}
+                    {{ render_field(login_user_form.next) }}
+                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                      Login
+                    </button>
+                    <hr>
+                    <a href="index.html" class="btn btn-google btn-user btn-block">
+                      <i class="fab fa-google fa-fw"></i> Login with Google (coming soon)
+                    </a>
+                  </form>
+                  <hr>
+                  <div class="text-center">
+                    <a class="small" href="{{ url_for_security('forgot_password') }}">Forgot Password?</a>
+                  </div>
+                  <div class="text-center">
+                    <a class="small" href="{{ url_for_security('register') }}">Create an Account</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
+
     </div>
+
   </div>
-</section>
 
 {% endblock %}
+
+

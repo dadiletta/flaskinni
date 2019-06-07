@@ -26,7 +26,7 @@ SECURITY_CONFIRMABLE = os.environ.get("SECURITY_CONFIRMABLE", True)
 SECURITY_RECOVERABLE = os.environ.get("SECURITY_RECOVERABLE", True)
 SECURITY_PASSWORD_HASH = private.SECURITY_PASSWORD_HASH
 SECURITY_PASSWORD_SALT = private.SECURITY_PASSWORD_SALT
-SECURITY_POST_LOGIN_VIEW = '/my_account'   # controls what page you see after login
+SECURITY_POST_LOGIN_VIEW = '/'   # controls what page you see after login
 SECURITY_EMAIL_SENDER = private.ADMIN_EMAIL # fixes error https://github.com/mattupstate/flask-security/issues/685
 
 MAIL_SERVER = private.MAIL_SERVER

@@ -1,0 +1,94 @@
+{% extends "base.html" %} 
+
+{% block linkitem %}superadmin-link{% endblock %}
+{% block title %}Super Admin{% endblock %} 
+
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Super Admin</h1>
+		<a target="_blank" href="{{ url_for('admin.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm"><i class="fas fa-rocket fa-sm text-white-50"></i>  Flask-Admin</a>
+
+  </div>
+
+  <!-- USER TABLE -->
+	<!-- DataTales Example -->
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">User Tables</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+							<th>Registered</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+							<th>Registered</th>
+							<th>Actions</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						{% for user in data['users'] %}
+						<tr>
+							<td>{{ user.first_name }}</td>
+							<td>{{ user.last_name }}</td>
+							<td>{{ user.email }}</td>
+							<td>{{ user.when_registered }}</td>
+							<td>
+								<div class="dropdown no-arrow mb-4">
+									<button class="btn btn-secondary dropdown-toggle" type="button" id="{{ user.id }}-user-action" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Action
+									</button>
+									<div class="dropdown-menu" aria-labelledby="{{ user.id }}-user-action">
+										<a href="{{ url_for('user.edit_view', id=user.id, url=url_for('superadmin')) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit User</a>
+										<a href=""  class="dropdown-item delete"><i class="icon-trash"></i> Delete User</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<!-- /USER TABLE -->
+	
+</div>
+
+{% endblock %}
+
+{% block tail %}
+
+  <!-- Chart plugins -->
+  <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{{ url_for('static', filename='js/demo/chart-area-demo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/demo/chart-bar-demo.js') }}"></script>
+
+
+  <!-- Data Table plugins -->
+  <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+  <!-- Data Table custom scripts -->
+  <script src="{{ url_for('static', filename='js/demo/datatables-demo.js') }}"></script>
+
+
+{% endblock %}

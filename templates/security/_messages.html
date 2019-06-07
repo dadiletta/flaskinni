@@ -1,13 +1,37 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-  <div class="flash-container">
+  {% if messages %}
+    <h6 class="dropdown-header">
+      Flash Alerts
+    </h6>
     {% for category, message in messages %}
-      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span></button>
+    <a class="dropdown-item d-flex align-items-center" href="#">
+      <div class="mr-3">
+        {% if category == "success" %}
+        <div class="icon-circle bg-success">
+          <i class="fas fa-file-alt text-white"></i>
+        </div>
+        {% elif category == "danger" %}
+        <div class="icon-circle bg-danger">
+          <i class="fas fa-file-alt text-white"></i>
+        </div>
+        {% elif category == "warning" %}
+        <div class="icon-circle bg-warning">
+          <i class="fas fa-file-alt text-white"></i>
+        </div>      
+        {% elif category == "info" %}
+        <div class="icon-circle bg-info">
+          <i class="fas fa-file-alt text-white"></i>
+        </div>              
+        {% else %}
+        <div class="icon-circle bg-primary">
+          <i class="fas fa-file-alt text-white"></i>
+        </div>
+        {% endif %}
       </div>
+      <div>
+        <span class="font-weight-bold">{{ message }}</span>
+      </div>
+    </a>
     {% endfor %}
-  </div>
-{% endif %}
+  {% endif %}
 {% endwith %}

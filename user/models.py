@@ -6,6 +6,7 @@ from wtforms import validators, StringField, PasswordField
 from inni.models import Post
 from datetime import datetime
 import datetime
+import humanize
 
 # Create a table to support a many-to-many relationship between Users and Roles
 roles_users = db.Table(
@@ -51,6 +52,11 @@ class User(db.Model, UserMixin):
         secondary=roles_users,
         backref=db.backref('users', lazy='dynamic')
     )
+    
+    # return the date in readable English    
+    @property
+    def when_registered(self):
+        return humanize.naturaltime(self.confirmed_at)
 
 # Customized User model for SQL-Admin
 class UserAdmin(sqla.ModelView):

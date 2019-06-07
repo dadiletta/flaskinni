@@ -22,12 +22,22 @@ def index():
     posts = Post.query.order_by(Post.publish_date.desc())
     return render_template('inni/index.html', posts=posts)
 
-@app.route('/about')
-@app.route('/about/')
-@app.route('/about.html')
-def about():
-    my_variable = "Hey Steve"
-    return render_template('inni/about.html', my_variable=my_variable)
+@app.route('/components')
+@app.route('/components/')
+@app.route('/components.html')
+def components():
+    return render_template('inni/components.html')
+  
+@app.route('/superadmin')
+@roles_required('admin')
+def superadmin():
+    data = {}
+    data['users'] = User.query.all()
+    return render_template('inni/superadmin.html', data=data)
+  
+@app.route('/blankpage')
+def blank_page():
+    return render_template('inni/blank_page.html')
 
 @app.route('/contact', methods=('GET', 'POST'))
 def contact():

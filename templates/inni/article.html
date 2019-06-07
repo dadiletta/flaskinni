@@ -3,29 +3,32 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-{% from "inni/_helpers.html" import header_with_image, header %}
-{% if post and post.image %}
-{{ header_with_image(post.title, "postheader", post.imgsrc) }}
-{% else %}
-{{ header(post.title, "postheader") }}
-{% endif %}
-<section>
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-md-10">
-              {% if current_user.has_role('admin') %}
-                <a href="{{ url_for('edit_post', post_id=post.id) }}">Edit</a> -
-                <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
-              {% endif %}
-              
-              {{ post.body|safe }}
-          
-              <hr />
-              <div class="text-muted">Posted by <a href="#">{{ post.user_id|get_name_by_key }}</a> on {{ post.pubdate }}.
-              </div>
+
+<div class="container-fluid">
+  {% from "inni/_helpers.html" import header_with_image, header %}
+  {% if post and post.image %}
+  {{ header_with_image(post.title, "postheader", post.imgsrc) }}
+  {% else %}
+  {{ header(post.title, "postheader") }}
+  {% endif %}
+  <div class="container">
+      <div class="row justify-content-md-center">
+          <div class="col-md-10">
+            {% if current_user.has_role('admin') %}
+              <a href="{{ url_for('edit_post', post_id=post.id) }}">Edit</a> -
+              <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+            {% endif %}
+            <hr />
+            <div class="text-muted">Posted by <a href="#">{{ post.user_id|get_name_by_key }}</a> on {{ post.pubdate }}.
             </div>
-        </div>
+          </div>
+      </div>
+    <div class="row justify-content-md-center">
+      <div class="col-md-10">
+      <p>{{ post.body|safe }}</p>
+      </div>
     </div>
-</section>
+  </div>
+</div>
 
 {% endblock %}
