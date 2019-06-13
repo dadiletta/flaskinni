@@ -1,16 +1,13 @@
-from flaskinni import app
-from extensions import db, uploaded_images, mail
+from . import main as app
+from .. import db, uploaded_images, mail
+from .forms import PostForm, ContactForm
+from .models import Post, Tag, User
 from flask import render_template, redirect, flash, url_for, session, request
 from flask_security import login_required, roles_required, current_user
 from flask_uploads import UploadNotAllowed
 from flask_mail import Message
 from slugify import slugify
 # our objects
-from inni.forms import PostForm, ContactForm
-from inni.models import Post, Tag
-from user.models import User
-# our key info
-import private
 
 # Displays the home page.
 @app.route('/')
@@ -20,24 +17,24 @@ import private
 # Flask-Security will display a login form if the user isn't already authenticated.
 def index():
     posts = Post.query.order_by(Post.publish_date.desc())
-    return render_template('inni/index.html', posts=posts)
+    return render_template('main/index.html', posts=posts)
 
 @app.route('/components')
 @app.route('/components/')
 @app.route('/components.html')
 def components():
-    return render_template('inni/components.html')
+    return render_template('main/components.html')
   
 @app.route('/superadmin')
 @roles_required('admin')
 def superadmin():
     data = {}
     data['users'] = User.query.all()
-    return render_template('inni/superadmin.html', data=data)
+    return render_template('main/superadmin.html', data=data)
   
 @app.route('/blankpage')
 def blank_page():
-    return render_template('inni/blank_page.html')
+    return render_template('main/blank_page.html')
 
 @app.route('/contact', methods=('GET', 'POST'))
 def contact():
@@ -46,7 +43,7 @@ def contact():
         # send email
         msg = Message("Message from your visitor" + form.name.data,
                           sender='noreply@flaskinni-dadiletta.c9users.io',
-                          recipients=[private.ADMIN_EMAIL])
+                          recipients=[app.config['ADMIN_EMAIL']])
         msg.body = """
         From: %s <%s>,
         %s
@@ -55,13 +52,13 @@ def contact():
             mail.send(msg)
         flash("Message sent", 'success')
         return redirect(url_for('index'))
-    return render_template('inni/contact.html', form=form)
+    return render_template('main/contact.html', form=form)
 
 @app.route('/blog')
 @app.route('/blog/')
 def blog_index():
     posts = Post.query.filter_by(live=True).order_by(Post.publish_date.desc())
-    return render_template('inni/blog.html', posts=posts)
+    return render_template('main/blog.html', posts=posts)
 
 @app.route('/blog/new', methods=('GET', 'POST'))
 @login_required
@@ -93,12 +90,12 @@ def new_post():
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('read', slug=slug))
-    return render_template('inni/post.html', form=form, action="new")
+    return render_template('main/post.html', form=form, action="new")
     
 @app.route('/article/<slug>')
 def read(slug):
     post = Post.query.filter_by(slug=slug).first_or_404()
-    return render_template('inni/article.html', post=post)
+    return render_template('main/article.html', post=post)
     
 @app.route('/blog/edit/<int:post_id>', methods=('GET', 'POST'))
 @roles_required('admin')
@@ -128,7 +125,7 @@ def edit_post(post_id):
         '''
         db.session.commit()
         return redirect(url_for('read', slug=post.slug))
-    return render_template('inni/post.html', form=form, post=post, action="edit")
+    return render_template('main/post.html', form=form, post=post, action="edit")
 
 @app.route('/blog/delete/<int:post_id>')
 @roles_required('admin')
@@ -138,13 +135,4 @@ def delete_post(post_id):
     db.session.commit()
     flash("Article deleted", 'success')
     return redirect(url_for('blog_index'))
-    
-@app.route('/my_account')
-@login_required
-def my_account():
-    return render_template('inni/my_account.html')
-
-
-
-
 

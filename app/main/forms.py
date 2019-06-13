@@ -1,14 +1,34 @@
 from flask_wtf import FlaskForm
+from wtforms.fields.html5 import EmailField
 from wtforms import validators, StringField, PasswordField, TextAreaField, SubmitField
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.fields.html5 import EmailField
 from flask_ckeditor import CKEditorField
-from inni.models import Tag
+from .models import Tag
+from flask_security.forms import RegisterForm, ConfirmRegisterForm
+from .. import db
 
 # This queues up all tags with no regard who made them
 def tags():
     return Tag.query
+
+
+class ExtendedRegisterForm(ConfirmRegisterForm):
+    first_name = StringField('First Name', [validators.Required()])
+    last_name = StringField('Last Name', [validators.Required()])
+    email = EmailField('Email address', [validators.DataRequired(), validators.Email()])
+
+    password = PasswordField('Password', [
+            validators.Required(),
+            validators.Length(min=4, max=80)
+        ])
+        
+    def validate(self):
+        success = True
+        if not super(ExtendedRegisterForm, self).validate():
+            success = False
+        return success
+    
 
 # We can make our own validators
 def CheckNameLength(form, field):

@@ -44,7 +44,7 @@
         <div class="card-body">
           {{ post.body[:240]|markdown|striptags }}
           <hr>
-          <a href="{{ url_for('read', slug=post.slug) }}" class="btn btn-primary">Read More</a>
+          <a href="{{ url_for('main.read', slug=post.slug) }}" class="btn btn-primary">Read More</a>
         </div>
       </div>
 

@@ -29,6 +29,10 @@ SECURITY_PASSWORD_SALT = private.SECURITY_PASSWORD_SALT
 SECURITY_POST_LOGIN_VIEW = '/'   # controls what page you see after login
 SECURITY_EMAIL_SENDER = private.ADMIN_EMAIL # fixes error https://github.com/mattupstate/flask-security/issues/685
 
+STARTING_ADMIN1 = private.STARTING_ADMIN1
+STARTING_ADMIN2 = private.STARTING_ADMIN2
+STARTING_ADMIN_PASS = private.STARTING_ADMIN_PASS
+
 MAIL_SERVER = private.MAIL_SERVER
 MAIL_PORT = private.MAIL_PORT
 MAIL_USE_SSL = private.MAIL_USE_SSL
@@ -37,24 +41,3 @@ MAIL_USERNAME = private.MAIL_USERNAME
 MAIL_PASSWORD = private.MAIL_PASSWORD
 MAIL_DEBUG = private.DEBUG
 MAIL_DEFAULT_SENDER = private.ADMIN_EMAIL
-
-'''
-# Google Cloud Project ID. This can be found on the 'Overview' page at
-# https://console.developers.google.com
-PROJECT_ID = private.GOOGLE_PROJECT_ID
-
-# OAuth2 configuration.
-# This can be generated from the Google Developers Console at
-# https://console.developers.google.com/project/_/apiui/credential.
-# Note that you will need to add all URLs that your application uses as
-# authorized redirect URIs. For example, typically you would add the following:
-#
-#  * http://localhost:8080/oauth2callback
-#  * https://<your-app-id>.appspot.com/oauth2callback.
-#
-# If you receive a invalid redirect URI error review you settings to ensure
-# that the current URI is allowed.
-GOOGLE_OAUTH2_CLIENT_ID = \
-    private.GOOGLE_OAUTH2_CLIENT_ID
-GOOGLE_OAUTH2_CLIENT_SECRET = private.GOOGLE_OAUTH2_CLIENT_SECRET
-'''

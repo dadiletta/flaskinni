@@ -53,7 +53,7 @@
 										Action
 									</button>
 									<div class="dropdown-menu" aria-labelledby="{{ user.id }}-user-action">
-										<a href="{{ url_for('user.edit_view', id=user.id, url=url_for('superadmin')) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit User</a>
+										<a href="{{ url_for('user.edit_view', id=user.id, url=url_for('main.superadmin')) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit User</a>
 										<a href=""  class="dropdown-item delete"><i class="icon-trash"></i> Delete User</a>
 									</div>
 								</div>
