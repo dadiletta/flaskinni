@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container-fluid">
-  {% from "inni/_helpers.html" import header_with_image, header %}
+  {% from "main/_helpers.html" import header_with_image, header %}
   {% if post and post.image %}
   {{ header_with_image(post.title, "postheader", post.imgsrc) }}
   {% else %}

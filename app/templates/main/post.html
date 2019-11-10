@@ -12,7 +12,7 @@
 
 <div class="container-fluid">
   
-  {% from "inni/_helpers.html" import header %}
+  {% from "main/_helpers.html" import header %}
     {% if action=="new" %}
       {{ header("New Blog Post", "blogheader") }}
     {% else %}
@@ -22,7 +22,7 @@
   <div class="container">
       <div class="row justify-content-md-center">
           <div class="col-md-10">
-            {% from "_formhelpers.html" import render_field %}
+            {% from "security/_macros.html" import render_field %}
             {% if action=="new" %}<form method="POST" action="{{ url_for('main.new_post')}}" enctype="multipart/form-data" role="form">{% else %}<form method="POST" action="{{ url_for('main.edit_post', post_id=post.id)}}" enctype="multipart/form-data" role="form">
               {% endif %}
               {{ form.hidden_tag() }}

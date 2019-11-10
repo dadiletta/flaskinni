@@ -1,7 +1,7 @@
 from . import main as app
 from .. import db, uploaded_images, mail
 from .forms import PostForm, ContactForm
-from .models import Post, Tag, User
+from ..models import Post, Tag, User
 from flask import render_template, redirect, flash, url_for, session, request
 from flask_security import login_required, roles_required, current_user
 from flask_uploads import UploadNotAllowed

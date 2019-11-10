@@ -4,7 +4,7 @@ from wtforms import validators, StringField, PasswordField, TextAreaField, Submi
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flask_ckeditor import CKEditorField
-from .models import Tag
+from ..models import Tag
 from flask_security.forms import RegisterForm, ConfirmRegisterForm
 from .. import db
 

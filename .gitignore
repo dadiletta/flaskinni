@@ -3,7 +3,7 @@ __pycache__/
 private.py
 .env
 *.env
-
+.vscode
 migrations/
 
 # Byte-compiled / optimized / DLL files

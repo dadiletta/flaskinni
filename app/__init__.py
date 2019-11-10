@@ -8,7 +8,8 @@ from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
 
 from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor
-from .main.models import User, Role, UserAdmin, RoleAdmin, PostAdmin, Post
+from .models import User, Role, Post, Tag
+from .models.main import UserAdmin, RoleAdmin, PostAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -27,11 +28,15 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     # migrate.init_app(app, db)
     # Add Flask-Admin views for Users and Roles
-    admin.init_app(app)
-    ckeditor.init_app(app)
-    admin.add_view(UserAdmin(User, db.session))
-    admin.add_view(RoleAdmin(Role, db.session))
-    admin.add_view(PostAdmin(Post, db.session))
+    try:
+        admin.init_app(app)
+        ckeditor.init_app(app)
+        admin.add_view(UserAdmin(User, db.session))
+        admin.add_view(RoleAdmin(Role, db.session))
+        admin.add_view(PostAdmin(Post, db.session))
+    except Exception as e:
+        pass
+        # TODO: log error
     
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
