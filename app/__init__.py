@@ -1,6 +1,6 @@
 import datetime
 import os
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import current_user, login_required, RoleMixin, Security, \
     SQLAlchemyUserDatastore, UserMixin, utils
@@ -12,7 +12,15 @@ from .models import User, Role, Post, Tag
 from .models.main import UserAdmin, RoleAdmin, PostAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
 
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+def crash_page(e):
+    return render_template('main/500.html'), 500
+
+def page_not_found(e):
+    return render_template('main/404.html'), 404
+
+def page_forbidden(e):
+    return render_template('main/403.html'), 403
+
 
 # sort of like an application factory
 def create_app(config_name):
@@ -23,6 +31,7 @@ def create_app(config_name):
     configure_uploads(app, uploaded_images)
     
     db.init_app(app)
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security.init_app(app, user_datastore, confirm_register_form=ExtendedRegisterForm)
     mail.init_app(app)
     md = Markdown(app, extensions=['fenced_code', 'tables'])
@@ -37,9 +46,16 @@ def create_app(config_name):
     except Exception as e:
         pass
         # TODO: log error
+
+    # sentry_sdk.init(dsn="", integrations=[FlaskIntegration()])
     
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    # error handlers
+    app.register_error_handler(500, crash_page)
+    app.register_error_handler(404, page_not_found)
+    app.register_error_handler(403, page_forbidden)
     
     return app
 

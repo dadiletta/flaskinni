@@ -3,26 +3,6 @@
 {% block linkitem %}components-link{% endblock %}
 {% block title %}Components{% endblock %} 
 
-{% block plugins %}
-
-  <!-- Chart plugins -->
-  <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
-
-  <!-- Page level custom scripts -->
-  <script src="{{ url_for('static', filename='js/demo/chart-area-demo.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/demo/chart-bar-demo.js') }}"></script>
-
-
-  <!-- Data Table plugins -->
-  <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-
-  <!-- Data Table custom scripts -->
-  <script src="{{ url_for('static', filename='js/demo/datatables-demo.js') }}"></script>
-
-
-{% endblock %}
 
 {% block content %}
 <!-- Begin Page Content -->
@@ -654,10 +634,8 @@
         </div>
         <div class="card-body">
           <div class="text-center">
-            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/undraw_posting_photo.svg" alt="">
-          </div>
-          <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
-          <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
+            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="" alt="">
+          </div>          
         </div>
       </div>
 
@@ -1321,5 +1299,26 @@
 	
 	
 </div>
+
+{% endblock %}
+
+{% block tail %}
+
+  <!-- Chart plugins -->
+  <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="{{ url_for('static', filename='js/demo/chart-area-demo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/demo/chart-bar-demo.js') }}"></script>
+
+
+  <!-- Data Table plugins -->
+  <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+  <!-- Data Table custom scripts -->
+  <script src="{{ url_for('static', filename='js/demo/datatables-demo.js') }}"></script>
+
 
 {% endblock %}
