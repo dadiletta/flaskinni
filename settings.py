@@ -29,8 +29,7 @@ SECURITY_PASSWORD_SALT = private.SECURITY_PASSWORD_SALT
 SECURITY_POST_LOGIN_VIEW = '/'   # controls what page you see after login
 SECURITY_EMAIL_SENDER = private.ADMIN_EMAIL # fixes error https://github.com/mattupstate/flask-security/issues/685
 
-STARTING_ADMIN1 = private.STARTING_ADMIN1
-STARTING_ADMIN2 = private.STARTING_ADMIN2
+STARTING_ADMINS = private.STARTING_ADMINS
 STARTING_ADMIN_PASS = private.STARTING_ADMIN_PASS
 
 MAIL_SERVER = private.MAIL_SERVER

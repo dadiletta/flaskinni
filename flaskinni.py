@@ -1,6 +1,6 @@
-import os
-from dotenv import load_dotenv
-from flask_security import utils
+import os # give me tools to get my own IP and manage my computer
+from dotenv import load_dotenv # connect me with any .env files
+from flask_security import utils # a tool to encrypt passwords
 
 # TODO: Include an explanitory link for reference
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -8,16 +8,16 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 import sys
-import click
-from datetime import datetime
-from flask_migrate import Migrate, upgrade
-from app import create_app, db
-from app.models import User, Role, Post, Tag
+import click # this lets me use "flask ..." commands
+from datetime import datetime # the time
+from flask_migrate import Migrate, upgrade # database updater
+from app import create_app, db  # load my app factory
+from app.models import User, Role, Post, Tag # get my local objects
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'settings')
-migrate = Migrate(app, db)
+app = create_app(os.getenv('FLASK_CONFIG') or 'settings') # triggers app factory
+migrate = Migrate(app, db) # activate my database upgrader tool
 
-
+# if I talk to my app through CLI, pre-load some stuff
 @app.shell_context_processor
 def make_shell_context():
     # TODO: proper imports
