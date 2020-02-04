@@ -10,7 +10,8 @@ migrations/
 __pycache__/
 *.py[cod]
 *$py.class
-
+# images is intended for user-uploaded content
+images/ 
 # C extensions
 *.so
 

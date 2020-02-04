@@ -1,0 +1,39 @@
+{% extends "base.html" %} 
+
+{% block linkitem %}settings-link{% endblock %}
+{% block title %}Settings{% endblock %} 
+{% from 'security/_macros.html' import render_field_with_errors %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Settings</h1>
+  </div>
+
+  <!-- Content Row -->
+  <form action="{{ url_for('main.settings') }}" method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="row">
+      <div class="col-6">
+        {{ render_field_with_errors(form.first_name, class="form-control", placeholder="First name") }}
+        {{ render_field_with_errors(form.last_name, class="form-control", placeholder="Last name") }}
+        {{ render_field_with_errors(form.phone, class="form-control", placeholder="Phone") }}
+        {{ render_field_with_errors(form.address, class="form-control", placeholder="Address", rows=2) }}
+      </div>
+      <div class="col-6">
+        {% if current_user.image %}
+          <img src="{{ current_user.imgsrc }}" width="100%" style="border-radius: 10px; box-shadow:2px 2px 15px #00000050;"/> 
+        {% endif %}
+        {{ render_field_with_errors(form.image) }}
+        
+      </div>
+      <div class="col-12"> {# this ought to be on its own row, but whatever... #}
+        {{ render_field_with_errors(form.about, class="form-control", placeholder="About") }}
+        <button type="SUBMIT" class="btn btn-primary btn-lg w-100">Update Settings</button>
+      </div>
+    </div> {# -- CLOSE ROW-- #}
+  </form>  {# CLOSE MY FORM #}
+</div> {# CLOSE MY CONTAINER #}
+
+{% endblock %}

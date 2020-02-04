@@ -1,0 +1,37 @@
+{% extends "base.html" %} 
+
+{% block linkitem %}blankpage-link{% endblock %}
+{% block title %}Blank Page{% endblock %} 
+
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">{{ user }}</h1>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Basic Card Example -->
+			<div class="card shadow mb-4">
+				<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+				</div>
+				<div class="card-body">
+					{{ user.first_name }}<br/>{{ user.email }}<br/>
+          {{ user.last_name }}<br/>{{ user.imgsrc }}<br/>
+          {{ user.phone }}<br/>
+          {{ user.address }}
+          {% if user == current_user %}
+            this is you!
+          {% endif %}
+				</div>
+			</div>
+    {# this is a bad assignment #}
+    {# no bootstrap columns were used. I'm lazy #}
+    
+	</div>
+</div>
+
+{% endblock %}

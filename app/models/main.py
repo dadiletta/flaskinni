@@ -40,6 +40,10 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(155))
     last_name = db.Column(db.String(155))
+    phone = db.Column(db.String(20)) # let's guess it should be no more than 20
+    address = db.Column(db.Text)
+    about = db.Column(db.Text)
+    image = db.Column(db.String(125))
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
@@ -52,6 +56,20 @@ class User(db.Model, UserMixin):
         backref=db.backref('users', lazy='dynamic')
     )
     
+    # DUNDER METHOD
+    def __repr__(self):
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        else:
+            return super().__repr__()
+
+    @property
+    def imgsrc(self):
+        if self.image:
+            return uploaded_images.url(f"{self.id}/{self.image}")
+        else:
+            return None
+
     # return the date in readable English    
     @property
     def when_registered(self):
