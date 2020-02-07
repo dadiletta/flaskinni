@@ -265,15 +265,16 @@
   {% endblock %}
 
   {% block tail_js %}
-  <!-- Bootstrap core JavaScript-->
-  <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js' ) }}"></script>
-  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js' ) }}"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js' ) }}"></script>
+    {{ moment.include_moment() }}
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js' ) }}"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="{{ url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js' ) }}"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="{{ url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js' ) }}"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="{{ url_for('static', filename='js/sb-admin-2.min.js' ) }}"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="{{ url_for('static', filename='js/sb-admin-2.min.js' ) }}"></script>
   {% endblock %}
   {% block plugin_js %}
   {% endblock %}

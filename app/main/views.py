@@ -50,7 +50,11 @@ def settings():
 @login_required
 def profile(user_id):
     user = User.query.filter_by(id=user_id).first_or_404()
-    return render_template('main/profile.html', user=user)
+    if current_user == user or user.public_profile:
+        return render_template('main/profile.html', user=user)
+    else:
+        flash("UNAUTHORIZED ACCESS", "danger")
+        return redirect(url_for('main.index'))
 
 @app.route('/components')
 @app.route('/components/')

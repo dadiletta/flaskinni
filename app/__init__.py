@@ -8,7 +8,7 @@ from flask_security import current_user, login_required, RoleMixin, Security, \
 from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
 
-from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor
+from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor, moment
 from .models import User, Role, Post, Tag
 from .models.main import UserAdmin, RoleAdmin, PostAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
@@ -23,7 +23,7 @@ def page_forbidden(e):
     return render_template('main/403.html'), 403
 
 
-# sort of like an application factory
+# OUR COOL application factory
 def create_app(config_name):
     app = Flask(__name__) # most of the work done right here
     app.config.from_object('settings') # load my settings / private.py stuff
@@ -39,7 +39,7 @@ def create_app(config_name):
     # load my writing tool extension 
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
-
+    moment.init_app(app)
     # TODO: don't be lazy, Mr. A, get rid of this try-except
     # Add Flask-Admin views for Users and Roles
     try:
@@ -97,7 +97,15 @@ def create_app(config_name):
 
         db.session.commit()
 
-    
+        
+    @app.before_request
+    def before_request():
+        if current_user.is_authenticated:
+            first_time = True if not current_user.last_seen else False
+            current_user.last_seen = datetime.utcnow()
+            db.session.commit()
+
+
     return app
 
 

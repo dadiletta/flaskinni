@@ -12,6 +12,14 @@
 {% endmacro %}
 
 
+{% macro render_switch(field, label, class="custom-control-input") %}
+  <div class="custom-control custom-switch">
+    {{ field(**kwargs)|safe }}
+    <label class="custom-control-label" for="{{ field.id }}">{{ label }}</label>
+  </div>
+{% endmacro %}
+
+
 {% macro render_field(field) %}
   <p>{{ field(**kwargs)|safe }}</p>
 {% endmacro %}

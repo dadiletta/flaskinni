@@ -2,7 +2,7 @@
 
 {% block linkitem %}settings-link{% endblock %}
 {% block title %}Settings{% endblock %} 
-{% from 'security/_macros.html' import render_field_with_errors %}
+{% from 'security/_macros.html' import render_field_with_errors, render_switch %}
 {% block content %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -20,6 +20,7 @@
         {{ render_field_with_errors(form.last_name, class="form-control", placeholder="Last name") }}
         {{ render_field_with_errors(form.phone, class="form-control", placeholder="Phone") }}
         {{ render_field_with_errors(form.address, class="form-control", placeholder="Address", rows=2) }}
+        {{ render_switch(form.public_profile, "Show profile publicly", class="custom-control-input") }}
       </div>
       <div class="col-6">
         {% if current_user.image %}

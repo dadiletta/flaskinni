@@ -22,7 +22,13 @@
 					{{ user.first_name }}<br/>{{ user.email }}<br/>
           {{ user.last_name }}<br/>{{ user.imgsrc }}<br/>
           {{ user.phone }}<br/>
-          {{ user.address }}
+          {{ user.address }}<br/>
+          {% if user.last_seen %}
+            Last seen {{ moment(user.last_seen).fromNow() }}
+          {% else %}
+            User has not logged in yet
+          {% endif %}
+          <br/>
           {% if user == current_user %}
             this is you!
           {% endif %}

@@ -46,8 +46,12 @@ class User(db.Model, UserMixin):
     image = db.Column(db.String(125))
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
-    active = db.Column(db.Boolean())
+    # TOGGLES
+    active = db.Column(db.Boolean(), default=True)
+    public_profile = db.Column(db.Boolean(), default=True)
+    # DATES
     confirmed_at = db.Column(db.DateTime())
+    last_seen = db.Column(db.DateTime(), default=None)
     posts = db.relationship('Post', backref='user', lazy='dynamic')
     
     roles = db.relationship(
