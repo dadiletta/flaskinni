@@ -58,6 +58,8 @@ def create_app(config_name):
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    # THIS IS WHERE YOU ADD YOUR BLUEPRINTS
+    
 
     # custom error handlers, these call the functions at the top of the file
     app.register_error_handler(500, crash_page)

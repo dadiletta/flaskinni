@@ -13,10 +13,12 @@
 
   <!-- Content Row -->
   <div class="row">
+    {# A column should be used around here #}
+    {# use getbootstrap.com for better example cards #}
     <!-- Basic Card Example -->
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+					<h6 class="m-0 font-weight-bold text-primary">Simple Profile Card</h6>
 				</div>
 				<div class="card-body">
 					{{ user.first_name }}<br/>{{ user.email }}<br/>
@@ -34,8 +36,6 @@
           {% endif %}
 				</div>
 			</div>
-    {# this is a bad assignment #}
-    {# no bootstrap columns were used. I'm lazy #}
     
 	</div>
 </div>
