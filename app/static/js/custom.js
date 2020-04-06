@@ -28,5 +28,32 @@ $(document).ready(function() {
     });
   });
 
+  // AJAX EXAMPLE
+  $('.unseen-message').click(function(event) {
+    // store this so it's more easily accessible in the .done
+    var msg = $(this);
+    $.ajax({
+        data : {
+            message_id : $(this).attr('data-message')
+        },
+        type : 'POST',
+        url : '/message/seen_on' // Notice I can't use a url_for
+    })
+    .done(function(data) {
+        if (data.error) {
+            // prevent user from repeatidly sending post requests
+            // if there's an error, you're done.
+            msg.off('click');
+            
+        }else {
+            // show success
+            msg.removeClass('unseen-message');
+            msg.find('.badge-warning').hide();
+            msg.off('click');
+        }
+        
+    });
+}); 
+
 });
 
