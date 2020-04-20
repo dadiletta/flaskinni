@@ -10,9 +10,7 @@ from slugify import slugify
 from datetime import datetime
 
 from ..extensions import db, uploaded_images, mail, moment
-from ..models import Program, School, Path, Membership, Log, Message, Assignment, User, Role
-from .forms import MessageForm, LogForm, RevisionForm
-from ..main.forms import EditUser
+from . import main as app
 
 ###############################
 ####### AJAX HANDLERS #########
@@ -22,19 +20,10 @@ from ..main.forms import EditUser
 def what_time_is_it():
     return jsonify({'timestamp': moment.create(datetime.utcnow()).format('LLLL')})
 
-
-'''
-# EXAMPLE
-@app.route('/message/seen_on', methods=['POST'])
-@login_required
-def mark_seen():
-    message_id = int(request.form['message_id'])
-    message = Message.query.get(message_id)	
-    if message and current_user.id == message.recipient_id and not message.seen_on:
-        message.seen_on = datetime.utcnow()
-        db.session.add(message)
-        db.session.commit()
-        return jsonify({'success' : 'Message now seen'})
-    return jsonify({'error' : 'message not updated'})
-
-'''
+@app.route('/togglesidebar', methods=['POST'])
+def toggle_sidebar():
+    if not 'toggled' in session.keys():
+        session['toggled'] = True
+    else:
+        session['toggled'] = not session['toggled']
+    return jsonify({'success' : 'toggle now %r' % session['toggled']})

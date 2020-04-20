@@ -37,7 +37,9 @@
 </head>
 
 {% block body %}
-<body id="page-top" class="{% block body_classes %}{% endblock %}">
+<body id="page-top" 
+      class="{% block body_classes %}{% endblock %} {% if session['toggled']==True %}sidebar-toggled{% endif %}"
+      >
 
   {% block wrapper %}
   <!-- Page Wrapper -->
@@ -45,7 +47,8 @@
 
     {% block sidebar %}
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion {% if session['toggled']==True %}toggled{% endif %}" 
+        id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('main.index') }}">
