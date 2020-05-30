@@ -7,8 +7,9 @@ from flask_security import current_user, login_required, RoleMixin, Security, \
     SQLAlchemyUserDatastore, UserMixin, utils
 from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
+from flask_assets import Bundle
 
-from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor, moment
+from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor, moment, assets
 from .models import User, Role, Post, Tag
 from .models.main import UserAdmin, RoleAdmin, PostAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
@@ -40,6 +41,11 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app)
+    assets.init_app(app)
+    js = Bundle('vendor/bootstrap/js/bootstrap.bundle.min.js', 'vendor/jquery-easing/jquery.easing.min.js', 
+            'js/sb-admin-2.min.js', 
+            filters='jsmin', output='js/packed.js')
+    assets.register('js_all', js)
     # TODO: don't be lazy, Mr. A, get rid of this try-except
     # Add Flask-Admin views for Users and Roles
     try:

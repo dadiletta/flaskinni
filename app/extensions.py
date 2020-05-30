@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_ckeditor import CKEditor
 from flask_moment import Moment
+from flask_assets import Environment
 
 security = Security()
 db = SQLAlchemy()
@@ -15,3 +16,4 @@ uploaded_images = UploadSet('images', IMAGES)
 mail = Mail()
 admin = Admin(template_mode='bootstrap3')
 ckeditor = CKEditor()
+assets = Environment()
