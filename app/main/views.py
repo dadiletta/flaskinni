@@ -37,6 +37,13 @@ def settings():
             try:
                 user_upload(current_user, image)
                 current_user.image = str(image.filename)
+                # delete the previous image if there was one
+                try:                        
+                    if original_image:
+                        old_image_path = f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }/{original_image}"
+                        os.remove(old_image_path)
+                except Exception as e:
+                    flash(f"Failed to delete previous image: {e}", 'danger')
             except Exception as e:
                 flash(f"The image was not uploaded: {e}", 'danger')
         else:
@@ -181,12 +188,12 @@ def delete_post(post_id):
 @app.route('/files/<int:user_id>/<path:filename>')
 def uploaded_files(user_id, filename):
     """Function to serve up files"""
-    path = current_app.config['UPLOADED_IMAGES_DEST'] + f"/{user_id}"
+    path = current_app.config['UPLOADED_IMAGES_DEST'] + f"/{user_id}" # USER-BASED FOLDER SYSTEM so we can delete contents based on user
     return send_from_directory(path, filename)
 
 def user_upload(user, file):
     """upload's a file to a user's folder"""
-    path = f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }"
+    path = f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }" # notice how I pass the user ID? That's cause we need the right folder
     if not os.path.exists(path):
         os.mkdir(path)
     file.save(os.path.join(f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }/", file.filename))
