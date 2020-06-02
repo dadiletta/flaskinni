@@ -16,7 +16,7 @@ This is meant to be an open-source starter kit for Flask applications. Flask is 
 
 ### Install
 
-Please see the [documentation](https://gilmour.gitbook.io/compsci/web-development) for detailed installation instruction. Or just wing it and figure it out. Look out for all the `settings.py` varibles you'll have to load in through a `.env` file.
+Please see the [documentation](https://gilmour.gitbook.io/compsci/web-development) for detailed installation instructions. Or just wing it and figure it out. Look out for all the `settings.py` varibles you'll have to load in through a `.env` file.
 
 ### Credits
 
