@@ -2,290 +2,55 @@
 {# every page will use this stuff #}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    {# overwrite this meta block if you want Google to categorize pages differently #}
-    {% block head_meta %}
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="">
-      <meta name="author" content="">
-    {% endblock %}
-    {# overwrite the title block in your templates to modify the title #}
-    <title>{% block title %}Welcome{% endblock %} - Flaskinni</title>
-    <!-- Bootstrap Core CSS zz123-->
-    {% block head_css %}
-     <!-- Custom fonts for this template-->
-    <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css' ) }}" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    
-    {% endblock %}
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    {% block head %}
-    {% endblock %}
-    {% block head_tail %}
-    <!-- Custom styles for this template-->
-    {% assets "all_css" %}
-    <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
-    {% endassets %}
-    {% endblock %}
-    
+  {# check out the templates/shared/head.html to see CSS and head includes #}
+  {% include "shared/head.html" with context %}
+  {% block body %}
+  <body id="page-top" 
+        class="{% block body_classes %}{% endblock %} {% if session['toggled']==True %}sidebar-toggled{% endif %}">
+    <div id="cover"></div>
+    {% block wrapper %}
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-</head>
-
-{% block body %}
-<body id="page-top" 
-      class="{% block body_classes %}{% endblock %} {% if session['toggled']==True %}sidebar-toggled{% endif %}"
-      >
-  <div id="cover"></div>
-  {% block wrapper %}
-  <!-- Page Wrapper -->
-  <div id="wrapper">
-
-    {% block sidebar %}
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion {% if session['toggled']==True %}toggled{% endif %}" 
-        id="accordionSidebar">
-
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('main.index') }}">
-        <img id="logo-small" class="animated--grow-in" src="{{ url_for('static', filename='img/Flaskinni_small.png') }}" alt="Flaskinni logo"/>
-        <div class="sidebar-brand-text mx-3">
-          <img id="logo-img" class="animated--fade-in" src="{{ url_for('static', filename='img/Flaskinni.png') }}" alt="Flaskinni logo"/>
-        </div>
-      </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
-      {% if current_user.has_role('admin') %}
-      <!-- Nav Item - Dashboard -->
-      <li class="nav-item" id="superadmin-link">
-        <a class="nav-link" href="{{ url_for('main.superadmin') }}">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Super Admin</span></a>
-      </li>
-
-      {% endif %}
-      <!-- Divider -->
-      <hr class="sidebar-divider">      
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Welcome
-      </div>
-
-      <li class="nav-item"  id="homepage-link">
-        <a class="nav-link loadScreen" href="{{ url_for('main.index') }}">
-          <i class="fas fa-fw fa-home"></i>
-          <span>Home</span></a>
-      </li>      
+      {# we include context so stuff like current_user will work #}
+      {% include "shared/sidebar.html" with context %}
       
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Blog</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Blog Pages:</h6>
-            <a id="blogindex-link" class="collapse-item" href="{{ url_for('main.blog_index') }}">Blog Index</a>
-            <a id="blogpost-link" class="collapse-item" href="{{ url_for('main.new_post') }}">Post</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="#">404 Page</a>
-            <a class="collapse-item" href="#">Blank Page</a>
-          </div>
-        </div>
-      </li>      
-      
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-      
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        My App
-      </div>
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
 
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item"  id="components-link">
-        <a class="nav-link loadScreen" href="{{ url_for('main.components') }}">
-          <i class="fas fa-fw fa-cog"></i>
-          <span>Components</span></a>
-      </li>
-      
-      <li class="nav-item"  id="blankpage-link">
-        <a class="nav-link" href="{{ url_for('main.blank_page') }}">
-          <i class="fas fa-fw fa-wrench"></i>
-          <span>Blank Page</span></a>
-      </li>
+        <!-- Main Content -->
+        <div id="content">
 
-
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
-
-      <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
-
-    </ul>
-    <!-- End of Sidebar -->
-    {% endblock %}
-    
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-        {% block navbar %}
-        <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-          <!-- Sidebar Toggle (Topbar) -->
-          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-          </button>
+          {% include "shared/navbar.html" with context %}
           
-          <!-- Topbar Navbar -->
-          <ul class="navbar-nav ml-auto">
-
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                {% if get_flashed_messages()|length > 0 %}
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">{{ get_flashed_messages()|length }}</span>
-                {% endif %}
-              </a>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                {% include "security/_messages.html" %}
-              </div>
-            </li>
-
-            <div class="topbar-divider d-none d-sm-block"></div>
-
-            {# Nav Item - User Information #}
-            <li class="nav-item dropdown no-arrow">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                {% if current_user.is_authenticated %}
-                  {{ current_user }} {# show the user object #}
-                {% else %}
-                  Welcome
-                {% endif %}
-                </span>
-                {# we should only check a user's properties if they're logged in #}
-                {% if current_user.is_authenticated and current_user.image %}
-                  <img class="img-profile rounded-circle" src="{{ current_user.imgsrc }}">
-                {% else %}
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
-                {% endif %}
-              </a>
-              <!-- Dropdown - User Information -->
-              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                {% if current_user.is_authenticated %}
-                <a class="dropdown-item" href="{{ url_for('main.profile', user_id=current_user.id) }}">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
-                </a>
-                <a class="dropdown-item" href="{{ url_for('main.settings') }}">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
-                </a>
-                {% else %}
-                <a class="dropdown-item" href="{{ url_for_security('register') }}">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Register
-                </a>
-                {% endif %}
-                <div class="dropdown-divider"></div>
-                {% if current_user.is_authenticated %}
-                <a class="dropdown-item" href="{{ url_for_security('logout') }}">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Logout
-                </a>
-                {% else %}
-                <a class="dropdown-item" href="{{ url_for_security('login') }}">
-                  <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Login
-                </a>                
-                {% endif %}
-              </div>
-            </li>
-
-          </ul>
-
-        </nav>
-        <!-- End of Topbar -->
-        {% endblock %}
-        
-        {% block content %}
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
+          {% block content %}
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            
+          </div>
+          {% endblock %}
+      
           
         </div>
-        {% endblock %}
-    
-        
-      </div>
-      <!-- End of Main Content -->
+        <!-- End of Main Content -->
 
-      {% block footer %}
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2019</span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
-      {% endblock %}
+        {% include "shared/footer.html" with context %}
+
+      </div>
+      <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper --> 
+    {% endblock %}
 
-  </div>
-  <!-- End of Page Wrapper --> 
-  {% endblock %}
+    {% block btt %}
+      <!-- Scroll to Top Button-->
+      <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+      </a>
+    {% endblock %}
 
-  {% block btt %}
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+    {% include "shared/js_all.html" with context %}
+  </body>
   {% endblock %}
-
-  {% block tail_js %}
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js' ) }}"></script>
-    {{ moment.include_moment() }}
-    {% assets "js_all" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script> {# look in __init__ for all the JS that's loaded  #}
-    {% endassets %}
-  {% endblock %}
-      
-  {% block plugin_js %}
-  {% endblock %}
-  <script>
-    $('#{% block linkitem %}replaceme{% endblock %}').addClass('active');
-  </script>
-  {% block tail %}{% endblock %}
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
-  </body>{% endblock %}
-
 </html>        

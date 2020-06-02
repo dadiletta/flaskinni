@@ -1,0 +1,15 @@
+{% macro circle_button(href="#", class="primary", icon="check", size=None) %}
+    <a href="{{ href }}" class="btn btn-{{ class }} btn-circle {% if size %}btn-{{ size }}{% endif %}">
+        <i class="{{ icon }}"></i>
+    </a>
+{% endmacro %}
+
+
+{% macro split_button(href="#", class="primary", icon="check", size=None, text_color="text-white-50", text="Submit") %}
+    <a href="{{ href }}" class="btn btn-{{ class }} btn-icon-split {% if size %}btn-{{ size }}{% endif %}">
+        <span class="icon {{ text }}">
+            <i class="{{ icon }}"></i>
+        </span>
+        <span class="text">{{ text }}</span>
+    </a>
+{% endmacro %}

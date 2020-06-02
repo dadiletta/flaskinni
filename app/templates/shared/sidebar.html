@@ -1,0 +1,90 @@
+{% block sidebar %}
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion {% if session['toggled']==True %}toggled{% endif %}" 
+        id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('main.index') }}">
+        <img id="logo-small" class="animated--grow-in" src="{{ url_for('static', filename='img/Flaskinni_small.png') }}" alt="Flaskinni logo"/>
+        <div class="sidebar-brand-text mx-3">
+        <img id="logo-img" class="animated--fade-in" src="{{ url_for('static', filename='img/Flaskinni.png') }}" alt="Flaskinni logo"/>
+        </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    {% if current_user.has_role('admin') %}
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item" id="superadmin-link">
+        <a class="nav-link" href="{{ url_for('main.superadmin') }}">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Super Admin</span></a>
+    </li>
+
+    {% endif %}
+    <!-- Divider -->
+    <hr class="sidebar-divider">      
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Welcome
+    </div>
+
+    <li class="nav-item"  id="homepage-link">
+        <a class="nav-link loadScreen" href="{{ url_for('main.index') }}">
+        <i class="fas fa-fw fa-home"></i>
+        <span>Home</span></a>
+    </li>      
+    
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>Blog</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Blog Pages:</h6>
+            <a id="blogindex-link" class="collapse-item" href="{{ url_for('main.blog_index') }}">Blog Index</a>
+            <a id="blogpost-link" class="collapse-item" href="{{ url_for('main.new_post') }}">Post</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">Other Pages:</h6>
+            <a class="collapse-item" href="#">404 Page</a>
+            <a class="collapse-item" href="#">Blank Page</a>
+        </div>
+        </div>
+    </li>      
+    
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        My App
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item"  id="components-link">
+        <a class="nav-link loadScreen" href="{{ url_for('main.components') }}">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Components</span></a>
+    </li>
+    
+    <li class="nav-item"  id="blankpage-link">
+        <a class="nav-link" href="{{ url_for('main.blank_page') }}">
+        <i class="fas fa-fw fa-wrench"></i>
+        <span>Blank Page</span></a>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+{% endblock %}

@@ -2,6 +2,7 @@
 
 {% block linkitem %}components-link{% endblock %}
 {% block title %}Components{% endblock %} 
+{% from "shared/_macros.html" import circle_button, split_button %}
 
 
 {% block content %}
@@ -28,59 +29,30 @@
 					<div class="mb-2">
 						<code>.btn-circle</code>
 					</div>
-					<a href="#" class="btn btn-primary btn-circle">
-						<i class="fab fa-facebook-f"></i>
-					</a>
-					<a href="#" class="btn btn-success btn-circle">
-						<i class="fas fa-check"></i>
-					</a>
-					<a href="#" class="btn btn-info btn-circle">
-						<i class="fas fa-info-circle"></i>
-					</a>
-					<a href="#" class="btn btn-warning btn-circle">
-						<i class="fas fa-exclamation-triangle"></i>
-					</a>
-					<a href="#" class="btn btn-danger btn-circle">
-						<i class="fas fa-trash"></i>
-					</a>
+					{{ circle_button(class="primary", icon="fab fa-facebook-f") }}
+					{{ circle_button(class="success", icon="fas fa-check") }}
+					{{ circle_button(class="info", icon="fas fa-info-circle") }}
+					{{ circle_button(class="warning", icon="fas fa-exclamation-triangle") }}
+					{{ circle_button(class="danger", icon="fas fa-trash") }}
+
 					<!-- Circle Buttons (Small) -->
 					<div class="mt-4 mb-2">
 						<code>.btn-circle .btn-sm</code>
 					</div>
-					<a href="#" class="btn btn-primary btn-circle btn-sm">
-						<i class="fab fa-facebook-f"></i>
-					</a>
-					<a href="#" class="btn btn-success btn-circle btn-sm">
-						<i class="fas fa-check"></i>
-					</a>
-					<a href="#" class="btn btn-info btn-circle btn-sm">
-						<i class="fas fa-info-circle"></i>
-					</a>
-					<a href="#" class="btn btn-warning btn-circle btn-sm">
-						<i class="fas fa-exclamation-triangle"></i>
-					</a>
-					<a href="#" class="btn btn-danger btn-circle btn-sm">
-						<i class="fas fa-trash"></i>
-					</a>
+					{{ circle_button(class="primary", icon="fab fa-facebook-f", size="sm") }}
+					{{ circle_button(class="success", icon="fas fa-check", size="sm") }}
+					{{ circle_button(class="info", icon="fas fa-info-circle", size="sm") }}
+					{{ circle_button(class="warning", icon="fas fa-exclamation-triangle", size="sm") }}
+					{{ circle_button(class="danger", icon="fas fa-check", size="sm") }}
 					<!-- Circle Buttons (Large) -->
 					<div class="mt-4 mb-2">
 						<code>.btn-circle .btn-lg</code>
 					</div>
-					<a href="#" class="btn btn-primary btn-circle btn-lg">
-						<i class="fab fa-facebook-f"></i>
-					</a>
-					<a href="#" class="btn btn-success btn-circle btn-lg">
-						<i class="fas fa-check"></i>
-					</a>
-					<a href="#" class="btn btn-info btn-circle btn-lg">
-						<i class="fas fa-info-circle"></i>
-					</a>
-					<a href="#" class="btn btn-warning btn-circle btn-lg">
-						<i class="fas fa-exclamation-triangle"></i>
-					</a>
-					<a href="#" class="btn btn-danger btn-circle btn-lg">
-						<i class="fas fa-trash"></i>
-					</a>
+					{{ circle_button(class="primary", icon="fab fa-facebook-f", size="lg") }}
+					{{ circle_button(class="success", icon="fas fa-check", size="lg") }}
+					{{ circle_button(class="info", icon="fas fa-info-circle", size="lg") }}
+					{{ circle_button(class="warning", icon="fas fa-exclamation-triangle", size="lg") }}
+					{{ circle_button(class="danger", icon="fas fa-check", size="lg") }}
 				</div>
 			</div>
 
@@ -108,19 +80,9 @@
 				</div>
 				<div class="card-body">
 					<p>Works with any button colors, just use the <code>.btn-icon-split</code> class and the markup in the examples below. The examples below also use the <code>.text-white-50</code> helper class on the icons for additional styling, but it is not required.</p>
-					<a href="#" class="btn btn-primary btn-icon-split">
-						<span class="icon text-white-50">
-							<i class="fas fa-flag"></i>
-						</span>
-						<span class="text">Split Button Primary</span>
-					</a>
+
 					<div class="my-2"></div>
-					<a href="#" class="btn btn-success btn-icon-split">
-						<span class="icon text-white-50">
-							<i class="fas fa-check"></i>
-						</span>
-						<span class="text">Split Button Success</span>
-					</a>
+					{{ split_button(class="success", icon="fas fa-check", text="Built via Macro")}}
 					<div class="my-2"></div>
 					<a href="#" class="btn btn-info btn-icon-split">
 						<span class="icon text-white-50">

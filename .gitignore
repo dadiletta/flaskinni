@@ -11,7 +11,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 # images is intended for user-uploaded content
-images/ 
+app/static/images
+app/static/images/*
+
 # C extensions
 *.so
 
