@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
   {# check out the templates/shared/head.html to see CSS and head includes #}
-  {% include "shared/head.html" with context %}
+  {% include "shared/head.html" %}
   {% block body %}
   <body id="page-top" 
         class="{% block body_classes %}{% endblock %} {% if session['toggled']==True %}sidebar-toggled{% endif %}">
