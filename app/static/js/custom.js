@@ -1,10 +1,18 @@
+// fade out the load screen
+$(window).on('load', function(){
+  $('#cover').fadeOut(1000);
+});
 
+// STUFF TO HAPPEN AFTER LOAD
 $(document).ready(function() {
+
+  // Anything marked full-height gets set the size of the window
   $('.full-height').css('height', $(window).height());
   
+  // Min height for a content wrapper
   $('.content-wrapper').css('min-height', ($(window).height()-200));
 
-
+  // Sweet Alert triggered on anything labeled delete
   $('.delete').on('click', function(e) {
     e.preventDefault();
     var currentElement = $(this);
@@ -45,6 +53,14 @@ $(document).ready(function() {
         }
         
     });
+  });
+
+  // TRIGGER LOAD SCREEN
+  $('.loadScreen').click(function(){
+    $('#cover').css('height', $(window).height());
+    $('.navbar').hide();
+    $('.navbar-top').css('padding-top', 0);
+    $('#cover').fadeIn(1000);
   });
 
 });

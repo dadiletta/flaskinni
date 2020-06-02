@@ -45,7 +45,11 @@ def create_app(config_name):
     js = Bundle('vendor/bootstrap/js/bootstrap.bundle.min.js', 'vendor/jquery-easing/jquery.easing.min.js', 
             'js/sb-admin-2.min.js', 
             filters='jsmin', output='js/packed.js')
+    sass = Bundle('scss/custom.scss', filters='sass', output='css/custom.css')
+    all_css = Bundle(sass,  # add more CSS files here
+                    filters='cssmin', output="css/packed.css")           
     assets.register('js_all', js)
+    assets.register('all_css', all_css)
     # TODO: don't be lazy, Mr. A, get rid of this try-except
     # Add Flask-Admin views for Users and Roles
     try:

@@ -17,6 +17,16 @@
 	width: 50%;
 }
 
+#cover {
+    /* save a file called loading.gif to your img folder */
+    background: url("../img/loading.gif") no-repeat scroll center center #b7b9cc;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 99999;
+}
+
+
 /**********************************/
 /************  LOGO  **************/
 /**********************************/

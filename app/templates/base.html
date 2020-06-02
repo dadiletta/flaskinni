@@ -30,7 +30,9 @@
     {% endblock %}
     {% block head_tail %}
     <!-- Custom styles for this template-->
-    <link href="{{ url_for('static', filename='css/custom.min.css' ) }}" rel="stylesheet">    
+    {% assets "all_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
+    {% endassets %}
     {% endblock %}
     
 
@@ -40,7 +42,7 @@
 <body id="page-top" 
       class="{% block body_classes %}{% endblock %} {% if session['toggled']==True %}sidebar-toggled{% endif %}"
       >
-
+  <div id="cover"></div>
   {% block wrapper %}
   <!-- Page Wrapper -->
   <div id="wrapper">
