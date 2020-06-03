@@ -1,18 +1,22 @@
 import datetime
-from datetime import datetime
 import os
-from flask import Flask, render_template
+from datetime import datetime
+from flask import Flask, render_template, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import current_user, login_required, RoleMixin, Security, \
     SQLAlchemyUserDatastore, UserMixin, utils
 from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
 from flask_assets import Bundle
+from werkzeug.local import LocalProxy
 
 from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor, moment, assets
 from .models import User, Role, Post, Tag
 from .models.main import UserAdmin, RoleAdmin, PostAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
+
+# relay for logger
+logger = LocalProxy(lambda: current_app.logger)
 
 def crash_page(e):
     return render_template('main/500.html'), 500
