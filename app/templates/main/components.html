@@ -82,57 +82,22 @@
 					<p>Works with any button colors, just use the <code>.btn-icon-split</code> class and the markup in the examples below. The examples below also use the <code>.text-white-50</code> helper class on the icons for additional styling, but it is not required.</p>
 
 					<div class="my-2"></div>
-					{{ split_button(class="success", icon="fas fa-check", text="Built via Macro")}}
+					{{ split_button("Built via Macro", class="success", icon="fas fa-check",)}}
 					<div class="my-2"></div>
-					<a href="#" class="btn btn-info btn-icon-split">
-						<span class="icon text-white-50">
-							<i class="fas fa-info-circle"></i>
-						</span>
-						<span class="text">Split Button Info</span>
-					</a>
+					{{ split_button(href="http://gilmour.org", class="info", icon="fas fa-info-circle", text="Split Button Info")}}
 					<div class="my-2"></div>
-					<a href="#" class="btn btn-warning btn-icon-split">
-						<span class="icon text-white-50">
-							<i class="fas fa-exclamation-triangle"></i>
-						</span>
-						<span class="text">Split Button Warning</span>
-					</a>
+					{{ split_button(href="http://gilmour.org", class="warning", icon="fas fa-exclamation-triangle", text="Split Button Warning")}}
 					<div class="my-2"></div>
-					<a href="#" class="btn btn-danger btn-icon-split">
-						<span class="icon text-white-50">
-							<i class="fas fa-trash"></i>
-						</span>
-						<span class="text">Split Button Danger</span>
-					</a>
+					{{ split_button(href="http://gilmour.org", class="danger", icon="fas fa-trash", text="Split Button Danger")}}
 					<div class="my-2"></div>
-					<a href="#" class="btn btn-secondary btn-icon-split">
-						<span class="icon text-white-50">
-							<i class="fas fa-arrow-right"></i>
-						</span>
-						<span class="text">Split Button Secondary</span>
-					</a>
+					{{ split_button(href="http://gilmour.org", class="secondary", icon="fas fa-arrow-right", text="Split Button Secondary")}}
 					<div class="my-2"></div>
-					<a href="#" class="btn btn-light btn-icon-split">
-						<span class="icon text-gray-600">
-							<i class="fas fa-arrow-right"></i>
-						</span>
-						<span class="text">Split Button Primary</span>
-					</a>
+					{{ split_button(href="http://gilmour.org", class="light", icon="fas fa-arrow-right", text="Split Button Primary")}}
 					<div class="mb-4"></div>
 					<p>Also works with small and large button classes!</p>
-					<a href="#" class="btn btn-primary btn-icon-split btn-sm">
-						<span class="icon text-white-50">
-							<i class="fas fa-flag"></i>
-						</span>
-						<span class="text">Split Button Small</span>
-					</a>
+					{{ split_button(href="http://gilmour.org", class="primary", icon="fas fa-flag", text="Split Button Small")}}
 					<div class="my-2"></div>
-					<a href="#" class="btn btn-primary btn-icon-split btn-lg">
-						<span class="icon text-white-50">
-							<i class="fas fa-flag"></i>
-						</span>
-						<span class="text">Split Button Large</span>
-					</a>
+					{{ split_button(href="http://gilmour.org", class="primary", icon="fas fa-flag", size="lg",  text="Split Button Large")}}
 				</div>
 			</div>
 
