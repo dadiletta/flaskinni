@@ -1,7 +1,12 @@
 {% extends "base.html" %} 
 
 {% block linkitem %}superadmin-link{% endblock %}
-{% block title %}Super Admin{% endblock %} 
+{% set title = "Super Admin" %} 
+
+{% block modals %}
+	{% include "shared/modals/buzz_form.html" %}
+{% endblock %}
+
 
 {% block content %}
 <!-- Begin Page Content -->
@@ -16,11 +21,16 @@
 
   	{# ---BUZZ FEED--- #}
 	<div class="card shadow mb-4">
-		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">Buzz Feed
-				<a href="#" class="btn btn-sm btn-secondary float-right"><i class="fas fa-paper-plane small"></i></a>
-			</h6>
+		<div class="card-header">
 			
+			<ul class="nav nav-tabs card-header-tabs">
+				<li class="nav-item">
+					<h6 class="nav-link font-weight-bold disabled text-primary">Buzz Feed</h6>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link small text-secondary" data-toggle="modal" data-target="#buzzForm"><i class="fas fa-plus"></i></a>
+				</li>
+			</ul>
 		</div>
 		<div class="card-body" id="buzzfeed">
 			<div class="row">
