@@ -11,6 +11,8 @@ from datetime import datetime
 
 from ..extensions import db, uploaded_images, mail, moment
 from . import main as app
+from .forms import BuzzForm
+from .. import comms
 
 ###############################
 ####### AJAX HANDLERS #########
@@ -27,3 +29,12 @@ def toggle_sidebar():
     else:
         session['toggled'] = not session['toggled']
     return jsonify({'success' : 'toggle now %r' % session['toggled']})
+
+@app.route('/create/buzz', methods=['POST'])
+def create_buzz():
+    form = BuzzForm()
+    if form.validate_on_submit:
+        comms.log_buzz(form.title.data, form.body.data)
+        return jsonify({'success' : 'Buzz created.'})
+    else:
+        return jsonify({'error' : 'Form failed %r' % form.errors})

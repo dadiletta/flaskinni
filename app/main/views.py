@@ -11,12 +11,11 @@ import os
 from . import main as app
 from .. import db, uploaded_images, mail
 from .forms import PostForm, ContactForm, SettingsForm
-from ..models import Post, Tag, User
+from ..models import Post, Tag, User, Buzz
 
 # Displays the home page.
 @app.route('/')
 @app.route('/index')
-@app.route('/index.html')
 # Users must be authenticated to view the home page, but they don't have to have any particular role.
 # Flask-Security will display a login form if the user isn't already authenticated.
 def index():
@@ -65,23 +64,14 @@ def profile(user_id):
         flash("UNAUTHORIZED ACCESS", "danger")
         return redirect(url_for('main.index'))
 
-@app.route('/components')
-@app.route('/components/')
-@app.route('/components.html')
-def components():
-    return render_template('main/components.html')
-  
 @app.route('/superadmin')
 @roles_required('admin')
 def superadmin():
     data = {}
     data['users'] = User.query.all()
+    data['buzz'] = Buzz.query.order_by(Buzz.created_on.desc()).limit(50).all()
     return render_template('main/superadmin.html', data=data)
   
-@app.route('/blankpage')
-def blank_page():
-    return render_template('main/blank_page.html')
-
 @app.route('/contact', methods=('GET', 'POST'))
 def contact():
     form = ContactForm()
@@ -100,16 +90,19 @@ def contact():
         return redirect(url_for('index'))
     return render_template('main/contact.html', form=form)
 
-@app.route('/render/<template>')
+@app.route('/view/<template>')
 def route_template(template):
     """
+    This is a pretty boss way to flexibly render any simple HTML file
     https://github.com/app-generator/boilerplate-code-flask-dashboard/blob/master/app/home/routes.py
     """
     try:
         if not template.endswith( '.html' ):
             template += '.html'
 
-        return render_template( template )
+        if 'reset_instructions' in template:
+            return render_template( f"security/email/{template}" )
+        return render_template( f"main/{template}" )
 
     except TemplateNotFound:
         return render_template('main/404.html'), 404
@@ -199,7 +192,7 @@ def delete_post(post_id):
 
 #################
 ## HELPER METHODS
-
+#################
 @app.route('/files/<int:user_id>/<path:filename>')
 def uploaded_files(user_id, filename):
     """Function to serve up files"""

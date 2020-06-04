@@ -6,12 +6,41 @@
 {% block content %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
-  <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Super Admin</h1>
-		<a target="_blank" href="{{ url_for('admin.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm"><i class="fas fa-rocket fa-sm text-white-50"></i>  Flask-Admin</a>
+	<!-- Page Heading -->
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<h1 class="h3 mb-0 text-gray-800">Super Admin</h1>
+			<a target="_blank" href="{{ url_for('admin.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
+				<i class="fas fa-rocket fa-sm text-white-50"></i>  Flask-Admin
+			</a>
+	</div>
 
-  </div>
+  	{# ---BUZZ FEED--- #}
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Buzz Feed
+				<a href="#" class="btn btn-sm btn-secondary float-right"><i class="fas fa-paper-plane small"></i></a>
+			</h6>
+			
+		</div>
+		<div class="card-body" id="buzzfeed">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="list-group">
+						{% for buzz in data['buzz'] %}
+						<a href="{{ buzz.generate_link() }}" class="list-group-item list-group-item-action">
+							<div class="d-flex w-100 justify-content-between">
+								<h5 class="mb-1">{{ buzz.title }}</h5>
+								<small>{{ moment(buzz.created_on).fromNow() }}</small>
+							</div>
+							<p class="mb-1">{{ buzz.body|safe }}</p>
+							<small>{{ buzz.user if buzz.user_id else "No user" }}</small>
+						</a>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
   {# <!-- USER TABLE --> #}
 	{#   DataTales Example  #}

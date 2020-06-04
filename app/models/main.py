@@ -1,5 +1,5 @@
 from .. import db, uploaded_images
-from flask import flash
+from flask import flash, url_for
 from flask_admin.contrib import sqla
 from flask_security import UserMixin, RoleMixin, current_user, utils
 from wtforms import validators, StringField, PasswordField
@@ -79,6 +79,34 @@ class User(db.Model, UserMixin):
     def when_registered(self):
         return humanize.naturaltime(self.confirmed_at)
 
+
+class Buzz(db.Model):
+    """
+    This is the event log for the super admin panel 
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    # FK
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)  
+    # props
+    title = db.Column(db.String(120)) 
+    body = db.Column(db.Text)  
+    created_on = db.Column(db.DateTime(), default=datetime.utcnow)
+    # RELATIONSHIPS
+    user = db.relationship('User', backref='buzz') # the initiator of this event
+    post = db.relationship('Post', backref='buzz') # in case this event had to do with a post
+
+    def generate_link(self):
+        """ 
+        Since buzz objects are created for all sorts of reasons, this method generates a link to the most relevant source
+        """
+        if self.user_id: return url_for('main.profile', user_id=self.user_id)
+        return "#"
+
+
+####################
+#####  FLASK-ADMIN  
+####################
 # Customized User model for SQL-Admin
 class UserAdmin(sqla.ModelView):
 
@@ -127,75 +155,3 @@ class RoleAdmin(sqla.ModelView):
     def is_accessible(self):
         return current_user.has_role('admin')
         
-# Customized Role model for SQL-Admin
-class PostAdmin(sqla.ModelView):
-
-    # Prevent administration of Roles unless the currently logged-in user has the "admin" role
-    def is_accessible(self):
-        return current_user.has_role('admin')
-
-    
-##################
-##### BLOG  ######
-
-# Create a table to support a many-to-many relationship between Users and Roles
-tags_posts = db.Table(
-    'tags_posts',
-    db.Column('post_id', db.Integer(), db.ForeignKey('post.id')),
-    db.Column('tag_id', db.Integer(), db.ForeignKey('tag.id'))
-)
-
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    title = db.Column(db.String(80))
-    subtitle = db.Column(db.String(80))
-    body = db.Column(db.Text)
-    image = db.Column(db.String(125))
-    slug = db.Column(db.String(125), unique=True)
-    publish_date = db.Column(db.DateTime)
-    live = db.Column(db.Boolean)
-    tags = db.relationship(
-        'Tag',
-        secondary=tags_posts,
-        backref=db.backref('posts', lazy='dynamic')
-    )
-
-    # get the whole image path
-    @property
-    def imgsrc(self):
-        if self.image:
-            return uploaded_images.url(self.image)
-        else:
-            return None
-    
-    # return the date in readable English    
-    @property
-    def pubdate(self):
-        return humanize.naturaltime(self.publish_date)
-
-    def __init__(self, user, title, subtitle, body, slug, image=None, publish_date=None, live=True):
-            self.user_id = user.id
-            self.title = title
-            self.subtitle = subtitle
-            self.body = body
-            self.image = image
-            self.slug = slug
-            if publish_date is None:
-                self.publish_date = datetime.utcnow()
-            self.live = live
-
-    def __repr__(self):
-        return '<Post %r>' % self.title
-
-
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-
-    def __init__(self, name, user_id=None):
-        self.name = name
-        self.user_id = user_id
-
-    def __repr__(self):
-        return self.name

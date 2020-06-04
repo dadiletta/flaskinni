@@ -11,8 +11,8 @@ from flask_assets import Bundle
 from werkzeug.local import LocalProxy
 
 from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor, moment, assets
-from .models import User, Role, Post, Tag
-from .models.main import UserAdmin, RoleAdmin, PostAdmin # not db tables
+from .models import User, Role, Post, Tag, Buzz
+from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
 
 # relay for logger
@@ -61,7 +61,8 @@ def create_app(config_name):
         ckeditor.init_app(app)
         admin.add_view(UserAdmin(User, db.session))
         admin.add_view(RoleAdmin(Role, db.session))
-        admin.add_view(PostAdmin(Post, db.session))
+        admin.add_view(RoleAdmin(Post, db.session))
+        admin.add_view(RoleAdmin(Buzz, db.session))
     except Exception as e:
         pass
         # TODO: log error

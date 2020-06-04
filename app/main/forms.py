@@ -71,3 +71,9 @@ class SettingsForm(FlaskForm):
         FileAllowed(['jpg', 'png'], 'Images only!')
     ])
     public_profile = BooleanField('Public profile')
+
+
+class BuzzForm(FlaskForm):
+    """ Simple form to create a buzz object """
+    title = StringField('Title', [validators.Required()])
+    body = CKEditorField('Body', [validators.Required()])
