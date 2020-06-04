@@ -30,11 +30,3 @@ def toggle_sidebar():
         session['toggled'] = not session['toggled']
     return jsonify({'success' : 'toggle now %r' % session['toggled']})
 
-@app.route('/create/buzz', methods=['POST'])
-def create_buzz():
-    form = BuzzForm()
-    if form.validate_on_submit:
-        comms.log_buzz(form.title.data, form.body.data)
-        return jsonify({'success' : 'Buzz created.'})
-    else:
-        return jsonify({'error' : 'Form failed %r' % form.errors})

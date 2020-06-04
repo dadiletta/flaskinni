@@ -9,8 +9,8 @@ import os
 
 # our objects
 from . import main as app
-from .. import db, uploaded_images, mail
-from .forms import PostForm, ContactForm, SettingsForm
+from .. import db, uploaded_images, mail, comms
+from .forms import PostForm, ContactForm, SettingsForm, BuzzForm
 from ..models import Post, Tag, User, Buzz
 
 # Displays the home page.
@@ -70,6 +70,7 @@ def superadmin():
     data = {}
     data['users'] = User.query.all()
     data['buzz'] = Buzz.query.order_by(Buzz.created_on.desc()).limit(50).all()
+    data['buzz_form'] = BuzzForm()
     return render_template('main/superadmin.html', data=data)
   
 @app.route('/contact', methods=('GET', 'POST'))
@@ -188,6 +189,26 @@ def delete_post(post_id):
     db.session.commit()
     flash("Article deleted", 'success')
     return redirect(url_for('blog_index'))
+
+#################
+## HANDLER METHODS
+## They don't render templates, just do an action and redirect
+#################
+@app.route('/create/buzz', methods=['POST'])
+@roles_required('admin')
+def create_buzz():
+    form = BuzzForm()
+    if form.validate_on_submit:
+        buzz = Buzz()
+        form.populate_obj(buzz)
+        buzz.user_id = current_user.id
+        db.session.add(buzz)
+        db.session.commit()
+        comms.log_buzz(form.title.data, form.body.data)
+        flash("Buzz successfully created", "success")
+    else:
+        flash(f"Buzz form failed: {form.errors}", "danger")
+    return redirect(url_for('main.superadmin'))
 
 
 #################
