@@ -4,6 +4,7 @@ from flask_security import login_required, roles_required, current_user
 from flask_uploads import UploadNotAllowed
 from flask_mail import Message
 from slugify import slugify
+from jinja2 import TemplateNotFound
 import os
 
 # our objects
@@ -19,8 +20,9 @@ from ..models import Post, Tag, User
 # Users must be authenticated to view the home page, but they don't have to have any particular role.
 # Flask-Security will display a login form if the user isn't already authenticated.
 def index():
-    posts = Post.query.order_by(Post.publish_date.desc())
-    return render_template('main/index.html', posts=posts)
+    data = {} 
+    data['posts'] = Post.query.order_by(Post.publish_date.desc()).all()
+    return render_template('main/index.html', data=data)
 
 @app.route('/settings', methods=('GET', 'POST'))
 @app.route('/settings.html', methods=('GET', 'POST'))
@@ -98,12 +100,26 @@ def contact():
         return redirect(url_for('index'))
     return render_template('main/contact.html', form=form)
 
-@app.route('/blog')
-@app.route('/blog/')
-def blog_index():
-    posts = Post.query.filter_by(live=True).order_by(Post.publish_date.desc())
-    return render_template('main/blog.html', posts=posts)
+@app.route('/render/<template>')
+def route_template(template):
+    """
+    https://github.com/app-generator/boilerplate-code-flask-dashboard/blob/master/app/home/routes.py
+    """
+    try:
+        if not template.endswith( '.html' ):
+            template += '.html'
 
+        return render_template( template )
+
+    except TemplateNotFound:
+        return render_template('main/404.html'), 404
+    
+    except:
+        return render_template('main/500.html'), 500
+
+###################
+####  POST
+###################
 @app.route('/blog/new', methods=('GET', 'POST'))
 @login_required
 @roles_required('admin')
@@ -181,7 +197,6 @@ def delete_post(post_id):
     return redirect(url_for('blog_index'))
 
 
-
 #################
 ## HELPER METHODS
 
@@ -198,3 +213,4 @@ def user_upload(user, file):
         os.mkdir(path)
     file.save(os.path.join(f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }/", file.filename))
     return url_for('main.uploaded_files', user_id=user.id, filename=file.filename) 
+

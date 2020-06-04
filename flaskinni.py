@@ -2,7 +2,7 @@ import os # give me tools to get my own IP and manage my computer
 from dotenv import load_dotenv # connect me with any .env files
 from flask_security import utils # a tool to encrypt passwords
 
-# TODO: Include an explanitory link for reference
+# https://github.com/theskumar/python-dotenv
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
