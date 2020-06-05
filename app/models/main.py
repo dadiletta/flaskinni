@@ -68,7 +68,7 @@ class User(db.Model, UserMixin):
             return super().__repr__()
 
     @property
-    def imgsrc(self):
+    def img(self):
         if self.image:
             return uploaded_images.url(f"{self.id}/{self.image}")
         else:

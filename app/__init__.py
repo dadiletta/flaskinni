@@ -8,15 +8,12 @@ from flask_security import current_user, login_required, RoleMixin, Security, \
 from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
 from flask_assets import Bundle
-from werkzeug.local import LocalProxy
 
 from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor, moment, assets
 from .models import User, Role, Post, Tag, Buzz
 from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
 
-# relay for logger
-logger = LocalProxy(lambda: current_app.logger)
 
 def crash_page(e):
     return render_template('main/500.html'), 500

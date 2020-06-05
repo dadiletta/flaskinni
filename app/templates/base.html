@@ -4,21 +4,21 @@
 <html lang="en">
   {# check out the templates/shared/head.html to see CSS and head includes #}
   {% include "shared/head.html" %}
-  {% block body %}
   <body id="page-top" 
         class="{% block body_classes %}{% endblock %} {% if session['toggled']==True %}sidebar-toggled{% endif %}">
+
+    {# -- LOADING SCREEN -- #}
     <div id="cover"></div>
-    {% block wrapper %}
-    <!-- Page Wrapper -->
+    {# -- wrapper used by this bootstrap theme for spacing -- #}
     <div id="wrapper">
 
       {# we include context so stuff like current_user will work #}
       {% include "shared/sidebar.html" with context %}
       
-      <!-- Content Wrapper -->
+      {#-- Content Wrapper used by this bootstrap theme for spacing --#}
       <div id="content-wrapper" class="d-flex flex-column">
 
-        <!-- Main Content -->
+        <!-- Main Content used by this bootstrap theme for spacing -->
         <div id="content">
 
           {% include "shared/navbar.html" with context %}
@@ -32,7 +32,7 @@
       
           
         </div>
-        <!-- End of Main Content -->
+        {#-- End of Main Content --#}
 
         {% include "shared/footer.html" with context %}
 
@@ -41,7 +41,6 @@
 
     </div>
     <!-- End of Page Wrapper --> 
-    {% endblock %}
 
     {% block btt %}
       <!-- Scroll to Top Button-->
@@ -49,8 +48,19 @@
         <i class="fas fa-angle-up"></i>
       </a>
     {% endblock %}
+
+    {# You can put modals pretty much anywhere, but some folks find it tidy to keep them out of the content block #}
     {% block modals %}{% endblock %}
+
+    {# LOAD UP ALL YOUR THEME'S JS HERE #}
     {% include "shared/js_all.html" with context %}
+
+    {# A convenient block so you can drop in your own template-specific JS code #}
+    {% block tail %}{% endblock %}
+
+    {# activate menu items #}
+    <script>
+      $('#{% block linkitem %}replaceme{% endblock %}').addClass('active');
+    </script>
   </body>
-  {% endblock %}
 </html>        

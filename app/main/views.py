@@ -13,6 +13,7 @@ from .. import db, uploaded_images, mail, comms
 from .forms import PostForm, ContactForm, SettingsForm, BuzzForm
 from ..models import Post, Tag, User, Buzz
 
+
 # Displays the home page.
 @app.route('/')
 @app.route('/index')
@@ -108,8 +109,10 @@ def route_template(template):
     except TemplateNotFound:
         return render_template('main/404.html'), 404
     
-    except:
+    except Exception as e:
+        current_app.logger.error(f'Failed to render template: {e}')
         return render_template('main/500.html'), 500
+        
 
 ###################
 ####  POST

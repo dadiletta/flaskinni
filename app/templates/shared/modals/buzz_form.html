@@ -12,8 +12,8 @@
     <form action="{{ url_for('main.create_buzz') }}" method="POST">
         <div class="modal-body">            
             {{ data['buzz_form'].hidden_tag() }}            
-            {{ render_field_with_errors(data['buzz_form'].title, class="form-control") }}
-            {{ render_field_with_errors(data['buzz_form'].body, class="form-control") }}
+            {{ render_field_with_errors(data['buzz_form'].title, class="form-control", placeholder="Title") }}
+            {{ render_field_with_errors(data['buzz_form'].body, class="form-control", placeholder="Body") }}
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

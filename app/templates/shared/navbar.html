@@ -39,8 +39,9 @@
             </span>
             {# we should only check a user's properties if they're logged in #}
             {% if current_user.is_authenticated and current_user.image %}
-            <img class="img-profile rounded-circle" src="{{ current_user.imgsrc }}">
+            <img class="img-profile rounded-circle" src="{{ current_user.img }}">
             {% else %}
+            {# TODO: remove CDN reference #}
             <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
             {% endif %}
         </a>

@@ -1,19 +1,47 @@
+{#####################################}
+{############## SETTINGS #############}
+{#####################################}
 {% extends "base.html" %} 
+{% block linkitem %}blankpage-link{% endblock %} {# hands off a variable to the script that activates the nav menu link items #}
+{% block body_classes %}{% endblock %} {# place to insert options to change body layout #}
+{% set title = "Blank Page" %} 
+{% set meta_description = "This is my page's search engine description." %} 
+{% set custom_styles = """
+  /* Template-specific CSS is allowed but unwise. */
+""" %} 
 
-{% block linkitem %}blankpage-link{% endblock %}
-{% block title %}Blank Page{% endblock %} 
-
+{#####################################}
+{################ BODY ###############}
+{#####################################}
 {% block content %}
-<!-- Begin Page Content -->
-<div class="container-fluid">
-  <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Blank Page</h1>
+  <!-- Begin Page Content -->
+  <div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Blank Page</h1>
+    </div>
+
+    {# - main content row - #}
+    <div class="row">
+    </div>
   </div>
+{% endblock %}
 
-  <!-- Content Row -->
-  <div class="row">
-	</div>
-</div>
 
+{#####################################}
+{################ TAIL ###############}
+{#####################################}
+{% block tail %}
+<script>
+  $( document ).ready(function() {
+    console.log( "Template-specific script activated" );
+  });
+</script>
+{% endblock %}
+
+
+{#####################################}
+{############## MODALS ###############}
+{#####################################}
+{% block modals %}
 {% endblock %}

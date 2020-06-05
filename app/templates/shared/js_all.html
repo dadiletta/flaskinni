@@ -1,18 +1,10 @@
 
-{% block tail_js %}
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js' ) }}"></script>
-    {{ moment.include_moment() }}
-    {% assets "js_all" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script> {# look in __init__ for all the JS that's loaded  #}
-    {% endassets %}
-{% endblock %}
-      
-{% block plugin_js %}
-{% endblock %}
-<script>
-    $('#{% block linkitem %}replaceme{% endblock %}').addClass('active');
-</script>
-{% block tail %}{% endblock %}
+<!-- Bootstrap core JavaScript-->
+<script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js' ) }}"></script>
+{{ moment.include_moment() }}
+{% assets "js_all" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script> {# look in __init__ for all the JS that's loaded  #}
+{% endassets %}
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
