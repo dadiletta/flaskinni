@@ -5,11 +5,14 @@
 {% endmacro %}
 
 
-{% macro split_button(href="#", class="primary", icon="check", size=None, text_color="text-white-50", text="Submit") %}
+{% macro split_button(text, href="#", class="primary", icon="fas fa-check", size=None, text_color="text-white-50") %}
     <a href="{{ href }}" class="btn btn-{{ class }} btn-icon-split {% if size %}btn-{{ size }}{% endif %}">
-        <span class="icon {{ text }}">
+        <span class="icon {{ text_color }}">
             <i class="{{ icon }}"></i>
         </span>
         <span class="text">{{ text }}</span>
     </a>
+{% endmacro %}
+
+{% marco card_button(href= "#", class")%}
 {% endmacro %}
