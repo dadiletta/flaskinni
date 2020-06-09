@@ -14,5 +14,20 @@
     </a>
 {% endmacro %}
 
-{% marco card_button(href= "#", class")%}
+{% macro card_button(title, text, class="dark", icon="fas fa-check")%}
+
+    <div class="card border-left-{{ class }} shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-{{ class }} text-uppercase mb-1">{{ title }}</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ text }}</div>
+                </div>
+                <div class="col-auto">
+                    <i class="{{ icon }} fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endmacro %}

@@ -13,15 +13,19 @@
     <div id="wrapper">
 
       {# we include context so stuff like current_user will work #}
-      {% include "shared/sidebar.html" with context %}
+      {% if not disable_sidebar %}
+        {% include "shared/sidebar.html" with context %}
+      {% endif %}
       
       {#-- Content Wrapper used by this bootstrap theme for spacing --#}
       <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content used by this bootstrap theme for spacing -->
         <div id="content">
-
-          {% include "shared/navbar.html" with context %}
+        
+          {% if not disable_navbar %}
+            {% include "shared/navbar.html" with context %}
+          {% endif%}
           
           {% block content %}
           <!-- Begin Page Content -->
