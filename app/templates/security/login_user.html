@@ -3,11 +3,9 @@
 
 {% extends "base.html" %} 
 
-{% block title %}Login{% endblock %} 
+{% set title = "Login" %} 
 
 {% block body_classes %}bg-gradient-primary{% endblock %}
-{% block btt %} {% endblock %}
-{% block plugin_js %} {% endblock %}
 
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 

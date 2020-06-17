@@ -7,6 +7,8 @@ from flask_admin import Admin
 from flask_ckeditor import CKEditor
 from flask_moment import Moment
 from flask_assets import Environment
+from flask_restful import Api
+from flask_jwt_extended import JWTManager
 
 security = Security()
 db = SQLAlchemy()
@@ -17,3 +19,5 @@ mail = Mail()
 admin = Admin(template_mode='bootstrap3')
 ckeditor = CKEditor()
 assets = Environment()
+api = Api(prefix="api/v1")
+jwt = JWTManager()

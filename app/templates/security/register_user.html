@@ -1,14 +1,14 @@
 {% extends "base.html" %} 
+{% set disable_sidebar = True %}
+{% set disable_navbar = True %}
 
-{% block title %}Create Account{% endblock %} 
+{% set title = "Create Account" %} 
 
 {% block body_classes %}bg-gradient-primary{% endblock %}
-{% block btt %} {% endblock %}
-{% block plugin_js %} {% endblock %}
 
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
 
-{% block wrapper %}
+{% block content %}
 
   <div class="container">
     <div class="row justify-content-center">  

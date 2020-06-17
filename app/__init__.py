@@ -9,7 +9,8 @@ from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
 from flask_assets import Bundle
 
-from .extensions import db, uploaded_images, security, mail, migrate, admin, ckeditor, moment, assets
+from .extensions import db, uploaded_images, security, mail, migrate, admin, \
+    ckeditor, moment, assets, api, jwt
 from .models import User, Role, Post, Tag, Buzz
 from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
@@ -27,6 +28,7 @@ def page_forbidden(e):
 
 # OUR COOL application factory
 def create_app(config_name):
+    """ Application factory """
     # Flask init
     app = Flask(__name__) # most of the work done right here. Thanks, Flask!
     app.config.from_object('settings') # load my settings which pull from .env
@@ -45,7 +47,9 @@ def create_app(config_name):
     # load my writing tool extension 
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
-    moment.init_app(app)
+    moment.init_app(app) # time formatting
+    api.init_app(app) # load Flask-RESTful
+    jwt.init_app(app) # bolt on our Javascript Web Token tool
     ####
     # ASSETS
     ###
