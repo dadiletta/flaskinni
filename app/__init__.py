@@ -27,9 +27,13 @@ def page_forbidden(e):
 
 # OUR COOL application factory
 def create_app(config_name):
-    app = Flask(__name__) # most of the work done right here
-    app.config.from_object('settings') # load my settings / private.py stuff
+    # Flask init
+    app = Flask(__name__) # most of the work done right here. Thanks, Flask!
+    app.config.from_object('settings') # load my settings which pull from .env
     
+    ''' 
+    FLASK EXTENTIONS
+    '''
     # load my image uploader extension 
     configure_uploads(app, uploaded_images)
     
@@ -42,6 +46,9 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app)
+    ####
+    # ASSETS
+    ###
     assets.init_app(app)
     js = Bundle('vendor/bootstrap/js/bootstrap.bundle.min.js', 'vendor/jquery-easing/jquery.easing.min.js', 
             'js/sb-admin-2.min.js', 
@@ -49,29 +56,35 @@ def create_app(config_name):
     sass = Bundle('scss/custom.scss', filters='scss', output='css/custom.css')
     all_css = Bundle(sass,  # add more CSS files here
                     filters='cssmin', output="css/packed.css")           
-    assets.register('js_all', js)
-    assets.register('all_css', all_css)
+
+
+    # EXTENSIONS THAT SOMETIMES CRASH
     # TODO: don't be lazy, Mr. A, get rid of this try-except
-    # Add Flask-Admin views for Users and Roles
     try:
+        assets.register('js_all', js)
+        assets.register('all_css', all_css)
         admin.init_app(app)
         ckeditor.init_app(app)
         admin.add_view(UserAdmin(User, db.session))
         admin.add_view(RoleAdmin(Role, db.session))
         admin.add_view(RoleAdmin(Post, db.session))
         admin.add_view(RoleAdmin(Buzz, db.session))
+        # TODO: Add new models here so you can manage data from Flask-Admin's convenient tools
     except Exception as e:
-        pass
-        # TODO: log error
+        app.logger.error(f'Failed activating extensions: {e}')
 
+    # TODO: Setup sentry.io!
     # sentry_sdk.init(dsn="", integrations=[FlaskIntegration()])
     
-    # activate the flaskinni blueprint (my bundle of routes)
+    # activate the flaskinni blueprint (blog, user settings, and other basic routes)
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    # THIS IS WHERE YOU ADD YOUR BLUEPRINTS
-    
+    # activate the flaskinni api (for those extra high-tech projects)
+
+
+    # --- NEW BLUEPRINTS GO BELOW THIS LINE ---
+
 
     # custom error handlers, these call the functions at the top of the file
     app.register_error_handler(500, crash_page)
@@ -82,6 +95,7 @@ def create_app(config_name):
     # Executes before the first request is processed.
     @app.before_first_request
     def before_first_request():
+        """ What do we do before we respond to the first request """
 
         # Create any database tables that don't exist yet.
         db.create_all()
@@ -102,8 +116,6 @@ def create_app(config_name):
         # Commit any database changes; the User and Roles must exist before we can add a Role to the User
         db.session.commit()
 
-        # Give one User has the "end-user" role, while the other has the "admin" role. (This will have no effect if the
-        # Users already have these Roles.) Again, commit any database changes.
         for email in app.config['STARTING_ADMINS']:
             user_datastore.add_role_to_user(email, 'admin')
             confirmed_admin = user_datastore.get_user(email)
@@ -114,11 +126,11 @@ def create_app(config_name):
         
     @app.before_request
     def before_request():
+        """ What we do before every single handled request """
         if current_user.is_authenticated:
             first_time = True if not current_user.last_seen else False
             current_user.last_seen = datetime.utcnow()
             db.session.commit()
-
 
     return app
 
