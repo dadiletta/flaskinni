@@ -7,7 +7,6 @@
 	{% include "shared/modals/buzz_form.html" %}
 {% endblock %}
 
-
 {% block content %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -129,5 +128,7 @@
   <!-- Data Table custom scripts -->
   <script src="{{ url_for('static', filename='js/demo/datatables-demo.js') }}"></script>
 
+	{{ ckeditor.load() }}
+    {{ ckeditor.config(name='body') }} 
 
 {% endblock %}
