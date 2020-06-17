@@ -1,10 +1,10 @@
-import resources
+from .resources import UserRegistration, UserLogin, UserLogoutAccess, UserLogoutRefresh, \
+    TokenRefresh, SecretResource
 
 def add_resources(api):
-    api.add_resource(resources.UserRegistration, '/registration')
-    api.add_resource(resources.UserLogin, '/login')
-    api.add_resource(resources.UserLogoutAccess, '/logout/access')
-    api.add_resource(resources.UserLogoutRefresh, '/logout/refresh')
-    api.add_resource(resources.TokenRefresh, '/token/refresh')
-    api.add_resource(resources.AllUsers, '/users')
-    api.add_resource(resources.SecretResource, '/secret')
+    api.add_resource(UserRegistration, '/registration')
+    api.add_resource(UserLogin, '/login')
+    api.add_resource(UserLogoutAccess, '/logout/access')
+    api.add_resource(UserLogoutRefresh, '/logout/refresh')
+    api.add_resource(TokenRefresh, '/token/refresh')
+    api.add_resource(SecretResource, '/secret')

@@ -14,6 +14,7 @@ from .extensions import db, uploaded_images, security, mail, migrate, admin, \
 from .models import User, Role, Post, Tag, Buzz
 from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
+from .api import api as api_module
 
 
 def crash_page(e):
@@ -49,6 +50,7 @@ def create_app(config_name):
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app) # time formatting
     api.init_app(app) # load Flask-RESTful
+    api_module.add.add_resources(api)
     jwt.init_app(app) # bolt on our Javascript Web Token tool
     ####
     # ASSETS
@@ -83,8 +85,6 @@ def create_app(config_name):
     # activate the flaskinni blueprint (blog, user settings, and other basic routes)
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
-
-    # activate the flaskinni api (for those extra high-tech projects)
 
 
     # --- NEW BLUEPRINTS GO BELOW THIS LINE ---
