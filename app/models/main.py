@@ -69,15 +69,36 @@ class User(db.Model, UserMixin):
 
     @property
     def img(self):
+        """ Builds a path for the saved image. See Flask-Upload """
         if self.image:
             return uploaded_images.url(f"{self.id}/{self.image}")
         else:
             return None
 
-    # return the date in readable English    
     @property
     def when_registered(self):
-        return humanize.naturaltime(self.confirmed_at)
+        """ Return the date in readable English """
+        return humanize.naturaltime(self.confirmed_at) # we use Flask-Moment for template-based solution to the same issue
+
+    def save_to_db(self):
+        """ Utility update model to DB """
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def find_by_username(cls, username):
+        """ Accessor method """
+        return cls.query.filter_by(email=username).first()
+
+    @staticmethod
+    def generate_hash(password):
+        """ Utility to help with API """
+        return utils.encrypt_password(password)
+    
+    @staticmethod
+    def verify_hash(password, hash):
+        """ Utility to help with API """
+        return utils.verify_password(password, hash)
 
 
 class Buzz(db.Model):
@@ -102,6 +123,27 @@ class Buzz(db.Model):
         """
         if self.user_id: return url_for('main.profile', user_id=self.user_id)
         return "#"
+
+
+####################
+#####  FLASK-JWT-EXTENDED  
+####################
+class RevokedTokenModel(db.Model):
+    """
+    Originally taken from: https://github.com/oleg-agapov/flask-jwt-auth/blob/master/step_5/models.py
+    """
+    __tablename__ = 'revoked_tokens'
+    id = db.Column(db.Integer, primary_key = True)
+    jti = db.Column(db.String(120))
+    
+    def add(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    @classmethod
+    def is_jti_blacklisted(cls, jti):
+        query = cls.query.filter_by(jti = jti).first()
+        return bool(query)
 
 
 ####################

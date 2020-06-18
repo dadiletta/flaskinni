@@ -10,11 +10,11 @@ from flaskext.markdown import Markdown
 from flask_assets import Bundle
 
 from .extensions import db, uploaded_images, security, mail, migrate, admin, \
-    ckeditor, moment, assets, api, jwt
-from .models import User, Role, Post, Tag, Buzz
+    ckeditor, moment, assets, restful, jwt
+from .models import User, Role, Post, Tag, Buzz, RevokedTokenModel
 from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
-from .api import api as api_module
+from .api import add_resources
 
 
 def crash_page(e):
@@ -49,8 +49,8 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app) # time formatting
-    api.init_app(app) # load Flask-RESTful
-    api_module.add.add_resources(api)
+    restful.init_app(app) # load Flask-RESTful
+    add_resources(restful)
     jwt.init_app(app) # bolt on our Javascript Web Token tool
     ####
     # ASSETS

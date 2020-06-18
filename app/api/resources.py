@@ -8,7 +8,7 @@ parser.add_argument('username', help = 'This field cannot be blank', required = 
 parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
 
-class UserAPI(Resource):
+class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
         
