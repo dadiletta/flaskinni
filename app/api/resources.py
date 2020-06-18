@@ -1,14 +1,20 @@
+from flask import current_app
 from flask_restful import Resource, reqparse
 from ..models import User, RevokedTokenModel
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, \
     jwt_refresh_token_required, get_jwt_identity, get_raw_jwt
 
-parser = reqparse.RequestParser()
-parser.add_argument('username', help = 'This field cannot be blank', required = True)
-parser.add_argument('password', help = 'This field cannot be blank', required = True)
 
+class UserRegistrationAPI(Resource):
+    def __init__(self):
+        # Add payload requirements / expectations: https://blog.miguelgrinberg.com/post/designing-a-restful-api-using-flask-restful
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username', type = str, required = True,\
+                help = 'No username provided', location = 'json')
+        self.reqparse.add_argument('password', type = str, required = True,\
+                help = 'No password provided', location = 'json')                
+        super(UserRegistration, self).__init__()
 
-class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
         
@@ -32,8 +38,12 @@ class UserRegistration(Resource):
 
 class UserLogin(Resource):
     def post(self):
+        parser = reqparse.RequestParser()
         data = parser.parse_args()
-        current_user = User.query.filter_by(email=data['username']).first()
+        try:         
+            current_user = User.query.filter_by(email=data['username']).first()
+        except Exception as e:
+            current_app.logger.error(f"Failed to query for user: {data}")
 
         if not current_user:
             return {'message': 'User {} doesn\'t exist'.format(data['username'])}
@@ -88,4 +98,9 @@ class SecretResource(Resource):
     def get(self):
         return {
             'answer': 42
+        }
+
+    def post(self):
+        return {
+            'test': 99
         }

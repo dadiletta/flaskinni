@@ -1,7 +1,7 @@
 import datetime
 import os
 from datetime import datetime
-from flask import Flask, render_template, current_app
+from flask import Flask, render_template, current_app, make_response, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import current_user, login_required, RoleMixin, Security, \
     SQLAlchemyUserDatastore, UserMixin, utils
@@ -18,12 +18,16 @@ from .api import add_resources
 
 
 def crash_page(e):
+    if 'api' in request.url_root:
+        return make_response(jsonify("500 Server error"), 500)
     return render_template('main/500.html'), 500
 
 def page_not_found(e):
     return render_template('main/404.html'), 404
 
 def page_forbidden(e):
+    if 'api' in request.url_root:
+        return make_response(jsonify("403 Forbidden"), 403)
     return render_template('main/403.html'), 403
 
 
@@ -49,8 +53,9 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app) # time formatting
-    restful.init_app(app) # load Flask-RESTful
     add_resources(restful)
+    restful.init_app(app) # load Flask-RESTful
+    
     jwt.init_app(app) # bolt on our Javascript Web Token tool
     ####
     # ASSETS
@@ -86,7 +91,10 @@ def create_app(config_name):
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-
+    # activate API blueprint: https://stackoverflow.com/questions/38448618/using-flask-restful-as-a-blueprint-in-large-application
+    from .api import api_blueprint    
+    app.register_blueprint(api_blueprint) # registering the blueprint effectively runs init_app on the restful extension
+    
     # --- NEW BLUEPRINTS GO BELOW THIS LINE ---
 
 
