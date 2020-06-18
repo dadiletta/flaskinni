@@ -5,6 +5,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, jwt_re
     jwt_refresh_token_required, get_jwt_identity, get_raw_jwt
 
 
+# /registration
 class UserRegistrationAPI(Resource):
     def __init__(self):
         # Add payload requirements / expectations: https://blog.miguelgrinberg.com/post/designing-a-restful-api-using-flask-restful
@@ -36,10 +37,20 @@ class UserRegistrationAPI(Resource):
             return {'message': 'Something went wrong'}, 500
 
 
-class UserLogin(Resource):
+# /login
+class UserLoginAPI(Resource):
+    def __init__(self):
+        # Add payload requirements / expectations: https://blog.miguelgrinberg.com/post/designing-a-restful-api-using-flask-restful
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('username', type = str, required = True,\
+                help = 'No username provided')
+        self.reqparse.add_argument('password', type = str, required = True,\
+                help = 'No password provided')                
+        super(UserLoginAPI, self).__init__()
+
     def post(self):
-        parser = reqparse.RequestParser()
-        data = parser.parse_args()
+        data = self.reqparse.parse_args()
+        current_user = None
         try:         
             current_user = User.query.filter_by(email=data['username']).first()
         except Exception as e:
@@ -49,7 +60,7 @@ class UserLogin(Resource):
             return {'message': 'User {} doesn\'t exist'.format(data['username'])}
         
         # TODO: Use flask-security utils to verity hash
-        if False: # UserModel.verify_hash(data['password'], current_user.password):
+        if User.verify_hash(User.generate_hash(data['password']), current_user.password): # UserModel.verify_hash(data['password'], current_user.password):
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
             return {
@@ -58,9 +69,10 @@ class UserLogin(Resource):
                 'refresh_token': refresh_token
                 }
         else:
-            return {'message': 'Wrong credentials'}
+            return {'message': f"Wrong credentials: {data['password']} -VS- {User.generate_hash(data['password'])} -vs- {current_user.password}"}
 
 
+# /logout/access
 class UserLogoutAccess(Resource):
     @jwt_required
     def post(self):
@@ -73,6 +85,7 @@ class UserLogoutAccess(Resource):
             return {'message': 'Something went wrong'}, 500
 
 
+# /logout/refresh
 class UserLogoutRefresh(Resource):
     @jwt_refresh_token_required
     def post(self):
@@ -85,6 +98,7 @@ class UserLogoutRefresh(Resource):
             return {'message': 'Something went wrong'}, 500
 
 
+# /token/refresh
 class TokenRefresh(Resource):
     @jwt_refresh_token_required
     def post(self):
@@ -93,7 +107,14 @@ class TokenRefresh(Resource):
         return {'access_token': access_token}
 
 
+# /secret
 class SecretResource(Resource):
+    def __init__(self):
+        # Add payload requirements / expectations: https://blog.miguelgrinberg.com/post/designing-a-restful-api-using-flask-restful
+        self.reqparse = reqparse.RequestParser()    
+        self.reqparse.add_argument('test', type=int, help='Rate to charge for this resource')           
+        super(SecretResource, self).__init__()    
+    
     @jwt_required
     def get(self):
         return {
@@ -104,3 +125,7 @@ class SecretResource(Resource):
         return {
             'test': 99
         }
+
+    def put(self):
+        data = self.reqparse.parse_args()
+        return {'message123': f'{data}'}

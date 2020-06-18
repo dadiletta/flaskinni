@@ -98,7 +98,8 @@ class User(db.Model, UserMixin):
     @staticmethod
     def verify_hash(password, hash):
         """ Utility to help with API """
-        return utils.verify_password(password, hash)
+        return utils.verify_password(password, hash)    
+
 
 
 class Buzz(db.Model):
