@@ -8,9 +8,10 @@ from flask_security import current_user, login_required, RoleMixin, Security, \
 from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
 from flask_assets import Bundle
+from flask_restful import Api
 
 from .extensions import db, uploaded_images, security, mail, migrate, admin, \
-    ckeditor, moment, assets, restful, jwt
+    ckeditor, moment, assets, jwt
 from .models import User, Role, Post, Tag, Buzz, RevokedTokenModel
 from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
@@ -26,7 +27,7 @@ def page_not_found(e):
     return render_template('main/404.html'), 404
 
 def page_forbidden(e):
-    if 'api' in request.url_root:
+    if 'api' in request.url_root: # I wish this worked
         return make_response(jsonify("403 Forbidden"), 403)
     return render_template('main/403.html'), 403
 
@@ -53,10 +54,13 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app) # time formatting
-    add_resources(restful)
-    restful.init_app(app) # load Flask-RESTful
     
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
+        return models.RevokedTokenModel.is_jti_blacklisted(jti)
     jwt.init_app(app) # bolt on our Javascript Web Token tool
+    
     ####
     # ASSETS
     ###
@@ -92,7 +96,9 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
 
     # activate API blueprint: https://stackoverflow.com/questions/38448618/using-flask-restful-as-a-blueprint-in-large-application
-    from .api import api_blueprint    
+    from .api import api_blueprint   
+    restful = Api(api_blueprint, prefix="/api/v1") 
+    add_resources(restful)
     app.register_blueprint(api_blueprint) # registering the blueprint effectively runs init_app on the restful extension
     
     # --- NEW BLUEPRINTS GO BELOW THIS LINE ---

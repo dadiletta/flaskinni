@@ -60,11 +60,11 @@ class UserLoginAPI(Resource):
             return {'message': 'User {} doesn\'t exist'.format(data['username'])}
         
         # TODO: Use flask-security utils to verity hash
-        if User.verify_hash(User.generate_hash(data['password']), current_user.password): # UserModel.verify_hash(data['password'], current_user.password):
+        if User.verify_hash(data['password'], current_user.password): # UserModel.verify_hash(data['password'], current_user.password):
             access_token = create_access_token(identity = data['username'])
             refresh_token = create_refresh_token(identity = data['username'])
             return {
-                'message': 'Logged in as {}'.format(current_user.username),
+                'message': 'Logged in as {}'.format(current_user.email),
                 'access_token': access_token,
                 'refresh_token': refresh_token
                 }
