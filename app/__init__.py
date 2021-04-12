@@ -2,20 +2,17 @@ import datetime
 import os
 from datetime import datetime
 from flask import Flask, render_template, current_app, make_response, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
 from flask_security import current_user, login_required, RoleMixin, Security, \
     SQLAlchemyUserDatastore, UserMixin, utils
-from flask_uploads import configure_uploads
 from flaskext.markdown import Markdown
 from flask_assets import Bundle
 from flask_restful import Api
 
-from .extensions import db, uploaded_images, security, mail, migrate, admin, \
+from .extensions import db, security, mail, migrate, admin, \
     ckeditor, moment, assets, jwt
 from .models import User, Role, Post, Tag, Buzz, RevokedTokenModel
 from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
-from .api import add_resources
 
 
 def crash_page(e):
@@ -42,9 +39,6 @@ def create_app(config_name):
     ''' 
     FLASK EXTENTIONS
     '''
-    # load my image uploader extension 
-    configure_uploads(app, uploaded_images)
-    
     db.init_app(app) # load my database extension
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     # load my security extension
@@ -54,12 +48,6 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app) # time formatting
-    
-    @jwt.token_in_blacklist_loader
-    def check_if_token_in_blacklist(decrypted_token):
-        jti = decrypted_token['jti']
-        return models.RevokedTokenModel.is_jti_blacklisted(jti)
-    jwt.init_app(app) # bolt on our Javascript Web Token tool
     
     ####
     # ASSETS
@@ -96,10 +84,19 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
 
     # activate API blueprint: https://stackoverflow.com/questions/38448618/using-flask-restful-as-a-blueprint-in-large-application
+    '''
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
+        return models.RevokedTokenModel.is_jti_blacklisted(jti)
+        
+    jwt.init_app(app) # bolt on our Javascript Web Token tool
     from .api import api_blueprint   
     restful = Api(api_blueprint, prefix="/api/v1") 
+    from .api import add_resources
     add_resources(restful)
     app.register_blueprint(api_blueprint) # registering the blueprint effectively runs init_app on the restful extension
+    '''
     
     # --- NEW BLUEPRINTS GO BELOW THIS LINE ---
 

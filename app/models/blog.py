@@ -1,4 +1,4 @@
-from .. import db, uploaded_images
+from .. import db
 from flask import flash, url_for
 from flask_admin.contrib import sqla
 from flask_security import UserMixin, RoleMixin, current_user, utils
@@ -36,7 +36,7 @@ class Post(db.Model):
     @property
     def img(self):
         if self.image:
-            return uploaded_images.url(self.image)
+            return url_for('static', filename='uploads/blog/' + str(self.id))
         else:
             return None
     

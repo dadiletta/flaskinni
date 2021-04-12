@@ -1,5 +1,6 @@
 from flask import current_app
 from flask_restful import Resource, reqparse
+'''
 from ..models import User, RevokedTokenModel
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, \
     jwt_refresh_token_required, get_jwt_identity, get_raw_jwt
@@ -129,3 +130,5 @@ class SecretResource(Resource):
     def put(self):
         data = self.reqparse.parse_args()
         return {'message123': f'{data}'}
+
+'''

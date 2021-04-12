@@ -10,9 +10,9 @@ errors.log
 __pycache__/
 *.py[cod]
 *$py.class
-# images is intended for user-uploaded content
-app/static/images
-app/static/images/*
+# keep the upload folder, but not its contents
+app/static/uploads/*
+!app/static/uploads/.gitkeep
 
 # C extensions
 *.so

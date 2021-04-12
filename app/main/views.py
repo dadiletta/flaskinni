@@ -1,7 +1,6 @@
 # library imports
 from flask import render_template, redirect, flash, url_for, session, request, current_app, send_from_directory
 from flask_security import login_required, roles_required, current_user
-from flask_uploads import UploadNotAllowed
 from flask_mail import Message
 from slugify import slugify
 from jinja2 import TemplateNotFound
@@ -9,7 +8,7 @@ import os
 
 # our objects
 from . import main as app
-from .. import db, uploaded_images, mail, comms
+from .. import db, mail, comms
 from .forms import PostForm, ContactForm, SettingsForm, BuzzForm
 from ..models import Post, Tag, User, Buzz
 
@@ -31,7 +30,8 @@ def settings():
     if form.validate_on_submit():
         # check out this cool new Python ternary operator: https://book.pythontips.com/en/latest/ternary_operators.html
         original_image = None if not current_user.image else current_user.image        
-        form.populate_obj(current_user)  # this only works if the form property is the same name as the User property    
+        form.populate_obj(current_user)  # this only works if the form property is the same name as the User property 
+        '''   
         current_user.image = original_image   
         if form.image.has_file() and form.image.data != original_image:
             # TODO: delete old image if a new one is added
@@ -50,6 +50,7 @@ def settings():
                 flash(f"The image was not uploaded: {e}", 'danger')
         else:
             flash(f"{form.image.has_file()}")
+        '''
         db.session.add(current_user)
         db.session.commit()
         flash("User updated", "success")
@@ -124,12 +125,13 @@ def new_post():
     form = PostForm()
     if form.validate_on_submit():
         image = request.files.get('image')
+        '''
         filename = None
         try:
             filename = uploaded_images.save(image)
         except:
             flash("The image was not uploaded", 'danger')
-        '''
+
         # tags have been disabled
         if form.new_tag.data:
             new_tag = Tag(form.new_tag.data)
@@ -143,7 +145,7 @@ def new_post():
         subtitle = form.subtitle.data
         body = form.body.data
         slug = slugify(title)
-        post = Post(current_user, title, subtitle, body, slug, image=filename)
+        post = Post(current_user, title, subtitle, body, slug)
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('read', slug=slug))
@@ -164,6 +166,7 @@ def edit_post(post_id):
         original_image = post.image
         form.populate_obj(post)
         if form.image.has_file():
+            '''
             image = request.files.get('image')
             try:
                 filename = uploaded_images.save(image)
@@ -173,7 +176,7 @@ def edit_post(post_id):
                 post.image = filename
         else:
             post.image = original_image
-        '''
+
         if form.new_tag.data:
             new_tag = Tag(form.new_tag.data)
             db.session.add(new_tag)

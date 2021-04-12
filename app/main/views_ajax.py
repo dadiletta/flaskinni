@@ -9,7 +9,7 @@ from flask_mail import Message as FlaskMessage
 from slugify import slugify
 from datetime import datetime
 
-from ..extensions import db, uploaded_images, mail, moment
+from ..extensions import db, mail, moment
 from . import main as app
 from .forms import BuzzForm
 from .. import comms
