@@ -28,7 +28,7 @@
               {{ form.hidden_tag() }}
 
               {% if post and post.image %}
-              <img src="{{ post.imgsrc }}" height="80px" class="img-rounded">
+              <img src="{{ post.img }}" height="80px" class="img-rounded">
               {% endif %}
 
               {{ render_field(form.image, class='form-control') }}

@@ -1,15 +1,14 @@
 import datetime
 import os
 from datetime import datetime
-from flask import Flask, render_template, current_app, make_response, jsonify, request
-from flask_security import current_user, login_required, RoleMixin, Security, \
-    SQLAlchemyUserDatastore, UserMixin, utils
+from flask import Flask, render_template, make_response, jsonify, request
+from flask_security import current_user, SQLAlchemyUserDatastore, utils
 from flaskext.markdown import Markdown
 from flask_assets import Bundle
 from flask_restful import Api
 
 from .extensions import db, security, mail, migrate, admin, \
-    ckeditor, moment, assets, jwt
+    ckeditor, moment, assets
 from .models import User, Role, Post, Tag, Buzz, RevokedTokenModel
 from .models.main import UserAdmin, RoleAdmin # not db tables
 from .main.forms import ExtendedRegisterForm
@@ -89,7 +88,7 @@ def create_app(config_name):
     def check_if_token_in_blacklist(decrypted_token):
         jti = decrypted_token['jti']
         return models.RevokedTokenModel.is_jti_blacklisted(jti)
-        
+
     jwt.init_app(app) # bolt on our Javascript Web Token tool
     from .api import api_blueprint   
     restful = Api(api_blueprint, prefix="/api/v1") 

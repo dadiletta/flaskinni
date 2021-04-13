@@ -1,10 +1,13 @@
 {% extends "base.html" %} 
 
+{#- PAGE SETTINGS -#}
 {% block linkitem %}homepage-link{% endblock %}
 {% set title = "Home" %} 
 
+{#- CONTENT -#}
 {% block content %}
 
+  {#- FULL-HEIGHT HERO -#}
   <div id="hero" class="full-height bg-gradient-secondary d-flex align-items-center">
     <img src="{{ url_for('static', filename='img/Flaskinni.png') }}"/>
   </div>

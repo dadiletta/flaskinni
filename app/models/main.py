@@ -71,7 +71,7 @@ class User(db.Model, UserMixin):
     def img(self):
         """ Builds a path for the saved image """
         if self.image:
-            return url_for('static', filename='uploads/avatars/' + str(self.id))
+            return url_for('static', filename=f"uploads/{self.id}/{self.image}")
         else:
             return None
 

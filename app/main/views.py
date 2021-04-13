@@ -1,10 +1,11 @@
 # library imports
-from flask import render_template, redirect, flash, url_for, session, request, current_app, send_from_directory
+from flask import render_template, redirect, flash, url_for, session, request, current_app, send_from_directory, abort
 from flask_security import login_required, roles_required, current_user
+from werkzeug.utils import secure_filename
 from flask_mail import Message
 from slugify import slugify
 from jinja2 import TemplateNotFound
-import os
+import os, imghdr
 
 # our objects
 from . import main as app
@@ -31,26 +32,31 @@ def settings():
         # check out this cool new Python ternary operator: https://book.pythontips.com/en/latest/ternary_operators.html
         original_image = None if not current_user.image else current_user.image        
         form.populate_obj(current_user)  # this only works if the form property is the same name as the User property 
-        '''   
-        current_user.image = original_image   
-        if form.image.has_file() and form.image.data != original_image:
-            # TODO: delete old image if a new one is added
+        current_user.image = original_image # avoid erasing any image properties just yet
+        if form.image.has_file():
             image = request.files.get('image')
+            filename = secure_filename(image.filename)
             try:
-                user_upload(current_user, image)
-                current_user.image = str(image.filename)
+                # https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
+                path = f"{current_app.root_path}/static/uploads/{current_user.id}" # notice how I pass the user ID? That's cause we need the right folder
+                if not os.path.exists(path):
+                    os.mkdir(path)
+                if filename != '':
+                    file_ext = os.path.splitext(filename)[1]
+                    if file_ext not in ['.jpg', '.png', '.gif'] or \
+                            file_ext != validate_image(image.stream):
+                        abort(400)
+                image.save(os.path.join(f"{path}/", filename))
+                current_user.image = str(filename)
                 # delete the previous image if there was one
                 try:                        
                     if original_image:
-                        old_image_path = f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }/{original_image}"
+                        old_image_path = f"{current_app.root_path}/static/uploads/{current_user.id}/{original_image}"
                         os.remove(old_image_path)
                 except Exception as e:
                     flash(f"Failed to delete previous image: {e}", 'danger')
             except Exception as e:
                 flash(f"The image was not uploaded: {e}", 'danger')
-        else:
-            flash(f"{form.image.has_file()}")
-        '''
         db.session.add(current_user)
         db.session.commit()
         flash("User updated", "success")
@@ -125,13 +131,23 @@ def new_post():
     form = PostForm()
     if form.validate_on_submit():
         image = request.files.get('image')
-        '''
-        filename = None
+        filename = secure_filename(image.filename)
         try:
-            filename = uploaded_images.save(image)
-        except:
-            flash("The image was not uploaded", 'danger')
-
+            # https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
+            path = f"{current_app.root_path}/static/uploads/blog" 
+            if not os.path.exists(path):
+                os.mkdir(path)
+            if filename != '':
+                file_ext = os.path.splitext(filename)[1]
+                if file_ext not in ['.jpg', '.png', '.gif'] or \
+                        file_ext != validate_image(image.stream):
+                    abort(400)
+            # TODO: check if file already exists with that name
+            image.save(os.path.join(f"{path}/", filename))
+            current_user.image = str(filename)
+        except Exception as e:
+            flash(f"The image was not uploaded: {e}", 'danger')
+        '''
         # tags have been disabled
         if form.new_tag.data:
             new_tag = Tag(form.new_tag.data)
@@ -145,7 +161,7 @@ def new_post():
         subtitle = form.subtitle.data
         body = form.body.data
         slug = slugify(title)
-        post = Post(current_user, title, subtitle, body, slug)
+        post = Post(current_user, title, subtitle, body, slug, image=filename)
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('read', slug=slug))
@@ -161,28 +177,44 @@ def read(slug):
 def edit_post(post_id):
     post = Post.query.filter_by(id=post_id).first_or_404()
     form = PostForm(obj=post)
-    filename = None
-    if form.validate_on_submit():
-        original_image = post.image
-        form.populate_obj(post)
-        if form.image.has_file():
-            '''
-            image = request.files.get('image')
-            try:
-                filename = uploaded_images.save(image)
-            except:
-                flash("The image was not uploaded")
-            if filename:
-                post.image = filename
-        else:
-            post.image = original_image
 
+    if form.validate_on_submit():
+        original_image = None if not post.image else post.image    
+        form.populate_obj(post)
+        form.image = original_image # avoid accidentally overwriting image
+        if form.image.has_file():
+            image = request.files.get('image')
+            filename = secure_filename(image.filename)
+            try:
+                # https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
+                path = f"{current_app.root_path}/static/uploads/blog"
+                if not os.path.exists(path):
+                    os.mkdir(path)
+                if filename != '':
+                    file_ext = os.path.splitext(filename)[1]
+                    if file_ext not in ['.jpg', '.png', '.gif'] or \
+                            file_ext != validate_image(image.stream):
+                        abort(400)
+                image.save(os.path.join(f"{path}/", filename))
+                post.image = str(filename)
+                # delete the previous image if there was one
+                try:                        
+                    if original_image:
+                        old_image_path = f"{current_app.root_path}/static/uploads/blog/{original_image}"
+                        os.remove(old_image_path)
+                except Exception as e:
+                    flash(f"Failed to delete previous image: {e}", 'danger')
+            except Exception as e:
+                flash(f"The image was not uploaded: {e}", 'danger')
+        '''
+        # TODO: restore tags
         if form.new_tag.data:
             new_tag = Tag(form.new_tag.data)
             db.session.add(new_tag)
             db.session.flush()
             post.tag = new_tag
         '''
+        db.session.add(post)
         db.session.commit()
         return redirect(url_for('read', slug=post.slug))
     return render_template('main/post.html', form=form, post=post, action="edit")
@@ -226,11 +258,21 @@ def uploaded_files(user_id, filename):
     path = current_app.config['UPLOADED_IMAGES_DEST'] + f"/{user_id}" # USER-BASED FOLDER SYSTEM so we can delete contents based on user
     return send_from_directory(path, filename)
 
-def user_upload(user, file):
+def validate_image(stream):
+    """ Checks image validity using Python's imghdr """
+    # https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask
+    header = stream.read(512)
+    stream.seek(0)
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
+
+def avatar_upload(user, file, **kwargs):
     """upload's a file to a user's folder"""
-    path = f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }" # notice how I pass the user ID? That's cause we need the right folder
+    path = f"{current_app.root_path}/static/uploads/avatars/{ current_user.id }" # notice how I pass the user ID? That's cause we need the right folder
     if not os.path.exists(path):
         os.mkdir(path)
-    file.save(os.path.join(f"{current_app.config['UPLOADED_IMAGES_DEST']}/{ current_user.id }/", file.filename))
-    return url_for('main.uploaded_files', user_id=user.id, filename=file.filename) 
+    file.save(os.path.join(f"{path}/", file.filename))
+    return url_for('static', filename=f"uploads/avatars/{user.id}/{file.filename}") 
 

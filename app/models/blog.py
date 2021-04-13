@@ -36,7 +36,7 @@ class Post(db.Model):
     @property
     def img(self):
         if self.image:
-            return url_for('static', filename='uploads/blog/' + str(self.id))
+            return url_for('static', filename=f"uploads/blog/{self.image}")
         else:
             return None
     
