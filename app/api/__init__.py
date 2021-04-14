@@ -1,11 +1,8 @@
 from flask import Blueprint
 api_blueprint = Blueprint('api_blueprint', __name__)
 
-'''
-from .resources import UserRegistrationAPI, UserLoginAPI, UserLogoutAccess, UserLogoutRefresh, \
+from .user_resources import UserRegistrationAPI, UserLoginAPI, UserLogoutAccess, UserLogoutRefresh, \
     TokenRefresh, SecretResource
-
-
 
 
 def add_resources(api):
@@ -17,4 +14,3 @@ def add_resources(api):
     api.add_resource(TokenRefresh, '/token/refresh')
     api.add_resource(SecretResource, '/secret') # super fun test routes
 
-'''

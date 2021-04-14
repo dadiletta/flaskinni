@@ -1,4 +1,3 @@
-import datetime
 import os
 from datetime import datetime
 from flask import Flask, render_template, make_response, jsonify, request
@@ -8,9 +7,7 @@ from flask_assets import Bundle
 from flask_restful import Api
 
 from .extensions import db, security, mail, migrate, admin, \
-    ckeditor, moment, assets
-from .models import User, Role, Post, Tag, Buzz, RevokedTokenModel
-from .models.main import UserAdmin, RoleAdmin # not db tables
+    ckeditor, moment, assets, jwt
 from .main.forms import ExtendedRegisterForm
 
 
@@ -28,7 +25,6 @@ def page_forbidden(e):
     return render_template('main/403.html'), 403
 
 
-# OUR COOL application factory
 def create_app(config_name):
     """ Application factory """
     # Flask init
@@ -39,6 +35,7 @@ def create_app(config_name):
     FLASK EXTENTIONS
     '''
     db.init_app(app) # load my database extension
+    from .models import User, Role
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     # load my security extension
     security.init_app(app, user_datastore, confirm_register_form=ExtendedRegisterForm)
@@ -47,6 +44,7 @@ def create_app(config_name):
     md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app) # time formatting
+    jwt.init_app(app)
     
     ####
     # ASSETS
@@ -67,11 +65,13 @@ def create_app(config_name):
         assets.register('all_css', all_css)
         admin.init_app(app)
         ckeditor.init_app(app)
+        from .models import Post, Buzz # importing models carefully as needed to avoid circular import issues
+        from .models.main import UserAdmin, RoleAdmin # not db tables
         admin.add_view(UserAdmin(User, db.session))
         admin.add_view(RoleAdmin(Role, db.session))
         admin.add_view(RoleAdmin(Post, db.session))
         admin.add_view(RoleAdmin(Buzz, db.session))
-        # TODO: Add new models here so you can manage data from Flask-Admin's convenient tools
+        # Add new models here so you can manage data from Flask-Admin's convenient tools
     except Exception as e:
         app.logger.error(f'Failed activating extensions: {e}')
 
@@ -83,20 +83,19 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
 
     # activate API blueprint: https://stackoverflow.com/questions/38448618/using-flask-restful-as-a-blueprint-in-large-application
-    '''
-    @jwt.token_in_blacklist_loader
-    def check_if_token_in_blacklist(decrypted_token):
-        jti = decrypted_token['jti']
-        return models.RevokedTokenModel.is_jti_blacklisted(jti)
-
     jwt.init_app(app) # bolt on our Javascript Web Token tool
     from .api import api_blueprint   
     restful = Api(api_blueprint, prefix="/api/v1") 
     from .api import add_resources
     add_resources(restful)
     app.register_blueprint(api_blueprint) # registering the blueprint effectively runs init_app on the restful extension
-    '''
-    
+
+    # Callback function to check if a JWT exists in the redis blocklist
+    @jwt.token_in_blocklist_loader
+    def check_if_token_is_revoked(jwt_header, jwt_payload):
+        jti = jwt_payload["jti"]
+        return models.RevokedTokenModel.is_jti_blocklisted(jti)
+
     # --- NEW BLUEPRINTS GO BELOW THIS LINE ---
 
 

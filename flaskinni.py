@@ -1,23 +1,17 @@
 import os # give me tools to get my own IP and manage my computer
+import logging
 from dotenv import load_dotenv # connect me with any .env files
-from flask_security import utils # a tool to encrypt passwords
+from flask_migrate import Migrate, upgrade # database updater
+
+from app import create_app, db  # load my app factory
 
 # https://github.com/theskumar/python-dotenv
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-import sys
-import logging
-import click # this lets me use "flask ..." commands
-from datetime import datetime # the time
-from flask_migrate import Migrate, upgrade # database updater
-from app import create_app, db  # load my app factory
-from app.models import User, Role, Post, Tag # get my local objects
-
 app = create_app(os.getenv('FLASK_CONFIG') or 'settings') # triggers app factory
 migrate = Migrate(app, db) # activate my database upgrader tool
-
 
 # activate logging
 # setup logging config
@@ -48,7 +42,7 @@ app.logger.info('App started.')
 # if I talk to my app through CLI, pre-load some stuff
 @app.shell_context_processor
 def make_shell_context():
-    # TODO: proper imports
+    from app.models import User, Role
     return dict(db=db, User=User, Role=Role)
 
 '''
