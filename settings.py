@@ -7,6 +7,15 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 DEBUG=os.environ.get("DEBUG", True) 
 
 ###################
+##  FLASKINNI  
+###################
+ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", 'flaskinni@gmail.com')
+STARTING_ADMINS = os.environ.get("STARTING_ADMINS", [ADMIN_EMAIL])
+STARTING_ADMIN_PASS = os.environ.get("STARTING_ADMIN_PASS", 'flaskinni123')
+MAX_CONTENT_LENGTH = os.environ.get("MAX_CONTENT_LENGTH", 2048 * 2048)
+UPLOAD_EXTENSIONS = os.environ.get("UPLOAD_EXTENSIONS", ['.jpg', '.png', '.gif'])
+
+###################
 ##  SQLALCHEMY
 ###################
 POSTGRES = {
@@ -22,13 +31,12 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
 SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", True)
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 SESSION_PROTECTION = 'strong'
-# activate flask elements
 
 ###################
-##  FLASK-UPLOAD 
+##  JWT 
 ###################
-UPLOADED_IMAGES_DEST = os.environ.get("UPLOADED_IMAGES_DEST", str(os.path.abspath(os.path.join(os.path.dirname(__file__), '/app/static/images'))))
-UPLOADED_IMAGES_URL = os.environ.get("UPLOADED_IMAGES_URL", "/static/images/") 
+PROPAGATE_EXCEPTIONS = os.environ.get("PROPAGATE_EXCEPTIONS", True)
+JWT_BLOCKLIST_TOKEN_CHECKS = os.environ.get("JWT_BLOCKLIST_TOKEN_CHECKS", ['access', 'refresh'])
 
 ###################
 ##  FLASK-SECURITY 
@@ -37,16 +45,9 @@ SECURITY_REGISTERABLE = os.environ.get("SECURITY_REGISTERABLE", True)
 SECURITY_CONFIRMABLE = os.environ.get("SECURITY_CONFIRMABLE", True)
 SECURITY_RECOVERABLE = os.environ.get("SECURITY_RECOVERABLE", True)  
 SECURITY_PASSWORD_HASH = os.environ.get("SECURITY_PASSWORD_HASH", "pbkdf2_sha512")
-SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_HASH", "pbkdf2_sha512") 
+SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_HASH", "XXXXXXXXXXXXX") 
 SECURITY_POST_LOGIN_VIEW = '/'   # controls what page you see after login
 SECURITY_EMAIL_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", 'flaskinni@flaskinni.org')# fixes error https://github.com/mattupstate/flask-security/issues/685
-
-###################
-##  FLASKINNI  
-###################
-ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", 'flaskinni@gmail.com')
-STARTING_ADMINS = [ADMIN_EMAIL]
-STARTING_ADMIN_PASS = os.environ.get("STARTING_ADMIN_PASS", 'flaskinni123')
 
 ###################
 ##  FLASK-MAIL 
@@ -63,8 +64,5 @@ MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", 'flaskinni@gmail.com
 ###################
 ##  FLASK-RESTFUL / JWT
 ###################
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX") 
-JWT_BLACKLIST_ENABLED = os.environ.get("JWT_BLACKLIST_ENABLED", True) 
-JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
-
-
+PROPAGATE_EXCEPTIONS = os.environ.get("JWT_BLACKLIST_ENABLED", True) 
+JWT_BLOCKLIST_TOKEN_CHECKS = os.environ.get("JWT_BLOCKLIST_TOKEN_CHECKS", ['access', 'refresh']) 
