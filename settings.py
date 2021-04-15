@@ -12,7 +12,6 @@ DEBUG=os.environ.get("DEBUG", True)
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", 'flaskinni@gmail.com')
 STARTING_ADMINS = os.environ.get("STARTING_ADMINS", [ADMIN_EMAIL])
 STARTING_ADMIN_PASS = os.environ.get("STARTING_ADMIN_PASS", 'flaskinni123')
-MAX_CONTENT_LENGTH = os.environ.get("MAX_CONTENT_LENGTH", 2048 * 2048)
 UPLOAD_EXTENSIONS = os.environ.get("UPLOAD_EXTENSIONS", ['.jpg', '.png', '.gif'])
 
 ###################
