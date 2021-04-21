@@ -22,10 +22,8 @@
     <![endif]-->
 
 
-    {#-- Custom styles for this theme loaded in __init__.py --#}
-    {% assets "all_css" %}
-    <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
-    {% endassets %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/packed.css') }}" type="text/css" />
+
 
     {% if custom_styles %}
     <style>{{ custom_styles }}</style>
