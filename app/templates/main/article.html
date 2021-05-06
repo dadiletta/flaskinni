@@ -7,7 +7,7 @@
 <div class="container-fluid">
   {% from "main/_helpers.html" import header_with_image, header %}
   {% if post and post.image %}
-  {{ header_with_image(post.title, "postheader", post.imgsrc) }}
+  {{ header_with_image(post.title, "postheader", post.img) }}
   {% else %}
   {{ header(post.title, "postheader") }}
   {% endif %}
@@ -15,11 +15,11 @@
       <div class="row justify-content-md-center">
           <div class="col-md-10">
             {% if current_user.has_role('admin') %}
-              <a href="{{ url_for('edit_post', post_id=post.id) }}">Edit</a> -
-              <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+              <a href="{{ url_for('main.edit_post', post_id=post.id) }}">Edit</a> -
+              <a href="{{ url_for('main.delete_post', post_id=post.id) }}">Delete</a>
             {% endif %}
             <hr />
-            <div class="text-muted">Posted by <a href="#">{{ post.user_id|get_name_by_key }}</a> on {{ post.pubdate }}.
+            <div class="text-muted">Posted by <a href="#">{{ post.user }}</a> on {{ post.pubdate }}.
             </div>
           </div>
       </div>

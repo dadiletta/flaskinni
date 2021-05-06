@@ -3,9 +3,6 @@
 {% block linkitem %}blogpost-link{% endblock %}
 {% block title %}Blog Post{% endblock %}
 
-{% block head %}
-{{ ckeditor.load() }}
-{% endblock %}
 
 {% block content %}
 
@@ -32,8 +29,8 @@
               {% endif %}
 
               {{ render_field(form.image, class='form-control') }}
-              {{ render_field(form.title, class='form-control') }}
-              {{ render_field(form.subtitle, class='form-control') }}
+              {{ render_field(form.title, class='form-control', placeholder="Title") }}
+              {{ render_field(form.subtitle, class='form-control', placeholder="Subtitle") }}
               {{ render_field(form.body, class='form-control', rows=10) }}
 
               {% if action=="new" %}<button type="submit" class="btn btn-primary">Post</button>{% else %}
@@ -45,4 +42,9 @@
   </div>
 </div>
 
+{% endblock %}
+
+{% block tail %}
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='body') }} 
 {% endblock %}

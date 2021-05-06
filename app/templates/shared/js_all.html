@@ -1,10 +1,11 @@
 
 <!-- Bootstrap core JavaScript-->
 <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js' ) }}"></script>
-{{ moment.include_moment() }}
-{% assets "js_all" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script> {# look in __init__ for all the JS that's loaded  #}
-{% endassets %}
+<script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js' ) }}"></script>
+<script src="{{ url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js' ) }}"></script>
+<script src="{{ url_for('static', filename='js/sb-admin-2.min.js' ) }}"></script>
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{{ moment.include_moment() }}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='js/custom.js') }}"></script>

@@ -161,10 +161,10 @@ def new_post():
         subtitle = form.subtitle.data
         body = form.body.data
         slug = slugify(title)
-        post = Post(current_user, title, subtitle, body, slug, image=filename)
+        post = Post(user_id=current_user.id, title=title, subtitle=subtitle, body=body, slug=slug, image=filename)
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('read', slug=slug))
+        return redirect(url_for('main.read', slug=slug))
     return render_template('main/post.html', form=form, action="new")
     
 @app.route('/article/<slug>')
@@ -226,7 +226,7 @@ def delete_post(post_id):
     post.live = False
     db.session.commit()
     flash("Article deleted", 'success')
-    return redirect(url_for('blog_index'))
+    return redirect(url_for('main.index'))
 
 #################
 ## HANDLER METHODS
@@ -265,6 +265,7 @@ def validate_image(stream):
     stream.seek(0)
     format = imghdr.what(None, header)
     if not format:
+        flash("Error validating image.", "danger")
         return None
     return '.' + (format if format != 'jpeg' else 'jpg')
 

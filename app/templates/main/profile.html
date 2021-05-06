@@ -9,7 +9,9 @@
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">{{ user }}</h1>
   </div>
+</div>
 
+<div class="container">
   <!-- Content Row -->
   <div class="row">
     {# A column should be used around here #}
@@ -21,7 +23,7 @@
 				</div>
 				<div class="card-body">
 					{{ user.first_name }}<br/>{{ user.email }}<br/>
-          {{ user.last_name }}<br/>{{ user.imgsrc }}<br/>
+          {{ user.last_name }}<br/>{{ user.img }}<br/>
           {{ user.phone }}<br/>
           {{ user.address }}<br/>
           {% if user.last_seen %}

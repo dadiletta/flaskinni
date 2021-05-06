@@ -9,6 +9,9 @@
     {% endblock %}
     {# overwrite the title block in your templates to modify the title #}
     <title>Flaskinni | {{ title if title else "Welcome" }}</title>
+    <link rel="icon" 
+      type="image/png" 
+      href="{{ url_for('static', filename='img/Flaskinni_small.png') }}">
     <!-- Bootstrap Core CSS zz123-->
      <!-- Custom fonts for this template-->
     <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css' ) }}" rel="stylesheet" type="text/css">
@@ -24,8 +27,4 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/packed.css') }}" type="text/css" />
 
-
-    {% if custom_styles %}
-    <style>{{ custom_styles }}</style>
-    {% endif %}
 </head>

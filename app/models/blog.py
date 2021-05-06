@@ -24,7 +24,7 @@ class Post(db.Model):
     body = db.Column(db.Text)
     image = db.Column(db.String(125))
     slug = db.Column(db.String(125), unique=True)
-    publish_date = db.Column(db.DateTime)
+    publish_date = db.Column(db.DateTime(), default=datetime.utcnow)
     live = db.Column(db.Boolean)
     tags = db.relationship(
         'Tag',

@@ -3,11 +3,10 @@ from datetime import datetime
 from flask import Flask, render_template, make_response, jsonify, request
 from flask_security import current_user, SQLAlchemyUserDatastore, utils
 from flaskext.markdown import Markdown
-from flask_assets import Bundle
 from flask_restful import Api
 
 from .extensions import db, security, mail, migrate, admin, \
-    ckeditor, moment, assets, jwt
+    ckeditor, moment, jwt
 from .main.forms import ExtendedRegisterForm
 
 
@@ -47,21 +46,21 @@ def create_app(config_name):
     jwt.init_app(app)
     
     ####
-    # ASSETS
+    # ASSETS - feature removed as it had reliability issues
     ###
+    '''
     assets.init_app(app)
     js = Bundle('vendor/bootstrap/js/bootstrap.bundle.min.js', 'vendor/jquery-easing/jquery.easing.min.js', 
             'js/sb-admin-2.min.js', 
             filters='jsmin', output='js/packed.js')
-    #sass = Bundle('scss/custom.scss', filters='scss', output='css/custom.css')
-    #all_css = Bundle(sass, filters='cssmin', output="css/packed.css")           
+    sass = Bundle('scss/custom.scss', filters='scss', output='css/custom.css')
+    all_css = Bundle(sass, filters='cssmin', output="css/packed.css")      
+    '''     
 
 
     # EXTENSIONS THAT SOMETIMES CRASH
     # TODO: don't be lazy, Mr. A, get rid of this try-except
     try:
-        assets.register('js_all', js)
-        assets.register('all_css', all_css)
         admin.init_app(app)
         ckeditor.init_app(app)
         from .models import Post, Buzz # importing models carefully as needed to avoid circular import issues

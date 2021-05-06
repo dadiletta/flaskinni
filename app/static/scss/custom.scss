@@ -27,6 +27,12 @@
     z-index: 99999;
 }
 
+/* Fixes a toggle button issue */
+.custom-control-label::after {
+    top: .3rem;
+    left: -2.05rem;
+}
+
 
 /**********************************/
 /************  LOGO  **************/
