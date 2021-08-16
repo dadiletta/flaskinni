@@ -81,7 +81,6 @@ def create_app(config_name):
     app.register_blueprint(main_blueprint)
 
     # activate API blueprint: https://stackoverflow.com/questions/38448618/using-flask-restful-as-a-blueprint-in-large-application
-    jwt.init_app(app) # bolt on our Javascript Web Token tool
     from .api import api_blueprint   
     restful = Api(api_blueprint, prefix="/api/v1") 
     from .api import add_resources

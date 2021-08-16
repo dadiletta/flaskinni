@@ -147,7 +147,6 @@ def new_post():
             current_user.image = str(filename)
         except Exception as e:
             flash(f"The image was not uploaded: {e}", 'danger')
-        '''
         # tags have been disabled
         if form.new_tag.data:
             new_tag = Tag(form.new_tag.data)
@@ -156,7 +155,6 @@ def new_post():
             tag = new_tag
         else:
             tag = form.tag.data
-        '''
         title = form.title.data
         subtitle = form.subtitle.data
         body = form.body.data
@@ -206,17 +204,16 @@ def edit_post(post_id):
                     flash(f"Failed to delete previous image: {e}", 'danger')
             except Exception as e:
                 flash(f"The image was not uploaded: {e}", 'danger')
-        '''
+
         # TODO: restore tags
         if form.new_tag.data:
             new_tag = Tag(form.new_tag.data)
             db.session.add(new_tag)
             db.session.flush()
             post.tag = new_tag
-        '''
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('read', slug=post.slug))
+        return redirect(url_for('main.read', slug=post.slug))
     return render_template('main/post.html', form=form, post=post, action="edit")
 
 @app.route('/blog/delete/<int:post_id>')
