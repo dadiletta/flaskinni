@@ -9,7 +9,7 @@
 
 <div class="container-fluid">
   
-  {% from "main/_helpers.html" import header %}
+  {% from "base/_helpers.html" import header %}
     {% if action=="new" %}
       {{ header("New Blog Post", "blogheader") }}
     {% else %}
@@ -20,7 +20,7 @@
       <div class="row justify-content-md-center">
           <div class="col-md-10">
             {% from "security/_macros.html" import render_field %}
-            {% if action=="new" %}<form method="POST" action="{{ url_for('main.new_post')}}" enctype="multipart/form-data" role="form">{% else %}<form method="POST" action="{{ url_for('main.edit_post', post_id=post.id)}}" enctype="multipart/form-data" role="form">
+            {% if action=="new" %}<form method="POST" action="{{ url_for('base.new_post')}}" enctype="multipart/form-data" role="form">{% else %}<form method="POST" action="{{ url_for('base.edit_post', post_id=post.id)}}" enctype="multipart/form-data" role="form">
               {% endif %}
               {{ form.hidden_tag() }}
 
@@ -45,6 +45,10 @@
 {% endblock %}
 
 {% block tail %}
-{{ ckeditor.load() }}
-{{ ckeditor.config(name='body') }} 
+<!-- Initialize Quill editor -->
+<script>
+  var quill = new Quill('#body', {
+    theme: 'bubble'
+  });
+</script>
 {% endblock %}

@@ -1,6 +1,6 @@
 # library imports
 from flask import render_template, redirect, flash, url_for, session, request, current_app, send_from_directory, abort
-from flask_security import login_required, roles_required, current_user
+from flask_security import auth_required, login_required, roles_required, current_user
 from werkzeug.utils import secure_filename
 from flask_mail import Message
 from slugify import slugify
@@ -8,7 +8,7 @@ from jinja2 import TemplateNotFound
 import os, imghdr
 
 # our objects
-from . import main as app
+from . import base_blueprint as app # renamed to "app" so the blueprint layer fades to the background
 from .. import db, mail, comms
 from .forms import PostForm, ContactForm, SettingsForm, BuzzForm
 from ..models import Post, Tag, User, Buzz
@@ -22,10 +22,11 @@ from ..models import Post, Tag, User, Buzz
 def index():
     data = {} 
     data['posts'] = Post.query.order_by(Post.publish_date.desc()).all()
-    return render_template('main/index.html', data=data)
+    return render_template('base/index.html', data=data)
 
 @app.route('/settings', methods=('GET', 'POST'))
 @app.route('/settings.html', methods=('GET', 'POST'))
+@auth_required()
 def settings():
     form = SettingsForm(obj=current_user)
     if form.validate_on_submit():
@@ -60,17 +61,17 @@ def settings():
         db.session.add(current_user)
         db.session.commit()
         flash("User updated", "success")
-    return render_template('main/settings.html', form=form)
+    return render_template('base/settings.html', form=form)
 
 @app.route('/user/<int:user_id>')
 @login_required
 def profile(user_id):
     user = User.query.filter_by(id=user_id).first_or_404()
     if current_user == user or user.public_profile:
-        return render_template('main/profile.html', user=user)
+        return render_template('base/profile.html', user=user)
     else:
         flash("UNAUTHORIZED ACCESS", "danger")
-        return redirect(url_for('main.index'))
+        return redirect(url_for('base.index'))
 
 @app.route('/superadmin')
 @roles_required('admin')
@@ -79,7 +80,7 @@ def superadmin():
     data['users'] = User.query.all()
     data['buzz'] = Buzz.query.order_by(Buzz.created_on.desc()).limit(50).all()
     data['buzz_form'] = BuzzForm()
-    return render_template('main/superadmin.html', data=data)
+    return render_template('base/superadmin.html', data=data)
   
 @app.route('/contact', methods=('GET', 'POST'))
 def contact():
@@ -97,7 +98,7 @@ def contact():
             mail.send(msg)
         flash("Message sent", 'success')
         return redirect(url_for('index'))
-    return render_template('main/contact.html', form=form)
+    return render_template('base/contact.html', form=form)
 
 @app.route('/view/<template>')
 def route_template(template):
@@ -111,14 +112,14 @@ def route_template(template):
 
         if 'reset_instructions' in template:
             return render_template( f"security/email/{template}" )
-        return render_template( f"main/{template}" )
+        return render_template( f"base/{template}" )
 
     except TemplateNotFound:
-        return render_template('main/404.html'), 404
+        return render_template('base/404.html'), 404
     
     except Exception as e:
         current_app.logger.error(f'Failed to render template: {e}')
-        return render_template('main/500.html'), 500
+        return render_template('base/500.html'), 500
         
 
 ###################
@@ -162,13 +163,13 @@ def new_post():
         post = Post(user_id=current_user.id, title=title, subtitle=subtitle, body=body, slug=slug, image=filename)
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('main.read', slug=slug))
-    return render_template('main/post.html', form=form, action="new")
+        return redirect(url_for('base.read', slug=slug))
+    return render_template('base/post.html', form=form, action="new")
     
 @app.route('/article/<slug>')
 def read(slug):
     post = Post.query.filter_by(slug=slug).first_or_404()
-    return render_template('main/article.html', post=post)
+    return render_template('base/article.html', post=post)
     
 @app.route('/blog/edit/<int:post_id>', methods=('GET', 'POST'))
 @roles_required('admin')
@@ -213,8 +214,8 @@ def edit_post(post_id):
             post.tag = new_tag
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('main.read', slug=post.slug))
-    return render_template('main/post.html', form=form, post=post, action="edit")
+        return redirect(url_for('base.read', slug=post.slug))
+    return render_template('base/post.html', form=form, post=post, action="edit")
 
 @app.route('/blog/delete/<int:post_id>')
 @roles_required('admin')
@@ -223,7 +224,7 @@ def delete_post(post_id):
     post.live = False
     db.session.commit()
     flash("Article deleted", 'success')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('base.index'))
 
 #################
 ## HANDLER METHODS
@@ -243,7 +244,7 @@ def create_buzz():
         flash("Buzz successfully created", "success")
     else:
         flash(f"Buzz form failed: {form.errors}", "danger")
-    return redirect(url_for('main.superadmin'))
+    return redirect(url_for('base.superadmin'))
 
 
 #################

@@ -1,12 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms.fields.html5 import EmailField, TelField
+from wtforms.fields import EmailField, TelField
 from wtforms import validators, StringField, PasswordField, TextAreaField, SubmitField, BooleanField
 from flask_wtf.file import FileField, FileAllowed
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from flask_ckeditor import CKEditorField
 from ..models import Tag
-from flask_security.forms import RegisterForm, ConfirmRegisterForm
-from .. import db
+from flask_security.forms import ConfirmRegisterForm
 
 # This queues up all tags with no regard who made them
 def tags():
@@ -14,12 +11,12 @@ def tags():
 
 
 class ExtendedRegisterForm(ConfirmRegisterForm):
-    first_name = StringField('First Name', [validators.Required()])
-    last_name = StringField('Last Name', [validators.Required()])
+    first_name = StringField('First Name', [validators.DataRequired()])
+    last_name = StringField('Last Name', [validators.DataRequired()])
     email = EmailField('Email address', [validators.DataRequired(), validators.Email()])
 
     password = PasswordField('Password', [
-            validators.Required(),
+            validators.DataRequired(),
             validators.Length(min=4, max=80)
         ])
         
@@ -41,13 +38,13 @@ class PostForm(FlaskForm):
         FileAllowed(['jpg', 'png'], 'Images only!')
     ])
     title = StringField('Title', [
-            validators.Required(),
+            validators.DataRequired(),
             validators.Length(max=80)])
     subtitle = StringField('Subtitle', [
-            validators.Required(),
+            validators.DataRequired(),
             validators.Length(max=80)])        
-    body = CKEditorField('Content', validators=[validators.Required()])
-    # tag = QuerySelectField('Tag', query_factory=tags, validators=[validators.Required()])
+    body = TextAreaField('Content', validators=[validators.DataRequired()])
+    # tag = QuerySelectField('Tag', query_factory=tags, validators=[validators.DataRequired()])
     # new_tag = StringField('New Tag')
 
 
@@ -61,8 +58,8 @@ class ContactForm(FlaskForm):
 
 class SettingsForm(FlaskForm):
     """ Modify a user's details and options """
-    first_name = StringField('First name', [validators.Required()])
-    last_name = StringField('Last name', [validators.Required()])
+    first_name = StringField('First name', [validators.DataRequired()])
+    last_name = StringField('Last name', [validators.DataRequired()])
     about = TextAreaField('About me', [validators.Optional()])
     address = TextAreaField('Address', [validators.Optional()])
     phone = TelField('Phone', [validators.Optional()])
@@ -75,5 +72,5 @@ class SettingsForm(FlaskForm):
 
 class BuzzForm(FlaskForm):
     """ Simple form to create a buzz object """
-    title = StringField('Title', [validators.Required()])
-    body = CKEditorField('Body', [validators.Required()])
+    title = StringField('Title', [validators.DataRequired()])
+    body = TextAreaField('Body', [validators.DataRequired()])

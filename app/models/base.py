@@ -1,8 +1,8 @@
 from .. import db
-from flask import flash, url_for
+from flask import url_for
 from flask_admin.contrib import sqla
 from flask_security import UserMixin, RoleMixin, current_user, utils
-from wtforms import validators, StringField, PasswordField
+from wtforms import PasswordField
 from datetime import datetime
 import humanize
 
@@ -16,7 +16,7 @@ roles_users = db.Table(
 
 # Role class
 class Role(db.Model, RoleMixin):
-
+    __tablename__ = 'role'
     # Our Role has three fields, ID, name and description
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
@@ -34,6 +34,7 @@ class Role(db.Model, RoleMixin):
 
 # User class
 class User(db.Model, UserMixin):
+    __tablename__ = 'user'
 
     # Our User has six fields: ID, email, password, active, confirmed_at and roles. The roles field represents a
     # many-to-many relationship using the roles_users table. Each user may have no role, one role, or multiple roles.
@@ -46,6 +47,7 @@ class User(db.Model, UserMixin):
     image = db.Column(db.String(125))
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
+    fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
     # TOGGLES
     active = db.Column(db.Boolean(), default=True)
     public_profile = db.Column(db.Boolean(), default=True)
@@ -122,7 +124,7 @@ class Buzz(db.Model):
         """ 
         Since buzz objects are created for all sorts of reasons, this method generates a link to the most relevant source
         """
-        if self.user_id: return url_for('main.profile', user_id=self.user_id)
+        if self.user_id: return url_for('base.profile', user_id=self.user_id)
         return "#"
 
 
@@ -192,7 +194,7 @@ class UserAdmin(sqla.ModelView):
 
 
 # Customized Role model for SQL-Admin
-class RoleAdmin(sqla.ModelView):
+class BaseAdmin(sqla.ModelView):
 
     # Prevent administration of Roles unless the currently logged-in user has the "admin" role
     def is_accessible(self):

@@ -9,7 +9,7 @@
         <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <form action="{{ url_for('main.create_buzz') }}" method="POST">
+    <form action="{{ url_for('base.create_buzz') }}" method="POST">
         <div class="modal-body">            
             {{ data['buzz_form'].hidden_tag() }}            
             {{ render_field_with_errors(data['buzz_form'].title, class="form-control", placeholder="Title") }}

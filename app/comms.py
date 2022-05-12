@@ -1,7 +1,7 @@
 """
 WELCOME: communication utilities - app/comms.py
 """
-from flask import current_app, render_template, url_for, flash
+from flask import current_app, render_template, url_for
 from flask_mail import Message as FlaskMessage
 from flask_security import current_user
 from werkzeug.local import LocalProxy

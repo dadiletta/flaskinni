@@ -1,5 +1,5 @@
 """
-WELCOME: ajax business logic - flaskinni/app/main/views_ajax.py
+WELCOME: ajax business logic - flaskinni/app/base/views_ajax.py
 These are methods that handle AJAX request and don't return a rendered template
 """
 from flask import render_template, redirect, flash, url_for, session, request, current_app, jsonify
@@ -10,7 +10,7 @@ from slugify import slugify
 from datetime import datetime
 
 from ..extensions import db, mail, moment
-from . import main as app
+from . import base_blueprint as app
 from .forms import BuzzForm
 from .. import comms
 

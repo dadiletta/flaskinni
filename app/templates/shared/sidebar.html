@@ -4,7 +4,7 @@
         id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('main.index') }}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('base.index') }}">
         <img id="logo-small" class="animated--grow-in" src="{{ url_for('static', filename='img/Flaskinni_small.png') }}" alt="Flaskinni logo"/>
         <div class="sidebar-brand-text mx-3">
         <img id="logo-img" class="animated--fade-in" src="{{ url_for('static', filename='img/Flaskinni.png') }}" alt="Flaskinni logo"/>
@@ -23,14 +23,14 @@
     {% if current_user.has_role('admin') %}
     <!-- Nav Item - Dashboard -->
     <li class="nav-item" id="superadmin-link">
-        <a class="nav-link" href="{{ url_for('main.superadmin') }}">
+        <a class="nav-link" href="{{ url_for('base.superadmin') }}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Super Admin</span></a>
     </li>
     {% endif %}
 
     <li class="nav-item"  id="homepage-link">
-        <a class="nav-link loadScreen" href="{{ url_for('main.index') }}">
+        <a class="nav-link loadScreen" href="{{ url_for('base.index') }}">
         <i class="fas fa-fw fa-home"></i>
         <span>Home</span></a>
     </li>      
@@ -46,13 +46,13 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item"  id="components-link">
-        <a class="nav-link loadScreen" href="{{ url_for('main.route_template', template='components') }}">
+        <a class="nav-link loadScreen" href="{{ url_for('base.route_template', template='components') }}">
         <i class="fas fa-fw fa-cog"></i>
         <span>Components</span></a>
     </li>
     
     <li class="nav-item"  id="blankpage-link">
-        <a class="nav-link" href="{{ url_for('main.route_template', template='blank_page') }}">
+        <a class="nav-link" href="{{ url_for('base.route_template', template='blank_page') }}">
         <i class="fas fa-fw fa-wrench"></i>
         <span>Blank Page</span></a>
     </li>
@@ -66,7 +66,7 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Blog Pages:</h6>            
-            <a id="blogpost-link" class="collapse-item" href="{{ url_for('main.new_post') }}">Post</a>
+            <a id="blogpost-link" class="collapse-item" href="{{ url_for('base.new_post') }}">Post</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Other Pages:</h6>
             <a class="collapse-item" href="#">404 Page</a>

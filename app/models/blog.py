@@ -1,10 +1,8 @@
-from .. import db
-from flask import flash, url_for
-from flask_admin.contrib import sqla
-from flask_security import UserMixin, RoleMixin, current_user, utils
-from wtforms import validators, StringField, PasswordField
+from flask import url_for
 from datetime import datetime
 import humanize
+
+from ..extensions import db
 
 ####################
 #####  BLOG  
@@ -17,6 +15,7 @@ tags_posts = db.Table(
 )
 
 class Post(db.Model):
+    __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(80))
@@ -50,6 +49,7 @@ class Post(db.Model):
 
 
 class Tag(db.Model):
+    __tablename__ = 'tag'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
 

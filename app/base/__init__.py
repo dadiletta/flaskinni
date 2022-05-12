@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-main = Blueprint('main', __name__)
+base_blueprint = Blueprint('base', __name__)
 
 from . import views, views_ajax, forms, decorators

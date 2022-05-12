@@ -1,5 +1,8 @@
 import os
 
+# TODO: Setup your own .env file
+# https://gilmour.online/compsci/web-development/4-install-flaskinni#env-variables
+
 ###################
 ##  FLASK 
 ###################
@@ -17,6 +20,9 @@ UPLOAD_EXTENSIONS = os.environ.get("UPLOAD_EXTENSIONS", ['.jpg', '.png', '.gif']
 ###################
 ##  SQLALCHEMY
 ###################
+# TODO: Setup your database
+# https://www.digitalocean.com/community/tutorials/how-to-use-a-postgresql-database-in-a-flask-application#step-1-creating-the-postgresql-database-and-user
+# https://www.codementor.io/@engineerapart/getting-started-with-postgresql-on-mac-osx-are8jcopb
 POSTGRES = {
     'user': os.environ.get("DB_USERNAME", 'postgres'), 
     'pw': os.environ.get("DB_PASSWORD", 'postgres'),
@@ -27,7 +33,7 @@ POSTGRES = {
 SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:\
 %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", True)
+SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 SESSION_PROTECTION = 'strong'
 
@@ -38,7 +44,7 @@ PROPAGATE_EXCEPTIONS = os.environ.get("PROPAGATE_EXCEPTIONS", True)
 JWT_BLOCKLIST_TOKEN_CHECKS = os.environ.get("JWT_BLOCKLIST_TOKEN_CHECKS", ['access', 'refresh'])
 
 ###################
-##  FLASK-SECURITY 
+##  FLASK-SECURITY-TOO
 ###################
 SECURITY_REGISTERABLE = os.environ.get("SECURITY_REGISTERABLE", True)
 SECURITY_CONFIRMABLE = os.environ.get("SECURITY_CONFIRMABLE", True)
@@ -51,6 +57,7 @@ SECURITY_EMAIL_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", 'flaskinni@flaskin
 ###################
 ##  FLASK-MAIL 
 ###################
+# TODO: Setup something like Mailgun - https://www.mailgun.com/pricing/
 MAIL_SERVER = os.environ.get("MAIL_SERVER", 'smtp.gmail.com')
 MAIL_PORT = os.environ.get("MAIL_PORT", 465)
 MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", True)

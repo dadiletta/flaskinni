@@ -48,11 +48,11 @@
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
             {% if current_user.is_authenticated %}
-            <a class="dropdown-item" href="{{ url_for('main.profile', user_id=current_user.id) }}">
+            <a class="dropdown-item" href="{{ url_for('base.profile', user_id=current_user.id) }}">
             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
             Profile
             </a>
-            <a class="dropdown-item" href="{{ url_for('main.settings') }}">
+            <a class="dropdown-item" href="{{ url_for('base.settings') }}">
             <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
             Settings
             </a>

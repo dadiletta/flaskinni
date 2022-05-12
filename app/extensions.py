@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_admin import Admin
-from flask_ckeditor import CKEditor
 from flask_moment import Moment
 from flask_jwt_extended import JWTManager
 
@@ -13,5 +12,4 @@ migrate = Migrate()
 moment = Moment()
 mail = Mail()
 admin = Admin(template_mode='bootstrap4')
-ckeditor = CKEditor()
 jwt = JWTManager()
