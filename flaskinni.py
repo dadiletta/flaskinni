@@ -1,3 +1,9 @@
+"""
+Flaskinni's Launcher
+=====================
+This module spits out instances of our app. 
+"""
+
 import os # give me tools to get my own IP and manage my computer
 import logging
 from dotenv import load_dotenv # connect me with any .env files
@@ -5,12 +11,13 @@ from flask_migrate import Migrate, upgrade # database updater
 
 from app import create_app, db  # load my app factory
 
-# https://github.com/theskumar/python-dotenv
+#: Pulls in `environmental variables <https://github.com/theskumar/python-dotenv>`_. 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'settings') # triggers app factory
+#: triggers app factory
+app = create_app(os.getenv('FLASK_CONFIG') or 'settings') 
 migrate = Migrate(app, db) # activate my database upgrader tool
 
 # activate logging

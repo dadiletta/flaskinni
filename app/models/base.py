@@ -1,3 +1,9 @@
+"""
+Base Database Schema
+=====================
+These users are closely connected with the `Flask Security Too <https://flask-security-too.readthedocs.io/en/stable/quickstart.html#id4>`_. 
+"""
+
 from .. import db
 from flask import url_for
 from flask_admin.contrib import sqla
@@ -44,9 +50,11 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20)) # let's guess it should be no more than 20
     address = db.Column(db.Text)
     about = db.Column(db.Text)
+    #: Name of file that's kept in the user's folder
     image = db.Column(db.String(125))
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
+    #: Required by Flask-Security-Too
     fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
     # TOGGLES
     active = db.Column(db.Boolean(), default=True)
@@ -71,7 +79,11 @@ class User(db.Model, UserMixin):
 
     @property
     def img(self):
-        """ Builds a path for the saved image """
+        """Builds a path for the saved image
+
+        Returns:
+            str: Local URL to the user's profile image
+        """
         if self.image:
             return url_for('static', filename=f"uploads/{self.id}/{self.image}")
         else:
@@ -133,7 +145,7 @@ class Buzz(db.Model):
 ####################
 class RevokedTokenModel(db.Model):
     """
-    Originally taken from: https://github.com/oleg-agapov/flask-jwt-auth/blob/master/step_5/models.py
+    Originally taken from this `JWT guide <https://github.com/oleg-agapov/flask-jwt-auth/blob/master/step_5/models.py>`_.
     """
     __tablename__ = 'revoked_tokens'
     id = db.Column(db.Integer, primary_key = True)
@@ -155,16 +167,16 @@ class RevokedTokenModel(db.Model):
 # Customized User model for SQL-Admin
 class UserAdmin(sqla.ModelView):
 
-    # Don't display the password on the list of Users
+    #: Don't display the password on the list of Users
     column_exclude_list = ('password',)
 
-    # Don't include the standard password field when creating or editing a User (but see below)
+    #: Don't include the standard password field when creating or editing a User (but see below)
     form_excluded_columns = ('password',)
 
-    # Automatically display human-readable names for the current and available Roles when creating or editing a User
+    #: Automatically display human-readable names for the current and available Roles when creating or editing a User
     column_auto_select_related = True
 
-    # Prevent administration of Users unless the currently logged-in user has the "admin" role
+    #: Prevent administration of Users unless the currently logged-in user has the "admin" role
     def is_accessible(self):
         return current_user.has_role('admin')
 
@@ -192,11 +204,9 @@ class UserAdmin(sqla.ModelView):
             # the existing password in the database will be retained.
             model.password = utils.encrypt_password(model.password2)
 
-
-# Customized Role model for SQL-Admin
 class BaseAdmin(sqla.ModelView):
-
-    # Prevent administration of Roles unless the currently logged-in user has the "admin" role
+    """ Customized Role model for SQL-Admin """
+    #: Prevent administration of Roles unless the currently logged-in user has the "admin" role
     def is_accessible(self):
         return current_user.has_role('admin')
         

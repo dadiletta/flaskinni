@@ -1,5 +1,6 @@
 """
-WELCOME: ajax business logic - flaskinni/app/base/views_ajax.py
+AJAX Endpoints
+================
 These are methods that handle AJAX request and don't return a rendered template
 """
 from flask import render_template, redirect, flash, url_for, session, request, current_app, jsonify

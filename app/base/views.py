@@ -1,3 +1,11 @@
+"""
+The basic routes at the core of the app, including: 
+ - Homepage 
+ - Settings page
+ - Profile page
+ - Blog pages
+"""
+
 # library imports
 from flask import render_template, redirect, flash, url_for, session, request, current_app, send_from_directory, abort
 from flask_security import auth_required, login_required, roles_required, current_user
@@ -14,12 +22,10 @@ from .forms import PostForm, ContactForm, SettingsForm, BuzzForm
 from ..models import Post, Tag, User, Buzz
 
 
-# Displays the home page.
 @app.route('/')
 @app.route('/index')
-# Users must be authenticated to view the home page, but they don't have to have any particular role.
-# Flask-Security will display a login form if the user isn't already authenticated.
 def index():
+    """ Displays the home page """
     data = {} 
     data['posts'] = Post.query.order_by(Post.publish_date.desc()).all()
     return render_template('base/index.html', data=data)

@@ -1,5 +1,6 @@
 """
-WELCOME: communication utilities - app/comms.py
+Communications Utility Functions
+=================================
 """
 from flask import current_app, render_template, url_for
 from flask_mail import Message as FlaskMessage
@@ -15,7 +16,13 @@ logger = LocalProxy(lambda: current_app.logger)
 #####  HELPER FUNCTIONS  ######
 ###############################
 def send_email(recipients, subject, body, **kwargs):
-    """ Generates a Flask-Mail object and sends """
+    """Generates a Flask-Mail object and sends
+
+    Args:
+        recipients (list): Array of email addresses
+        subject (str): Email subject heading
+        body (str): Plain text email body
+    """
     msg = FlaskMessage(subject, recipients=recipients)
     msg.body = body
     if kwargs.get('html', False):

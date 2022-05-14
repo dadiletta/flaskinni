@@ -1,3 +1,9 @@
+"""
+Settings File
+===============
+These files are not intended to be changed much. Instead, you should use a `.env` file as described in `the guide <https://gilmour.online/compsci/web-development/4-install-flaskinni#env-variables>`_. 
+"""
+
 import os
 
 # TODO: Setup your own .env file

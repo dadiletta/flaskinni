@@ -1,3 +1,8 @@
+"""
+The primary purpose of this page is an `app factory <https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xv-a-better-application-structure>`_. 
+
+"""
+
 from datetime import datetime
 from flask import Flask, render_template, make_response, jsonify, request
 from flask_security import current_user, SQLAlchemySessionUserDatastore, utils

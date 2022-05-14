@@ -1,3 +1,8 @@
+"""
+Base Forms
+================
+The forms built by `WTForms <https://wtforms.readthedocs.io/en/>`_. 
+"""
 from flask_wtf import FlaskForm
 from wtforms.fields import EmailField, TelField
 from wtforms import validators, StringField, PasswordField, TextAreaField, SubmitField, BooleanField
@@ -11,6 +16,7 @@ def tags():
 
 
 class ExtendedRegisterForm(ConfirmRegisterForm):
+    """ Expands upon the Flask-Security-Too registration form. """
     first_name = StringField('First Name', [validators.DataRequired()])
     last_name = StringField('Last Name', [validators.DataRequired()])
     email = EmailField('Email address', [validators.DataRequired(), validators.Email()])
@@ -34,6 +40,7 @@ def CheckNameLength(form, field):
 
 
 class PostForm(FlaskForm):
+    """ Blog post form """
     image = FileField('Image', validators=[
         FileAllowed(['jpg', 'png'], 'Images only!')
     ])

@@ -1,3 +1,9 @@
+"""
+Blog Object Schema
+====================
+Blog posts, tags, and the association table between them. 
+"""
+
 from flask import url_for
 from datetime import datetime
 import humanize
@@ -21,6 +27,7 @@ class Post(db.Model):
     title = db.Column(db.String(80))
     subtitle = db.Column(db.String(80))
     body = db.Column(db.Text)
+    #: The name of the file that will be placed in `static/uploads/blog/`
     image = db.Column(db.String(125))
     slug = db.Column(db.String(125), unique=True)
     publish_date = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -39,9 +46,10 @@ class Post(db.Model):
         else:
             return None
     
-    # return the date in readable English    
+    #    
     @property
     def pubdate(self):
+        """Return the date in readable English  """
         return humanize.naturaltime(self.publish_date)
 
     def __repr__(self):
