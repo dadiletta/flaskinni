@@ -1,23 +1,26 @@
 
-version: '3'
+version: '3.9'
 services:
   db:
-    image: "postgres:10"
+    image: "postgres:latest"
     restart: always
     volumes:
       - "dbdata:/var/lib/postgresql/data"
-    env_file:
-      - docker.env
     networks:
       - db_nw
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
     container_name: flaskinni_db_1
   
   flaskapp:
     build: .
     volumes:
-      - /Users/adilettad/Projects/flaskinni:/app/flaskinni
+      - /Users/adileettad/Projects/flaskinni:/app/flaskinni
     env_file:
-      - docker.env
+      - .env
     networks:
       - db_nw
     depends_on:

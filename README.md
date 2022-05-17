@@ -16,18 +16,16 @@ This is meant to be an open-source starter kit for Flask applications. Flask is 
 
 ### Install
 
-Please see the [documentation](https://gilmour.gitbook.io/compsci/web-development) for detailed installation instructions. Or just wing it and figure it out. Look out for all the `settings.py` varibles you'll have to load in through a `.env` file.
+Please see the [guide](https://gilmour.gitbook.io/compsci/web-development) for detailed installation instructions. Or just wing it and figure it out. Look out for all the `settings.py` varibles you'll have to load in through a `.env` file.
 
 ### Credits
 
 Thank you to the many contributors to this project. Together we're learning about full-stack development including an enthusasim for mandated attribution.
 
-- [Bootstrap 4](https://getbootstrap.com/docs/4.0/utilities/flex/)
+
 - [Bootstrap Template](https://startbootstrap.com/themes/sb-admin-2/)
 - [Flask](https://flask.pocoo.org/)
 - [Flask-Admin](https://flask-admin.readthedocs.io/en/latest/)
-- [Flask-Assets](https://flask-assets.readthedocs.io/en/latest/)
 - [Flask-Moment](https://github.com/miguelgrinberg/Flask-Moment)
-- [Flask-Security](https://pythonhosted.org/Flask-Security/)
-- [Loading.io](https://loading.io/)
+- [Flask-Security-Too](https://flask-security-too.readthedocs.io/en/stable/)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
