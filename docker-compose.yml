@@ -2,21 +2,25 @@
 version: '3.9'
 services:
   db:
+    container_name: flaskinni_db_1
     image: "postgres:latest"
     restart: always
     volumes:
-      - "dbdata:/var/lib/postgresql/data"
+      - db_storage:/var/lib/postgresql/data
     networks:
       - db_nw
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_USER: postgres # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: postgres # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: flaskinni_db # The PostgreSQL default database (automatically created at first launch)
     ports:
       - '5432:5432'
-    container_name: flaskinni_db_1
+    
   
   flaskapp:
+    container_name: flaskinni_app_1
     build: .
+    restart: always
     volumes:
       - /Users/adileettad/Projects/flaskinni:/app/flaskinni
     env_file:
@@ -27,10 +31,10 @@ services:
       - db
     ports:
       - "80:80"
-    container_name: flaskinni_app_1
+    
 
 networks:
   db_nw:
     driver: bridge
 volumes:
-  dbdata:
+  db_storage:

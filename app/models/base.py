@@ -4,6 +4,7 @@ Base Database Schema
 These users are closely connected with the `Flask Security Too <https://flask-security-too.readthedocs.io/en/stable/quickstart.html#id4>`_. 
 """
 
+import uuid
 from .. import db
 from flask import url_for
 from flask_admin.contrib import sqla
@@ -12,6 +13,9 @@ from wtforms import PasswordField
 from datetime import datetime
 import humanize
 
+
+def uuid_generator():
+    return uuid.uuid4().hex
 
 # Create a table to support a many-to-many relationship between Users and Roles
 roles_users = db.Table(
@@ -55,7 +59,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
     #: Required by Flask-Security-Too
-    fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
+    fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False, default=uuid_generator)
     # TOGGLES
     active = db.Column(db.Boolean(), default=True)
     public_profile = db.Column(db.Boolean(), default=True)

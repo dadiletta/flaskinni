@@ -21,7 +21,7 @@ migrate = Migrate()
 moment = Moment()
 #: Flask-Mail's SMTP mailer used with Flask-Security-Too
 mail = Mail()
-#: Flask-Admin set to use bootstrap4 
 admin = Admin(template_mode='bootstrap4')
-#: Flask-JWT-Extended's token manager
+"""Flask-Admin set to use bootstrap4 """
 jwt = JWTManager()
+"""Flask-JWT-Extended's token manager"""
