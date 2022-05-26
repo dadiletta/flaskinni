@@ -11,16 +11,16 @@ from flask_admin import Admin
 from flask_moment import Moment
 from flask_jwt_extended import JWTManager
 
-#: Flask-Security-Too
 security = Security()
-#: SQLAlchemy database connection
+"""Flask-Security-Too"""
 db = SQLAlchemy()
-#: Flask-Migrate's alembic tracker to adjust with database changes
+"""SQLAlchemy database connection"""
 migrate = Migrate()
-#: Flask-Moment's timezone and datetime humanizer 
+"""Flask-Migrate's alembic tracker to adjust with database changes"""
 moment = Moment()
-#: Flask-Mail's SMTP mailer used with Flask-Security-Too
+"""Flask-Moment's timezone and datetime humanizer """
 mail = Mail()
+"""Flask-Mail's SMTP mailer used with Flask-Security-Too"""
 admin = Admin(template_mode='bootstrap4')
 """Flask-Admin set to use bootstrap4 """
 jwt = JWTManager()

@@ -44,6 +44,9 @@ class Role(db.Model, RoleMixin):
 
 # User class
 class User(db.Model, UserMixin):
+    """
+    Both the database schematic and the application object used to store user data and house functions
+    """
     __tablename__ = 'user'
 
     # Our User has six fields: ID, email, password, active, confirmed_at and roles. The roles field represents a
@@ -51,21 +54,23 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(155))
     last_name = db.Column(db.String(155))
-    phone = db.Column(db.String(20)) # let's guess it should be no more than 20
+    phone = db.Column(db.String(20))
+    """While there are many ways to store phone numbers, here a string is being used."""
     address = db.Column(db.Text)
     about = db.Column(db.Text)
-    #: Name of file that's kept in the user's folder
     image = db.Column(db.String(125))
+    """Name of file that's kept in the user's folder"""
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
-    #: Required by Flask-Security-Too
     fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False, default=uuid_generator)
+    """This property is required by Flask-Security-Too"""
     # TOGGLES
     active = db.Column(db.Boolean(), default=True)
     public_profile = db.Column(db.Boolean(), default=True)
     # DATES
     confirmed_at = db.Column(db.DateTime())
     last_seen = db.Column(db.DateTime(), default=None)
+    """This property is automatically updated in the `before_request` function as defined in the app's `__init__.py` file."""
     posts = db.relationship('Post', backref='user', lazy='dynamic')
     
     roles = db.relationship(
@@ -105,7 +110,7 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def find_by_username(cls, username):
-        """ Accessor method """
+        """ Accessor method that works from a static context """
         return cls.query.filter_by(email=username).first()
 
     @staticmethod
@@ -114,8 +119,16 @@ class User(db.Model, UserMixin):
         return utils.encrypt_password(password)
     
     @staticmethod
-    def verify_hash(password, hash):
-        """ Utility to help with API """
+    def verify_hash(password, hash) -> bool:
+        """A static utility to match provided hash and checks it against the password
+
+        Args:
+            password (str): plain text password
+            hash (str): encrypted password stored in user model
+
+        Returns:
+            bool: Returns `True` if the password matches the provided hash
+        """
         return utils.verify_password(password, hash)    
 
 
@@ -208,8 +221,12 @@ class UserAdmin(sqla.ModelView):
             # the existing password in the database will be retained.
             model.password = utils.encrypt_password(model.password2)
 
+        # https://stackoverflow.com/questions/70978807/with-flask-admin-tab-create-user-use-the-security-database-create-user-method-t
+        if model.fs_uniquifier is None:
+            model.fs_uniquifier = uuid.uuid4().hex
+
 class BaseAdmin(sqla.ModelView):
-    """ Customized Role model for SQL-Admin """
+    """ Basic display model for Flask-Admin """
     #: Prevent administration of Roles unless the currently logged-in user has the "admin" role
     def is_accessible(self):
         return current_user.has_role('admin')

@@ -1,4 +1,6 @@
 """
+Base Routes
+============
 The basic routes at the core of the app, including: 
  - Homepage 
  - Settings page
@@ -25,7 +27,7 @@ from ..models import Post, Tag, User, Buzz
 @app.route('/')
 @app.route('/index')
 def index():
-    """ Displays the home page """
+    """ Renders and returns the home page """
     data = {} 
     data['posts'] = Post.query.order_by(Post.publish_date.desc()).all()
     return render_template('base/index.html', data=data)

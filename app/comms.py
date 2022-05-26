@@ -46,4 +46,3 @@ def log_buzz(title, body, **kwargs):
     except Exception as e:
         logger.error(f"Error while buzzing: {e}")
 
-# TODO: send a text message using Twilio 

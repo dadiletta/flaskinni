@@ -25,6 +25,11 @@ def what_time_is_it():
 
 @app.route('/togglesidebar', methods=['POST'])
 def toggle_sidebar():
+    """AJAX handler that updates session cookie to store user's preference about sidebar
+
+    Returns:
+        Reponse: JSONified notification on the current value of `session['toggled']`
+    """
     if not 'toggled' in session.keys():
         session['toggled'] = True
     else:

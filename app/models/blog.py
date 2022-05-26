@@ -26,9 +26,9 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     title = db.Column(db.String(80))
     subtitle = db.Column(db.String(80))
-    body = db.Column(db.Text)
-    #: The name of the file that will be placed in `static/uploads/blog/`
+    body = db.Column(db.Text) 
     image = db.Column(db.String(125))
+    """The name of the file that will be placed in `static/uploads/blog/`"""
     slug = db.Column(db.String(125), unique=True)
     publish_date = db.Column(db.DateTime(), default=datetime.utcnow)
     live = db.Column(db.Boolean)
@@ -38,22 +38,27 @@ class Post(db.Model):
         backref=db.backref('posts', lazy='dynamic')
     )
 
-    # get the whole image path
     @property
     def img(self):
+        """Builds the whole image's path
+
+        Returns:
+            str: The URL for the associated image.
+        """
         if self.image:
             return url_for('static', filename=f"uploads/blog/{self.image}")
         else:
             return None
-    
-    #    
+      
     @property
     def pubdate(self):
-        """Return the date in readable English  """
+        """Return the date in readable English """
         return humanize.naturaltime(self.publish_date)
 
     def __repr__(self):
-        return '<Post %r>' % self.title
+        if self.title:
+            return f'<Post {self.title}>'
+        else: return super().__repr__()
 
 
 class Tag(db.Model):
