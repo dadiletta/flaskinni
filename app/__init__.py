@@ -105,7 +105,7 @@ def create_app(config_name):
 
         # Create two Users for testing purposes -- unless they already exists.
         # In each case, use Flask-Security utility function to encrypt the password.
-        encrypted_password = utils.encrypt_password(app.config['STARTING_ADMIN_PASS'])
+        encrypted_password = utils.hash_password(app.config['STARTING_ADMIN_PASS'])
 
         for email in app.config['STARTING_ADMINS']:
             if not user_datastore.find_user(email=email):
