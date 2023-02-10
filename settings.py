@@ -63,11 +63,12 @@ SECURITY_EMAIL_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", 'flaskinni@flaskin
 ###################
 ##  FLASK-MAIL 
 ###################
-# TODO: Setup something like Mailgun - https://www.mailgun.com/pricing/
+# TODO: Setup something like Mailtrap for testing (https://mailtrap.io/) ...
+# or Mailgun (https://www.mailgun.com/pricing/)
 MAIL_SERVER = os.environ.get("MAIL_SERVER", 'smtp.gmail.com')
 MAIL_PORT = os.environ.get("MAIL_PORT", 465)
-MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", True)
-MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", False)
+MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", False)
+MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", True)
 MAIL_USERNAME = os.environ.get("MAIL_USERNAME", 'flaskinni@gmail.com')
 MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", 'xxxxxxxxxxx')
 MAIL_DEBUG = os.environ.get("MAIL_DEBUG", True)

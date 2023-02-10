@@ -26,7 +26,7 @@ class ExtendedRegisterForm(ConfirmRegisterForm):
             validators.Length(min=4, max=80)
         ])
         
-    def validate(self):
+    def validate(self, extra_validators=None):
         success = True
         if not super(ExtendedRegisterForm, self).validate():
             success = False
