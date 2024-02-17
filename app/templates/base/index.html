@@ -56,7 +56,7 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-              {{ post.body[:240]|markdown|striptags }}
+              {{ post.body|safe|truncate(200) }}
               <hr>
               <a href="{{ url_for('base.read', slug=post.slug) }}" class="btn btn-primary">Read More</a>
             </div>

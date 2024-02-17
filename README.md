@@ -2,7 +2,7 @@
     |--------------------------Co/\/\p|_|T3R----$c13nc3------------------------|
     |--------------------------------------------------------------------------| 
     |     _________                    AAA                                     |
-    |    mmmmmmmmmmmm   _____         AAAAA                      @LancerTechGA |
+    |    mmmmmmmmmmmm   _____         AAAAA                                    |
     |   mm    mm    mm  rrrrr        AA   AA                                   |
     |   mm    mm    mm  rr          AAAAAAAAA                                  |
     |   mm    mm    mm  rr   _._   AAA     AAA (and his much smarter students!)|
@@ -31,7 +31,7 @@ SECRET_KEY='XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # change before publishing
 ###################
 ##  FLASKINNI  
 ###################
-STARTING_ADMIN_PASS = 'flaskinni'
+STARTING_ADMIN_PASS = 'flaskinni' # !UNSAFE: REPLACE WITH A HASH
 ADMIN_EMAIL='flaskinni@gmail.com'
 MAX_CONTENT_LENGTH = 2048 * 2048
 UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
@@ -60,7 +60,7 @@ SECURITY_PASSWORD_HASH ='pbkdf2_sha512'
 SECURITY_PASSWORD_SALT = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # change before publishing
 
 ###################
-##  FLASK-MAIL 
+##  FLASK-MAIL      # SETUP A MAILTRAP.IO ACCOUNT FOR DEV
 ###################
 MAIL_SERVER='smtp.gmail.com'
 MAIL_PORT=465

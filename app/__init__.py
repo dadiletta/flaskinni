@@ -3,10 +3,9 @@ The primary purpose of this page is an `app factory <https://blog.miguelgrinberg
 
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, render_template, make_response, jsonify, request
 from flask_security import current_user, SQLAlchemySessionUserDatastore, utils
-from flaskext.markdown import Markdown
 from flask_restful import Api
 
 from .extensions import db, security, mail, migrate, admin, \
@@ -45,7 +44,6 @@ def create_app(config_name):
     security.init_app(app, user_datastore, confirm_register_form=ExtendedRegisterForm)
     mail.init_app(app) # load my mail extensioin 
     # load my writing tool extension 
-    md = Markdown(app, extensions=['fenced_code', 'tables'])
     migrate.init_app(app, db) # load my database updater tool
     moment.init_app(app) # time formatting
     jwt.init_app(app)   
@@ -72,6 +70,7 @@ def create_app(config_name):
 
     # activate API blueprint: https://stackoverflow.com/questions/38448618/using-flask-restful-as-a-blueprint-in-large-application
     from .api import api_blueprint, add_resources   
+
     restful = Api(api_blueprint, prefix="/api/v1") 
     add_resources(restful)
     app.register_blueprint(api_blueprint) # registering the blueprint effectively runs init_app on the restful extension
@@ -92,8 +91,7 @@ def create_app(config_name):
 
 
     # Executes before the first request is processed.
-    @app.before_first_request
-    def before_first_request():
+    with app.app_context():
         """ Before the first run, we assure the database is built and admin access is secure.  """
 
         # Create any database tables that don't exist yet.
@@ -128,8 +126,10 @@ def create_app(config_name):
         """ What we do before every single handled request """
         if current_user.is_authenticated:
             first_time = True if not current_user.last_seen else False
-            current_user.last_seen = datetime.utcnow()
-            db.session.commit()
+            # TODO: Redirect first time users to a welcome page? 
+            if current_user.last_seen is None or datetime.utcnow() - current_user.last_seen > timedelta(hours=1):
+                current_user.last_seen = datetime.utcnow()
+                db.session.commit()
 
     return app
 
