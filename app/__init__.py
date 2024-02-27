@@ -14,6 +14,12 @@ from flask_restful import Api
 from .extensions import db, security, mail, migrate, admin, \
     moment, jwt
 from .base.forms import ExtendedRegisterForm
+import os, dotenv
+
+#: Pulls in `environmental variables <https://github.com/theskumar/python-dotenv>`_. 
+# dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+# if os.path.exists(dotenv_path):
+#     load_dotenv(dotenv_path)
 
 # relay for logger
 logger = LocalProxy(lambda: current_app.logger)
@@ -35,6 +41,11 @@ def page_forbidden(e):
 ###### FACTORY ##
 def create_app(config_name):
     """ Application factory: Assembles and returns clones of your app """
+    try:
+        dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+        dotenv.load_dotenv(dotenv_path)
+    except FileNotFoundError:
+        print("Warning: '.env' file not found. Using default configuration values.")
     # Flask init
     app = Flask(__name__) # most of the work done right here. Thanks, Flask!
     app.config.from_object('settings') # load my settings which pull from .env

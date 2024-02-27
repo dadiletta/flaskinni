@@ -12,6 +12,23 @@ $(document).ready(function() {
   // Min height for a content wrapper
   $('.content-wrapper').css('min-height', ($(window).height()-200));
 
+  // Activate Summernote WYSIWYG editor
+  $('.summernote').summernote({
+      dialogsInBody: true,
+      minHeight: 150,
+      toolbar: [
+          [ 'style', [ 'style' ] ],
+          [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+          [ 'fontname', [ 'fontname' ] ],
+          [ 'fontsize', [ 'fontsize' ] ],
+          [ 'color', [ 'color' ] ],
+          [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+          [ 'table', [ 'table' ] ],
+          [ 'insert', [ 'link'] ],
+          [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
+      ]
+  });
+
   // Sweet Alert triggered on anything labeled delete
   $('.delete').on('click', function(e) {
     e.preventDefault();

@@ -31,7 +31,7 @@
               {{ render_field(form.image, class='form-control') }}
               {{ render_field(form.title, class='form-control', placeholder="Title") }}
               {{ render_field(form.subtitle, class='form-control', placeholder="Subtitle") }}
-              {{ render_field(form.body, class='form-control', rows=10) }}
+              {{ render_field(form.body, class='form-control summernote', rows=10) }}
 
               {% if action=="new" %}<button type="submit" class="btn btn-primary">Post</button>{% else %}
               <button type="submit" class="btn btn-primary">Update</button>{% endif %}
@@ -44,11 +44,3 @@
 
 {% endblock %}
 
-{% block tail %}
-<!-- Initialize Quill editor -->
-<script>
-  var quill = new Quill('#body', {
-    theme: 'bubble'
-  });
-</script>
-{% endblock %}
