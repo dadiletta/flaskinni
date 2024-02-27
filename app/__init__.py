@@ -1,17 +1,22 @@
 """
-The primary purpose of this page is an `app factory <https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xv-a-better-application-structure>`_. 
+The primary purpose of this file is the creation of the Flask application object: 
+`app factory <https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xv-a-better-application-structure>`_. 
 
 """
 
 from datetime import datetime, timedelta
-from flask import Flask, render_template, make_response, jsonify, request
+from flask import Flask, render_template, make_response, jsonify, request, current_app
 from flask_security import current_user, SQLAlchemySessionUserDatastore, utils
+from werkzeug.local import LocalProxy
+# TODO: import sentry_sdk
 from flask_restful import Api
 
 from .extensions import db, security, mail, migrate, admin, \
     moment, jwt
 from .base.forms import ExtendedRegisterForm
 
+# relay for logger
+logger = LocalProxy(lambda: current_app.logger)
 
 ### Error page tools to use in the factor below
 def crash_page(e):
@@ -33,7 +38,6 @@ def create_app(config_name):
     # Flask init
     app = Flask(__name__) # most of the work done right here. Thanks, Flask!
     app.config.from_object('settings') # load my settings which pull from .env
-    
     ''' 
     FLASK EXTENTIONS
     '''
@@ -43,8 +47,9 @@ def create_app(config_name):
     # load my security extension
     security.init_app(app, user_datastore, confirm_register_form=ExtendedRegisterForm)
     mail.init_app(app) # load my mail extensioin 
+
     # load my writing tool extension 
-    migrate.init_app(app, db) # load my database updater tool
+    migrate.init_app(app, db, compare_type=True) # load database updater tool
     moment.init_app(app) # time formatting
     jwt.init_app(app)   
 
@@ -56,10 +61,7 @@ def create_app(config_name):
     # don't really need admin views of these objects
     # admin.add_view(BaseAdmin(Role, db.session))
     # admin.add_view(BaseAdmin(Buzz, db.session))
-    
     # TODO: Add your models below so you can manage data from Flask-Admin's convenient tools
-
-
 
     # TODO: Setup sentry.io!
     # sentry_sdk.init(dsn="", integrations=[FlaskIntegration()])
@@ -92,7 +94,10 @@ def create_app(config_name):
 
     # Executes before the first request is processed.
     with app.app_context():
-        """ Before the first run, we assure the database is built and admin access is secure.  """
+        """ 
+        Before the first run, we assure the database is built and 
+        admin access is secure.  
+        """
 
         # Create any database tables that don't exist yet.
         db.create_all()
