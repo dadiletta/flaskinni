@@ -5,7 +5,9 @@ The forms built by `WTForms <https://wtforms.readthedocs.io/en/>`_.
 """
 from flask_wtf import FlaskForm
 from wtforms.fields import EmailField, TelField
-from wtforms import validators, StringField, PasswordField, TextAreaField, SubmitField, BooleanField
+from wtforms import validators, StringField, PasswordField, TextAreaField, \
+    SubmitField, BooleanField
+from wtforms_sqlalchemy.fields import QuerySelectMultipleField
 from flask_wtf.file import FileField, FileAllowed
 from ..models import Tag
 from flask_security.forms import ConfirmRegisterForm
@@ -51,8 +53,8 @@ class PostForm(FlaskForm):
             validators.DataRequired(),
             validators.Length(max=80)])        
     body = TextAreaField('Content', validators=[validators.DataRequired()])
-    # tag = QuerySelectField('Tag', query_factory=tags, validators=[validators.DataRequired()])
-    # new_tag = StringField('New Tag')
+    tags = QuerySelectMultipleField('Tag', query_factory=tags, validators=[validators.DataRequired()])
+    new_tag = StringField('New Tag')
 
 
 class ContactForm(FlaskForm):

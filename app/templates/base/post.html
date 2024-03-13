@@ -32,6 +32,15 @@
               {{ render_field(form.title, class='form-control', placeholder="Title") }}
               {{ render_field(form.subtitle, class='form-control', placeholder="Subtitle") }}
               {{ render_field(form.body, class='form-control summernote', rows=10) }}
+              <div class="row">
+                <div class="col-md-6">
+                  {{ render_field(form.tags, class='form-control') }}
+                </div>
+                <div class="col-md-6">
+                  {{ render_field(form.new_tag, class='form-control') }}
+                </div>
+              </div>
+              
 
               {% if action=="new" %}<button type="submit" class="btn btn-primary">Post</button>{% else %}
               <button type="submit" class="btn btn-primary">Update</button>{% endif %}

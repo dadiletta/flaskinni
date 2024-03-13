@@ -7,11 +7,15 @@ This module spits out instances of our app.
 import os # give me tools to get my own IP and manage my computer
 import logging
 from flask_migrate import Migrate, upgrade # database updater
-
+from dotenv import load_dotenv
 from app import create_app, db  # load my app factory
 
+# TODO: Setup your own .env file
+# https://gilmour.online/compsci/web-development/4-install-flaskinni#env-variables
+load_dotenv('.env') # load from the perspective of the create_app factory
+
 #: triggers app factory
-app = create_app('settings.py') 
+app = create_app() 
 migrate = Migrate(app, db) # activate my database upgrader tool
 
 # LOGGING

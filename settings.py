@@ -3,17 +3,10 @@ Settings File
 ===============
 These files are not intended to be changed much. Instead, you should use a `.env` file as described in `the guide <https://gilmour.online/compsci/web-development/4-install-flaskinni#env-variables>`_. 
 """
-
 import os
 
-# TODO: Setup your own .env file
-# https://gilmour.online/compsci/web-development/4-install-flaskinni#env-variables
-
-###################
-##  FLASK 
-###################
 SECRET_KEY = os.environ.get("SECRET_KEY", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX") 
-DEBUG=True if os.environ.get("DEBUG", "True") == "True" else False
+FLASK_DEBUG=os.environ.get("FLASK_DEBUG", False)
 
 ###################
 ##  FLASKINNI  

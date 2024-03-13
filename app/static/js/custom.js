@@ -18,14 +18,13 @@ $(document).ready(function() {
       minHeight: 150,
       toolbar: [
           [ 'style', [ 'style' ] ],
-          [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+          [ 'font', [ 'bold', 'italic', 'underline', 'superscript', 'subscript', 'clear'] ],
           [ 'fontname', [ 'fontname' ] ],
           [ 'fontsize', [ 'fontsize' ] ],
           [ 'color', [ 'color' ] ],
           [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
           [ 'table', [ 'table' ] ],
-          [ 'insert', [ 'link'] ],
-          [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
+          [ 'insert', [ 'link'] ]
       ]
   });
 
