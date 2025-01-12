@@ -1,30 +1,61 @@
-    |--------------------------------------------------------------------------|
-    |--------------------------Co/\/\p|_|T3R----$c13nc3------------------------|
-    |--------------------------------------------------------------------------| 
-    |     _________                    AAA                                     |
-    |    mmmmmmmmmmmm   _____         AAAAA                                    |
-    |   mm    mm    mm  rrrrr        AA   AA                                   |
-    |   mm    mm    mm  rr          AAAAAAAAA                                  |
-    |   mm    mm    mm  rr   _._   AAA     AAA (and his much smarter students!)|
-    |--------------------------------------------------------------------------|
-    |--------------------------------------------------------------------------|
+|--------------------------------------------------------------------------|
+|--------------------------Co/\/\p|_|T3R----$c13nc3------------------------|
+|--------------------------------------------------------------------------| 
+|     _________                    AAA                                     |
+|    mmmmmmmmmmmm   _____         AAAAA                                    |
+|   mm    mm    mm  rrrrr        AA   AA                                   |
+|   mm    mm    mm  rr          AAAAAAAAA                                  |
+|   mm    mm    mm  rr   _._   AAA     AAA (and his much smarter students!)|
+|--------------------------------------------------------------------------|
+|--------------------------------------------------------------------------|
 
-# Flaskinni
+# Flaskinni: Now with More Superpowers! 🦸‍♂️
 
 ### [Documentation](https://gilmour.gitbook.io/compsci/web-development)
-This is meant to be an open-source starter kit for Flask applications. Flask is an amazing framework because it's so simple and minimal. It's a great way learn web development as can see all the scaffolding that Rails and other frameworks build for you. However, assembling the many helpful Flask modules can be a real chore. Flaskinni helps by bundling these resources. It's intended to serve as a starting point for students who have been studying Flask and are now ready to start a larger project.
+This is your friendly neighborhood Flask starter kit, now turbocharged with Supabase. Flask remains our favorite framework because it shows you all the web development magic without hiding it behind a curtain. While other frameworks might give you everything and the kitchen sink, Flask lets you see how the plumbing works. Flaskinni just makes sure you don't have to build every pipe from scratch.
 
-### Install
+### Features
+- 🚀 Flask + Supabase = Modern web stack without the complexity
+- 🔒 Rock-solid authentication with Flask-Login + Supabase Auth
+- 🎨 Mix-and-match traditional templates with modern Preact components
+- 🐋 Development with Docker - same environment, no headaches
+- 🚂 Ready for Render deployment - from zero to hero in minutes
+- 📚 Extensive documentation for learning and building
 
-Please see the [guide](https://gilmour.gitbook.io/compsci/web-development) for detailed installation instructions. Or just wing it and figure it out. Look out for all the `settings.py` varibles you'll have to load in through a `.env` file.
+### Quick Start
+1. Clone the repo
+2. Copy `.env.example` to `.env` and add your Supabase credentials
+3. `docker compose up` (yes, it's that simple!)
+
+### Road Ahead 🗺️
+- [ ] Supabase Integration
+  - [ ] Remove Flask-Admin (who needs it with Supabase's dashboard?)
+  - [ ] Validate Flask-Login with Supabase OAuth on Render
+  - [ ] Ensure CRUD operations play nice with SQLAlchemy + Supabase
+  - [ ] Explore API best practices for decoupled UI
+- [ ] Modern Frontend
+  - [ ] Add Preact for interactive components
+  - [ ] Update blog templates (keeping index.html classic Jinja2)
+- [ ] Developer Experience
+  - [ ] Add Glitch IDE support
+  - [ ] Generate auto documentation
+  - [ ] Update GitBook with all the new goodies
 
 ### Credits
+Standing on the shoulders of giants (and giving them proper credit):
 
-Thank you to the many contributors to this project. Together we're learning about full-stack development including an enthusasim for mandated attribution.
+- [Flask](https://flask.pocoo.org/) - The web framework that sparked joy
+- [Supabase](https://supabase.io/) - The backend that makes databases fun again
+- [SQLAlchemy](https://www.sqlalchemy.org/) - Because ORMs shouldn't be scary
+- [Flask-Login](https://flask-login.readthedocs.io/) - Keeping track of who's who
+- [Flask-Principal](https://pythonhosted.org/Flask-Principal/) - Managing permissions like a boss
+- [Flask-Moment](https://github.com/miguelgrinberg/Flask-Moment) - Time is on our side
+- [Preact](https://preactjs.com/) - React's lightweight cousin
+- [Docker](https://www.docker.com/) - Making development environments consistent
+- [Render](https://render.com/) - Deployment made easy
 
-- [Bootstrap Template](https://startbootstrap.com/themes/sb-admin-2/)
-- [Flask](https://flask.pocoo.org/)
-- [Flask-Admin](https://flask-admin.readthedocs.io/en/latest/)
-- [Flask-Security-Too](https://flask-security-too.readthedocs.io/en/stable/)
-- [SQLAlchemy](https://www.sqlalchemy.org/)
-- [Flask-Moment](https://github.com/miguelgrinberg/Flask-Moment)
+### Words of Wisdom
+Read more
+
+### License
+MIT License - Because sharing is caring 🤝

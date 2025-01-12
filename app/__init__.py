@@ -1,24 +1,23 @@
 """
-The primary purpose of this file is the creation of the Flask application object: 
-`app factory <https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xv-a-better-application-structure>`_. 
-
+The primary purpose of this file is the creation of the Flask application object using
+the app factory pattern.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Flask, render_template, make_response, jsonify, request, current_app
-from flask_security import current_user, SQLAlchemySessionUserDatastore, utils
+from flask_login import LoginManager, current_user
+from flask_principal import Principal, identity_loaded, UserNeed, RoleNeed
 from werkzeug.local import LocalProxy
-# TODO: import sentry_sdk
 from flask_restful import Api
+from supabase import create_client, Client
 
-from .extensions import db, security, mail, migrate, admin, \
-    moment, jwt
-from .base.forms import ExtendedRegisterForm
+from .extensions import db, mail, migrate, moment
+from .base.forms import LoginForm, RegisterForm
 
 # relay for logger
 logger = LocalProxy(lambda: current_app.logger)
 
-### Error page tools to use in the factor below
+### Error page handlers
 def crash_page(e):
     if 'api' in request.url_root:
         return make_response(jsonify("500 Server error"), 500)
@@ -28,113 +27,131 @@ def page_not_found(e):
     return render_template('base/404.html'), 404
 
 def page_forbidden(e):
-    if 'api' in request.url_root: # I wish this worked
+    if 'api' in request.url_root:
         return make_response(jsonify("403 Forbidden"), 403)
     return render_template('base/403.html'), 403
 
-###### FACTORY ##
 def create_app():
-    """ Application factory: Assembles and returns clones of your app """
-    # Flask init
-    app = Flask(__name__) # most of the work done right here. Thanks, Flask!
-    app.config.from_object('settings') # load my settings which pull from .env
-    ''' 
-    FLASK EXTENTIONS
-    '''
-    db.init_app(app) # load my database extension
-    from .models import User, Role, Post, Buzz, UserAdmin, BaseAdmin # not db tables
-    user_datastore = SQLAlchemySessionUserDatastore(db.session, User, Role)
-    # load my security extension
-    security.init_app(app, user_datastore, confirm_register_form=ExtendedRegisterForm)
-    mail.init_app(app) # load my mail extensioin 
+   """
+   Application factory function that creates and configures a Flask application instance.
 
-    # load my writing tool extension 
-    migrate.init_app(app, db, compare_type=True) # load database updater tool
-    moment.init_app(app) # time formatting
-    jwt.init_app(app)   
+   The factory pattern adds flexibility to the application by allowing us to create 
+   multiple instances with different configurations. This is especially useful for testing
+   and handling different deployment environments (development, production, etc).
 
-    admin.init_app(app)
-    # FLASKINNI'S BASE OBJECTS
-    admin.add_view(UserAdmin(User, db.session, endpoint='user_admin', menu_icon_type='fa', menu_icon_value='fa-user-circle'))
-    admin.add_view(BaseAdmin(Post, db.session, endpoint='post_admin', menu_icon_type='fa', menu_icon_value='fa-file-text')) 
-    # don't really need admin views of these objects
-    # admin.add_view(BaseAdmin(Role, db.session))
-    # admin.add_view(BaseAdmin(Buzz, db.session))
-    # TODO: Add your models below so you can manage data from Flask-Admin's convenient tools
+   Credit to Miguel Grinberg and his Flask Mega-Tutorial for teaching me this pattern:
+   https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
 
-    # TODO: Setup sentry.io!
-    # sentry_sdk.init(dsn="", integrations=[FlaskIntegration()])
-    
-    # activate the flaskinni blueprint (blog, user settings, and other basic routes)
-    from .base import base_blueprint
-    app.register_blueprint(base_blueprint)
+   Returns:
+       Flask: A configured Flask application instance
+   """
+   # Flask init
+   app = Flask(__name__)
+   app.config.from_object('settings')
 
-    # activate API blueprint: https://stackoverflow.com/questions/38448618/using-flask-restful-as-a-blueprint-in-large-application
-    from .api import api_blueprint, add_resources   
+   # Initialize Supabase
+   supabase: Client = create_client(
+       app.config['SUPABASE_URL'],
+       app.config['SUPABASE_KEY']
+   )
+   app.supabase = supabase
 
-    restful = Api(api_blueprint, prefix="/api/v1") 
-    add_resources(restful)
-    app.register_blueprint(api_blueprint) # registering the blueprint effectively runs init_app on the restful extension
+   # Initialize Flask extensions
+   db.init_app(app)
+   from .models import User, Role, Post, Buzz  
 
-    # Callback function to check if a JWT exists in the redis blocklist
-    @jwt.token_in_blocklist_loader
-    def check_if_token_is_revoked(jwt_header, jwt_payload):
-        jti = jwt_payload["jti"]
-        return models.RevokedTokenModel.is_jti_blocklisted(jti)
+   # Initialize Flask-Login
+   login_manager = LoginManager()
+   login_manager.init_app(app)
+   login_manager.login_view = 'base.login'
+   login_manager.login_message = 'Please log in to access this page.'
 
-    # --- NEW BLUEPRINTS GO BELOW THIS LINE ---
-    # TODO: Add your own blueprint 
+   @login_manager.user_loader
+   def load_user(user_id):
+       return db.session.get(User, int(user_id))  # Updated to SQLAlchemy 2.0 style
 
-    # custom error handlers, these call the functions at the top of the file
-    app.register_error_handler(500, crash_page)
-    app.register_error_handler(404, page_not_found)
-    app.register_error_handler(403, page_forbidden)
+   # Initialize Flask-Principal
+   principals = Principal(app)
+   
+   @identity_loaded.connect_via(app)
+   def on_identity_loaded(sender, identity):
+       # Set the identity user object
+       identity.user = current_user
 
+       # Add the UserNeed to the identity
+       if hasattr(current_user, 'id'):
+           identity.provides.add(UserNeed(current_user.id))
 
-    # Executes before the first request is processed.
-    with app.app_context():
-        """ 
-        Before the first run, we assure the database is built and 
-        admin access is secure.  
-        """
+       # Add each role to the identity
+       if hasattr(current_user, 'roles'):
+           for role in current_user.roles:
+               identity.provides.add(RoleNeed(role.name))
 
-        # Create any database tables that don't exist yet.
-        db.create_all()
+   # Initialize other extensions
+   mail.init_app(app)
+   migrate.init_app(app, db, compare_type=True)
+   moment.init_app(app)
 
-        # Create the Roles "admin" and "end-user" -- unless they already exist
-        user_datastore.find_or_create_role(name='admin', description='Administrator')
-        user_datastore.find_or_create_role(name='end-user', description='End user')
+   # Register blueprints
+   from .base import base_blueprint
+   app.register_blueprint(base_blueprint)
 
-        # Create two Users for testing purposes -- unless they already exists.
-        # In each case, use Flask-Security utility function to encrypt the password.
-        encrypted_password = utils.hash_password(app.config['STARTING_ADMIN_PASS'])
+   from .api import api_blueprint, add_resources
+   restful = Api(api_blueprint, prefix="/api/v1")
+   add_resources(restful)
+   app.register_blueprint(api_blueprint)
 
-        for email in app.config['STARTING_ADMINS']:
-            if not user_datastore.find_user(email=email):
-                user_datastore.create_user(email=email, password=encrypted_password)
+   # Register error handlers
+   app.register_error_handler(500, crash_page)
+   app.register_error_handler(404, page_not_found)
+   app.register_error_handler(403, page_forbidden)
+
+   # Initialize database and roles
+   with app.app_context():
+       # Create tables if they don't exist
+       db.create_all()
+
+       # Create or update RLS policies in Supabase
+       # TODO: Add Supabase RLS policy setup here
        
+       # Create default roles and admin user
+       def init_db():
+           # Create default roles if they don't exist
+           admin_role = Role.get_or_create('admin', 'Administrator')
+           user_role = Role.get_or_create('end-user', 'End user')
+           
+           # Create admin users from config
+           for email in app.config['STARTING_ADMINS']:
+               user = User.query.filter_by(email=email).first()
+               if not user:
+                   user = User(username=email.split('@')[0], 
+                             email=email)
+                   user.set_password(app.config['STARTING_ADMIN_PASS'])
+                   db.session.add(user)
+                   # Also create user in Supabase
+                   try:
+                       supabase_user = supabase.auth.admin.create_user({
+                           'email': email,
+                           'password': app.config['STARTING_ADMIN_PASS'],
+                           'email_confirm': True
+                       })
+                       user.supabase_uid = supabase_user.id
+                   except Exception as e:
+                       app.logger.error(f'Failed to create Supabase user: {e}')
+                   
+                   user.roles.append(admin_role)
+               
+           db.session.commit()
 
-        # Commit any database changes; the User and Roles must exist before we can add a Role to the User
-        db.session.commit()
+       init_db()
 
-        for email in app.config['STARTING_ADMINS']:
-            confirmed_admin = user_datastore.find_user(email=email)
-            confirmed_admin.confirmed_at = datetime.utcnow()
-            user_datastore.add_role_to_user(confirmed_admin, 'admin')
+   @app.before_request
+   def before_request():
+       if current_user.is_authenticated:
+           first_time = True if not current_user.last_seen else False
+           if current_user.last_seen is None or \
+              datetime.now(timezone.utc) - current_user.last_seen > timedelta(hours=1):
+               current_user.last_seen = datetime.now(timezone.utc)
+               db.session.commit()
 
-        db.session.commit()
-
-        
-    @app.before_request
-    def before_request():
-        """ What we do before every single handled request """
-        if current_user.is_authenticated:
-            first_time = True if not current_user.last_seen else False
-            # TODO: Redirect first time users to a welcome page? 
-            if current_user.last_seen is None or datetime.utcnow() - current_user.last_seen > timedelta(hours=1):
-                current_user.last_seen = datetime.utcnow()
-                db.session.commit()
-
-    return app
-
-
+   return app

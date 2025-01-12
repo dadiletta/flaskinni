@@ -1,43 +1,14 @@
 version: '3.9'
 services:
-  db:
-    container_name: flaskinni_db_1
-    image: "postgres:latest"
-    restart: always
-    volumes:
-      - ${DB_STORAGE}:/var/lib/postgresql/data
-    networks:
-      - db_nw
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
     ports:
-      - '5432:5432'
-  
-  flaskapp:
-    container_name: flaskinni_app_1
-    build: .
-    restart: always
+      - "5000:5000"
     volumes:
-      - ${FLASKAPP_DIR}:/app/flaskinni
+      - .:/app
     env_file:
-      - ${ENV_FILE}
-    networks:
-      - db_nw
-    depends_on:
-      - db
-    ports:
-      - "80:80"
-networks:
-  db_nw:
-volumes:
-  db_storage:
-
-    
-
-networks:
-  db_nw:
-    driver: bridge
-volumes:
-  db_storage:
+      - .env
+    environment:
+      - FLASK_DEBUG=1

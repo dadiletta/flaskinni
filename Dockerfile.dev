@@ -10,10 +10,17 @@ RUN apt-get update && apt-get install -y \
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn
 
 # Copy application code
 COPY . .
 
+# Set environment variables
+ENV FLASK_APP=main.py
+ENV FLASK_ENV=development
+ENV PYTHONUNBUFFERED=1
+
+# Expose port
+EXPOSE 5000
+
 # Command to run the application
-CMD gunicorn main:app
+CMD ["flask", "run", "--host=0.0.0.0"]

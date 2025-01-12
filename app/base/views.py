@@ -80,15 +80,6 @@ def profile(user_id):
     else:
         flash("UNAUTHORIZED ACCESS", "danger")
         return redirect(url_for('base.index'))
-
-@app.route('/superadmin')
-@roles_required('admin')
-def superadmin():
-    data = {}
-    data['users'] = User.query.all()
-    data['buzz'] = Buzz.query.order_by(Buzz.created_on.desc()).limit(50).all()
-    data['buzz_form'] = BuzzForm()
-    return render_template('base/superadmin.html', data=data)
   
 @app.route('/contact', methods=('GET', 'POST'))
 def contact():
