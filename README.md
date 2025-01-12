@@ -25,6 +25,7 @@ This is your friendly neighborhood Flask starter kit, now turbocharged with Supa
 - [ ] Modern Frontend
   - [ ] Add Preact for interactive components
   - [ ] Update blog templates (keeping index.html classic Jinja2)
+  - [ ] Explore image upload CDNs with free tiers
 - [ ] Developer Experience
   - [ ] Add Glitch IDE support
   - [ ] Generate auto documentation

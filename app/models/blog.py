@@ -20,7 +20,7 @@ tags_posts = db.Table(
 )
 
 class Post(db.Model):
-   """Blog post model with Supabase sync capabilities."""
+   """Blog post model with tags and image upload."""
    __tablename__ = 'post'
    
    id = db.Column(db.Integer, primary_key=True)
@@ -48,78 +48,6 @@ class Post(db.Model):
        backref=db.backref('posts', lazy='dynamic')
    )
 
-   @classmethod
-   def create(cls, supabase, user_id: int, title: str, body: str, **kwargs) -> 'Post':
-       """Create new post in both Supabase and local DB."""
-       try:
-           # Generate slug
-           base_slug = slugify(title)
-           slug = base_slug
-           counter = 1
-           while db.session.scalar(sa.select(Post).where(Post.slug == slug)):
-               slug = f"{base_slug}-{counter}"
-               counter += 1
-
-           # Create in Supabase
-           post_data = {
-               "user_id": user_id,
-               "title": title,
-               "body": body,
-               "slug": slug,
-               "status": kwargs.get('status', 'draft'),
-               "created_at": datetime.now(timezone.utc).isoformat(),
-               **kwargs
-           }
-           
-           supabase.table("posts").insert(post_data).execute()
-           
-           # Create local post
-           post = cls(
-               user_id=user_id,
-               title=title,
-               body=body,
-               slug=slug,
-               subtitle=kwargs.get('subtitle'),
-               image=kwargs.get('image'),
-               status=kwargs.get('status', 'draft'),
-               published_at=kwargs.get('published_at')
-           )
-           
-           # Handle tags
-           if 'tags' in kwargs:
-               post.tags = [Tag.get_or_create(name) for name in kwargs['tags']]
-           
-           db.session.add(post)
-           db.session.commit()
-           
-           return post
-       except Exception as e:
-           db.session.rollback()
-           current_app.logger.error(f"Post creation failed: {str(e)}")
-           raise
-
-   def update(self, supabase, **kwargs) -> 'Post':
-       """Update post in both Supabase and local DB."""
-       try:
-           # Update Supabase
-           update_data = {k: v for k, v in kwargs.items() if hasattr(self, k)}
-           supabase.table("posts").update(update_data).eq("id", self.id).execute()
-           
-           # Update local post
-           for key, value in kwargs.items():
-               if hasattr(self, key):
-                   if key == 'tags':
-                       self.tags = [Tag.get_or_create(name) for name in value]
-                   else:
-                       setattr(self, key, value)
-           
-           db.session.commit()
-           return self
-       except Exception as e:
-           db.session.rollback()
-           current_app.logger.error(f"Post update failed: {str(e)}")
-           raise
-
    def publish(self, supabase) -> 'Post':
        """Publish post."""
        now = datetime.now(timezone.utc)
@@ -135,18 +63,6 @@ class Post(db.Model):
            supabase,
            status='archived'
        )
-
-   def delete(self, supabase) -> bool:
-       """Delete post from both Supabase and local DB."""
-       try:
-           supabase.table("posts").delete().eq("id", self.id).execute()
-           db.session.delete(self)
-           db.session.commit()
-           return True
-       except Exception as e:
-           db.session.rollback()
-           current_app.logger.error(f"Post deletion failed: {str(e)}")
-           raise
 
    @property
    def img(self) -> Optional[str]:
@@ -194,27 +110,6 @@ class Tag(db.Model):
            db.session.add(tag)
            db.session.commit()
        return tag
-
-   @classmethod
-   def sync_from_supabase(cls, supabase) -> List['Tag']:
-       """Sync all tags from Supabase."""
-       try:
-           response = supabase.table("tags").select("*").execute()
-           for tag_data in response.data:
-               tag = cls.query.filter_by(name=tag_data['name']).first()
-               if not tag:
-                   tag = cls(
-                       name=tag_data['name'],
-                       slug=tag_data['slug'],
-                       description=tag_data.get('description')
-                   )
-                   db.session.add(tag)
-           db.session.commit()
-           return cls.query.all()
-       except Exception as e:
-           db.session.rollback()
-           current_app.logger.error(f"Tag sync failed: {str(e)}")
-           raise
 
    def __repr__(self):
        return self.name

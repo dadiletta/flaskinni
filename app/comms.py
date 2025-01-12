@@ -4,7 +4,7 @@ Communications Utility Functions
 """
 from flask import current_app, render_template, url_for
 from flask_mail import Message as FlaskMessage
-from flask_security import current_user
+from flask_login import current_user
 from werkzeug.local import LocalProxy
 
 from .models import Buzz

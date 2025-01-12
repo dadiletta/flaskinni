@@ -10,7 +10,7 @@ The basic routes at the core of the app, including:
 
 # library imports
 from flask import render_template, redirect, flash, url_for, session, request, current_app, send_from_directory, abort
-from flask_security import auth_required, login_required, roles_required, current_user
+from flask_login import auth_required, login_required, roles_required, current_user
 from werkzeug.utils import secure_filename
 from flask_mail import Message
 from slugify import slugify
@@ -266,6 +266,7 @@ def validate_image(stream):
         return None
     return '.' + (format if format != 'jpeg' else 'jpg')
 
+# TODO: move this to a CDN service like Cloudinary
 def avatar_upload(user, file, **kwargs):
     """upload's a file to a user's folder"""
     path = f"{current_app.root_path}/static/uploads/avatars/{ current_user.id }" # notice how I pass the user ID? That's cause we need the right folder
