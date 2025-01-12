@@ -32,13 +32,6 @@ class Role(db.Model):
     def __hash__(self):
         return hash(self.name)
 
-    @classmethod
-    def get_or_create(cls, name: str, description: str = '') -> 'Role':
-        role = cls.query.filter_by(name=name).first()
-        if not role:
-            role = cls(name=name, description=description)
-            db.session.add(role)
-        return role
 
 class User(db.Model, UserMixin):
     """
