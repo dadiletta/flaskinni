@@ -31,3 +31,29 @@
     </div>
 
 {% endmacro %}
+
+{% macro render_field_with_errors(field, row=False) %}
+  <div class="form-group {% if row %} row{% endif %}">
+    {{ field(**kwargs)|safe }}
+    {% if field.errors %}
+      <ul>
+      {% for error in field.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+
+{% macro render_switch(field, label) %}
+  <div class="custom-control custom-switch">
+    {{ field(class="custom-control-input", **kwargs)|safe }}
+    <label class="custom-control-label" for="{{ field.id }}">{{ label }}</label>
+  </div>
+{% endmacro %}
+
+
+{% macro render_field(field) %}
+  <p>{{ field(**kwargs)|safe }}</p>
+{% endmacro %}
