@@ -17,6 +17,19 @@ def tags():
     """Query factory for all available tags."""
     return Tag.query
 
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('New Password', validators=[validators.DataRequired(), validators.Length(min=8)])
+    password2 = PasswordField('Repeat Password', 
+        validators=[validators.DataRequired(), validators.EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField('Current Password', validators=[validators.DataRequired()])
+    password = PasswordField('New Password', validators=[validators.DataRequired(), validators.Length(min=8)])
+    password2 = PasswordField('Repeat New Password', 
+        validators=[validators.DataRequired(), validators.EqualTo('password')])
+    submit = SubmitField('Change Password')
+    
 class LoginForm(FlaskForm):
     """User login form."""
     username = StringField('Username', validators=[validators.DataRequired()])

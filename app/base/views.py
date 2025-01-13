@@ -10,7 +10,7 @@ The basic routes at the core of the app, including:
 
 # library imports
 from flask import render_template, redirect, flash, url_for, session, request, current_app, send_from_directory, abort
-from flask_login import auth_required, login_required, roles_required, current_user
+from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from flask_mail import Message
 from slugify import slugify
@@ -21,6 +21,7 @@ import os, imghdr
 from . import base_blueprint as app # renamed to "app" so the blueprint layer fades to the background
 from .. import db, mail, comms
 from .forms import PostForm, ContactForm, SettingsForm, BuzzForm
+from .decorators import roles_required
 from ..models import Post, Tag, User, Buzz
 
 
@@ -34,7 +35,7 @@ def index():
 
 @app.route('/settings', methods=('GET', 'POST'))
 @app.route('/settings.html', methods=('GET', 'POST'))
-@auth_required()
+@login_required
 def settings():
     form = SettingsForm(obj=current_user)
     if form.validate_on_submit():
@@ -224,27 +225,6 @@ def delete_post(post_id):
     db.session.commit()
     flash("Article deleted", 'success')
     return redirect(url_for('base.index'))
-
-#################
-## HANDLER METHODS
-## They don't render templates, just do an action and redirect
-#################
-@app.route('/create/buzz', methods=['POST'])
-@roles_required('admin')
-def create_buzz():
-    form = BuzzForm()
-    if form.validate_on_submit:
-        buzz = Buzz()
-        form.populate_obj(buzz)
-        buzz.user_id = current_user.id
-        db.session.add(buzz)
-        db.session.commit()
-        comms.log_buzz(form.title.data, form.body.data)
-        flash("Buzz successfully created", "success")
-    else:
-        flash(f"Buzz form failed: {form.errors}", "danger")
-    return redirect(url_for('base.superadmin'))
-
 
 #################
 ## HELPER METHODS

@@ -16,21 +16,30 @@ ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", 'flaskinni@gmail.com')
 STARTING_ADMINS = os.environ.get("STARTING_ADMINS", [])
 STARTING_ADMIN_PASS = os.environ["STARTING_ADMIN_PASS"]
 UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
+SUPABASE_URL = os.environ.get("SUPABASE_URL", 'https://xxxxxx.supabase.co')
+SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 
 ###################
 ##  SQLALCHEMY
 ###################
 POSTGRES = {
-    'user': os.environ.get("DB_USERNAME", 'postgres'),
-    'pw': os.environ.get("DB_PASSWORD", ""),  # Default to empty string
-    'db': os.environ.get("DATABASE_NAME", 'postgres'),  # Default to 'postgres' for Supabase
-    'host': os.environ.get("DB_HOST", 'localhost'),  # Default to localhost for development
-    'port': os.environ.get("DB_PORT", '5432')
+    'user': os.environ.get("DB_USERNAME"),
+    'pw': os.environ.get("DB_PASSWORD"),
+    'db': 'postgres',
+    'host': os.environ.get("DB_HOST"),
+    'port': os.environ.get("DB_PORT")
 }
-SQLALCHEMY_DATABASE_URI = os.environ.get(
-    "DATABASE_URL",
-    'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-)
+
+SQLALCHEMY_DATABASE_URI = 'postgresql://%(user)s:%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
+SQLALCHEMY_ENGINE_OPTIONS = {
+    'pool_pre_ping': True,
+    'pool_size': 5,
+    'max_overflow': 10,
+    'connect_args': {
+        'sslmode': 'require'
+    }
+}
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 DEBUG_TB_INTERCEPT_REDIRECTS = False

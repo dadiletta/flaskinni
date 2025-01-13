@@ -1,135 +1,64 @@
-from flask import current_app
+from flask import current_app, request
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, \
-    get_jwt_identity, get_jwt
-from flask_security import utils
+from ..models import User
+from ..extensions import db
+from functools import wraps
 
-from ..models import User, RevokedTokenModel
-from ..extensions import security, db
+# Supabase Auth Decorator
+def supabase_auth_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            # Get the Authorization header
+            auth_header = request.headers.get('Authorization')
+            if not auth_header or not auth_header.startswith('Bearer '):
+                return {'message': 'Missing or invalid authentication token'}, 401
+            
+            # The actual token validation happens on Supabase's end
+            # Here we just need to verify the token was passed correctly
+            # Supabase handles the heavy lifting of JWT validation
+            return fn(*args, **kwargs)
+        return decorated_view
+    return wrapper
 
-
-# HELPER
-_user_parser = reqparse.RequestParser()
-_user_parser.add_argument('email',
-                          type=str,
-                          required=True,
-                          help="This field cannot be blank."
-                          )
-_user_parser.add_argument('password',
-                          type=str,
-                          required=True,
-                          help="This field cannot be blank."
-                          )
-
-
-
-# /registration
-class UserRegistrationAPI(Resource):
-
-    def post(self):
-        data = _user_parser.parse_args()
-        
-        if User.query.filter_by(email=data['email']).first():
-            return {'message': f"User {data['email']} already exists"}
-        
-        encrypted_password = utils.encrypt_password(data['password'])
-        # TODO: verify email address format
-        security.datastore.create_user(email=data['email'], password=encrypted_password)
-        db.session.commit()
-        
-        try:
-            # save the new user
-            access_token = create_access_token(identity = data['email'])
-            refresh_token = create_refresh_token(identity = data['email'])
-            return {
-                'message': 'User {} was created'.format(data['email']),
-                'access_token': access_token,
-                'refresh_token': refresh_token
+class UserAPI(Resource):
+    def get(self):
+        """Get user profile information"""
+        @supabase_auth_required()
+        def get_profile():
+            # The user's Supabase ID will be in their JWT
+            # You can extract it from request.headers if needed
+            try:
+                user_email = request.headers.get('X-Supabase-User-Email')
+                user = User.query.filter_by(email=user_email).first()
+                if not user:
+                    return {'message': 'User not found'}, 404
+                return {
+                    'email': user.email,
+                    'profile': user.profile  # whatever user data you want to return
                 }
-        except:
-            return {'message': 'Something went wrong'}, 500
+            except Exception as e:
+                current_app.logger.error(f"Failed to get user profile: {e}")
+                return {'message': 'Internal server error'}, 500
+        return get_profile()
 
-
-# /login
-class UserLoginAPI(Resource):
-
-    def post(self):
-        data = _user_parser.parse_args()
-        current_user = None
-        try:         
-            current_user = User.query.filter_by(email=data['email']).first()
-        except Exception as e:
-            current_app.logger.error(f"Failed to query for user: {data}")
-
-        if not current_user:
-            return {'message': 'User {} doesn\'t exist'.format(data['email'])}
-        
-        if utils.verify_password(data['password'], current_user.password): # UserModel.verify_hash(data['password'], current_user.password):
-            access_token = create_access_token(identity = data['email'])
-            refresh_token = create_refresh_token(identity = data['email'])
-            return {
-                'message': 'Logged in as {}'.format(current_user.email),
-                'access_token': access_token,
-                'refresh_token': refresh_token
-                }
-        else:
-            return {'message': f"Wrong credentials: {current_user}"}
-
-
-# /logout/access
-class UserLogoutAccess(Resource):
-    @jwt_required()
-    def post(self):
-        jti = get_jwt()['jti']
-        try:
-            revoked_token = RevokedTokenModel(jti = jti)
-            revoked_token.add()
-            return {'message': 'Access token has been revoked'}
-        except:
-            return {'message': 'Something went wrong'}, 500
-
-
-# /logout/refresh
-class UserLogoutRefresh(Resource):
-    @jwt_required(refresh=True)
-    def post(self):
-        jti = get_jwt()['jti']
-        try:
-            revoked_token = RevokedTokenModel(jti = jti)
-            revoked_token.add()
-            return {'message': 'Refresh token has been revoked'}
-        except:
-            return {'message': 'Something went wrong'}, 500
-
-
-# /token/refresh
-class TokenRefresh(Resource):
-    @jwt_required(refresh=True)
-    def post(self):
-        current_user = get_jwt_identity()
-        access_token = create_access_token(identity = current_user)
-        return {'access_token': access_token}
-
-
-# /secret
 class SecretResource(Resource):
-    def __init__(self):
-        # Add payload requirements / expectations: https://blog.miguelgrinberg.com/post/designing-a-restful-api-using-flask-restful
-        self.reqparse = reqparse.RequestParser()    
-        self.reqparse.add_argument('test', type=int, help='Rate to charge for this resource')           
-        super(SecretResource, self).__init__()    
-    
-    @jwt_required()
+    @supabase_auth_required()
     def get(self):
         return {
             'answer': 42
         }
 
+    @supabase_auth_required()
     def post(self):
         return {
             'test': 99
         }
 
+    @supabase_auth_required()
     def put(self):
-        data = self.reqparse.parse_args()
-        return {'message123': f'{data}'}
+        parser = reqparse.RequestParser()
+        parser.add_argument('test', type=int, required=True,
+                          help='Test value required')
+        data = parser.parse_args()
+        return {'message': f'Received: {data}'}

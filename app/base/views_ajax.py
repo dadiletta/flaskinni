@@ -4,10 +4,9 @@ AJAX Endpoints
 These are methods that handle AJAX request and don't return a rendered template
 """
 from flask import url_for, session, request, current_app, jsonify
-
-
 from datetime import datetime, timezone
 from flask_login import login_required, current_user
+
 from ..extensions import db, moment
 from . import base_blueprint as app
 from .forms import BuzzForm

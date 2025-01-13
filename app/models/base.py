@@ -14,9 +14,10 @@ import humanize
 
 roles_users = db.Table(
     'roles_users',
-    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+    db.Column('user_id', db.UUID(), db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
 )
+
 
 class Role(db.Model):
     """Role model for user permissions."""
@@ -26,12 +27,32 @@ class Role(db.Model):
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
+    @classmethod
+    def get_or_create(cls, name, description=None):
+        """
+        Get an existing role or create it if it doesn't exist.
+        
+        Args:
+            name (str): The name of the role
+            description (str, optional): Description of the role
+        
+        Returns:
+            tuple: (role, created) where role is the Role instance and 
+                  created is a boolean indicating if a new role was created
+        """
+        role = cls.query.filter_by(name=name).first()
+        if role is None:
+            role = cls(name=name, description=description)
+            db.session.add(role)
+            db.session.commit()
+            return role, True
+        return role, False
+
     def __str__(self):
         return self.name
 
     def __hash__(self):
         return hash(self.name)
-
 
 class User(db.Model, UserMixin):
     """
@@ -40,7 +61,7 @@ class User(db.Model, UserMixin):
     """
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.UUID, primary_key=True)  # This matches Supabase's UUID
     email = db.Column(db.String(255), unique=True, nullable=False)
     first_name = db.Column(db.String(155))
     last_name = db.Column(db.String(155))
@@ -59,7 +80,8 @@ class User(db.Model, UserMixin):
     last_seen = db.Column(db.DateTime(timezone=True))
 
     # Relationships
-    posts = db.relationship('Post', backref='user', lazy='dynamic')
+    posts = db.relationship('Post', backref='user', lazy='dynamic', 
+                       primaryjoin="User.id == Post.user_id")
     roles = db.relationship(
         'Role',
         secondary=roles_users,
@@ -105,7 +127,7 @@ class Buzz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     
     # Foreign Keys
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    user_id = db.Column(db.UUID(), db.ForeignKey('user.id'), nullable=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
     
     # Properties
@@ -114,10 +136,7 @@ class Buzz(db.Model):
     event_type = db.Column(db.String(50))
     created_at = db.Column(db.DateTime(timezone=True), 
                           default=lambda: datetime.now(timezone.utc))
-    
-    # Additional metadata stored as JSON
-    metadata = db.Column(db.JSON)
-    
+
     # Relationships
     user = db.relationship('User', backref=db.backref('buzzes', lazy='dynamic'))
     post = db.relationship('Post', backref=db.backref('buzzes', lazy='dynamic'))
@@ -150,14 +169,6 @@ class Buzz(db.Model):
             .order_by(Buzz.created_at.desc())
             .limit(limit)
         ).all()
-
-    def generate_link(self) -> str:
-        """Generate relevant link based on event type and associated objects."""
-        if self.event_type == 'user_event' and self.user_id:
-            return url_for('base.profile', user_id=self.user_id)
-        elif self.event_type == 'post_event' and self.post_id:
-            return url_for('base.post', post_id=self.post_id)
-        return "#"
 
     @property
     def when(self) -> str:
