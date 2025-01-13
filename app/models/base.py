@@ -7,7 +7,7 @@ User model with Supabase integration for auth and data operations.
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 from flask import url_for, current_app
-from flask_login import UserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 import sqlalchemy as sa
 from .. import db
 import humanize
@@ -54,6 +54,7 @@ class Role(db.Model):
     def __hash__(self):
         return hash(self.name)
 
+
 class User(db.Model, UserMixin):
     """
     User model that maps to both local database and Supabase auth.
@@ -87,6 +88,45 @@ class User(db.Model, UserMixin):
         secondary=roles_users,
         backref=db.backref('users', lazy='dynamic')
     )
+
+    @classmethod
+    def create_with_auth(cls, email: str, password: str = None, **kwargs) -> 'User':
+        """
+        Creates a user both in Supabase Auth and local database.
+        
+        Args:
+            email: User's email address
+            password: Optional password for the user. If not provided, Supabase 
+                     will send a magic link
+            **kwargs: Additional fields for the local User model
+        
+        Returns:
+            User: The created user instance
+            
+        Raises:
+            Exception: If Supabase auth creation fails
+        """
+        # First create the auth user in Supabase
+        try:
+            auth_user = current_app.supabase.auth.admin.create_user({
+                'email': email,
+                'password': password,
+                'email_confirm': True
+            })
+        except Exception as e:
+            current_app.logger.error(f"Failed to create Supabase auth user: {e}")
+            raise
+
+        # create our local user with Supabase's UUID
+        user = cls(
+            id=auth_user.user.id,  
+            email=email,
+            created_at=datetime.now(timezone.utc),
+            **kwargs
+        )
+        
+        db.session.add(user)
+        return user
 
     @classmethod
     def get_by_email(cls, email: str) -> Optional['User']:
@@ -192,3 +232,4 @@ class Buzz(db.Model):
 
     def __repr__(self):
         return f'<Buzz {self.event_type}: {self.title}>'
+    

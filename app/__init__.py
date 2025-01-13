@@ -13,6 +13,7 @@ from supabase import create_client, Client
 
 from .extensions import db, mail, migrate, moment, principal
 from .base.forms import LoginForm, RegistrationForm
+from .utils import Anonymous
 
 # relay for logger
 logger = LocalProxy(lambda: current_app.logger)
@@ -49,10 +50,15 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object('settings')
 
+        # print markers for easy reading
+    print("###################")
+    print("###################")
+    print(f"SQLALCHEMY_DATABASE_URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+
     # Initialize Supabase
     supabase: Client = create_client(
         app.config['SUPABASE_URL'],
-        app.config['SUPABASE_KEY']
+        app.config['SUPABASE_SERVICE_KEY']
     )
     app.supabase = supabase
 
@@ -68,6 +74,7 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'base.login'
     login_manager.login_message = 'Please log in to access this page.'
+    login_manager.anonymous_user = Anonymous
 
 
     # Initialize database and roles
@@ -95,28 +102,18 @@ def create_app():
             if email:
                 user = User.query.filter_by(email=email).first()
                 if not user:
-                    # Create the user in our application's user table
-                    user = User(
-                        email=email,
-                        active=True,
-                        created_at=datetime.now(timezone.utc)
-                    )
-                    db.session.add(user)
-                    user.roles.append(admin_role)
-
-                    # You'll need to use Supabase client to set up their auth
                     try:
-                        auth_user = supabase.auth.admin.create_user({
-                            'email': email,
-                            'password': app.config['STARTING_ADMIN_PASS'],
-                            'email_confirm': True
-                        })
-                        user.supabase_uid = auth_user.user.id
+                        user = User.create_with_auth(
+                            email=email,
+                            password=app.config['STARTING_ADMIN_PASS'],
+                            active=True
+                        )
+                        user.roles.append(admin_role)
                     except Exception as e:
-                        app.logger.error(f"Failed to create Supabase auth user: {e}")
+                        app.logger.error(f"Failed to create admin user {email}: {e}")
+                        db.session.rollback()
                         continue
 
-            
         db.session.commit()
 
 

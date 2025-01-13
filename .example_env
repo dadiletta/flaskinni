@@ -1,0 +1,64 @@
+###################
+##  FLASK 
+###################
+FLASK_ENV=development
+FLASK_APP=main
+DEBUG=True
+SECRET_KEY='my-gitbook-explains-how-to-generate-a-decent-secret-key'
+PASSWORD_SALT='my-gitbook-explains-how-to-generate-a-decent-secret-key'
+
+###################
+##  FLASKINNI  
+###################
+# list of emails separated by commas
+STARTING_ADMINS='admin@example.com'
+STARTING_ADMIN_PASS='flaskinni' 
+MAX_CONTENT_LENGTH=2048 * 2048
+UPLOAD_EXTENSIONS=['.jpg', '.png', '.gif']
+
+###################
+##  SUPABASE
+###################
+SUPABASE_URL='https://[PROJECT_REF].supabase.co'
+SUPABASE_ANON_KEY='[LONG_KEY_PROVIDED_BY_SUPABASE]'
+SUPABASE_SERVICE_KEY='[LONG_KEY_PROVIDED_BY_SUPABASE]'
+
+###################
+##  SQLAlchemy 
+###################
+DB_HOST=postgres.[PROJECT_REF]
+DB_PASSWORD='you-set-it-up-during-project-config-on-supabase'
+DB_PORT=5432
+DB_NAME=postgres
+SQLALCHEMY_TRACK_MODIFICATIONS=False
+
+###################
+##  EMAIL SETUP 
+###################
+# Development: Use Mailtrap.io for testing emails
+# 1. Sign up for free at mailtrap.io
+# 2. Go to your inbox settings
+# 3. Copy the SMTP credentials
+MAIL_SERVER='smtp.mailtrap.io'
+MAIL_PORT=2525
+MAIL_USE_TLS=True
+MAIL_USE_SSL=False
+MAIL_USERNAME='your-mailtrap-username'
+MAIL_PASSWORD='your-mailtrap-password'
+
+# Production: Recommended to use Resend.com
+# - Free tier includes 100 emails/day, 3000/month
+# MAIL_SERVER='smtp.resend.com'
+# MAIL_PORT=587
+# MAIL_USE_TLS=True
+# MAIL_USE_SSL=False
+# MAIL_USERNAME='resend'
+# MAIL_PASSWORD='your-resend-api-key'
+MAIL_DEFAULT_SENDER='noreply@yourdomain.com'
+
+###################
+##  DOCKER
+###################
+# Local development settings
+COMPOSE_PROJECT_NAME=flaskinni
+DOCKER_BUILDKIT=1

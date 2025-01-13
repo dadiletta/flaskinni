@@ -17,7 +17,8 @@ STARTING_ADMINS = os.environ.get("STARTING_ADMINS", [])
 STARTING_ADMIN_PASS = os.environ["STARTING_ADMIN_PASS"]
 UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
 SUPABASE_URL = os.environ.get("SUPABASE_URL", 'https://xxxxxx.supabase.co')
-SUPABASE_KEY = os.environ["SUPABASE_KEY"]
+SUPABASE_ANON_KEY = os.environ["SUPABASE_ANON_KEY"]
+SUPABASE_SERVICE_KEY = os.environ["SUPABASE_SERVICE_KEY"]
 
 ###################
 ##  SQLALCHEMY
@@ -25,7 +26,7 @@ SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 POSTGRES = {
     'user': os.environ.get("DB_USERNAME"),
     'pw': os.environ.get("DB_PASSWORD"),
-    'db': 'postgres',
+    'db': os.environ.get("DB_NAME"),
     'host': os.environ.get("DB_HOST"),
     'port': os.environ.get("DB_PORT")
 }

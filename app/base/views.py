@@ -30,7 +30,7 @@ from ..models import Post, Tag, User, Buzz
 def index():
     """ Renders and returns the home page """
     data = {} 
-    data['posts'] = Post.query.order_by(Post.publish_date.desc()).all()
+    data['posts'] = Post.query.order_by(Post.published_at.desc()).all()
     return render_template('base/index.html', data=data)
 
 @app.route('/settings', methods=('GET', 'POST'))
