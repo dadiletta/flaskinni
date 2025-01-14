@@ -100,27 +100,12 @@ def contact():
         return redirect(url_for('index'))
     return render_template('base/contact.html', form=form)
 
-@app.route('/view/<template>')
-def route_template(template):
-    """
-    This is a pretty boss way to flexibly render any simple HTML file
-    https://github.com/app-generator/boilerplate-code-flask-dashboard/blob/master/app/home/routes.py
-    """
-    try:
-        if not template.endswith( '.html' ):
-            template += '.html'
 
-        if 'reset_instructions' in template:
-            return render_template( f"base/email/{template}" )
-        return render_template( f"base/{template}" )
-
-    except TemplateNotFound:
-        return render_template('base/404.html'), 404
-    
-    except Exception as e:
-        current_app.logger.error(f'Failed to render template: {e}')
-        return render_template('base/500.html'), 500
-        
+@app.route('/admin', methods=('GET', 'POST'))
+@roles_required('admin')
+def admin():
+    data = {}
+    return render_template('base/admin.html', data=data)   
 
 ###################
 ####  POST
@@ -229,6 +214,27 @@ def delete_post(post_id):
 #################
 ## HELPER METHODS
 #################
+@app.route('/view/<template>')
+def route_template(template):
+    """
+    This is a pretty boss way to flexibly render any simple HTML file
+    https://github.com/app-generator/boilerplate-code-flask-dashboard/blob/master/app/home/routes.py
+    """
+    try:
+        if not template.endswith( '.html' ):
+            template += '.html'
+
+        if 'reset_instructions' in template:
+            return render_template( f"base/email/{template}" )
+        return render_template( f"base/{template}" )
+
+    except TemplateNotFound:
+        return render_template('base/404.html'), 404
+    
+    except Exception as e:
+        current_app.logger.error(f'Failed to render template: {e}')
+        return render_template('base/500.html'), 500
+
 @app.route('/files/<int:user_id>/<path:filename>')
 def uploaded_files(user_id, filename):
     """Function to serve up files"""

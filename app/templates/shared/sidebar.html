@@ -23,9 +23,9 @@
     {% if current_user.has_role('admin') %}
     <!-- Nav Item - Dashboard -->
     <li class="nav-item" id="superadmin-link">
-        <a class="nav-link" href="{{ url_for('base.superadmin') }}">
+        <a class="nav-link" href="{{ url_for('base.admin') }}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Super Admin</span></a>
+        <span>Admin</span></a>
     </li>
     {% endif %}
 

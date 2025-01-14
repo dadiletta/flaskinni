@@ -13,8 +13,8 @@
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
 		<h1 class="h3 mb-0 text-gray-800">Super Admin</h1>
-			<a target="_blank" href="{{ url_for('admin.index') }}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
-				<i class="fas fa-rocket fa-sm text-white-50"></i>  Flask-Admin
+			<a target="_blank" href="{{ url_for('base.admin') }}" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm">
+				<i class="fas fa-rocket fa-sm text-white-50"></i>  Admin
 			</a>
 	</div>
 
@@ -91,7 +91,7 @@
 										Action
 									</button>
 									<div class="dropdown-menu" aria-labelledby="{{ user.id }}-user-action">
-										<a href="{{ url_for('user_admin.edit_view', id=user.id, url=url_for('base.superadmin')) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit User</a>
+										<a href="" class="dropdown-item"><i class="icon-pencil"></i> Edit User</a>
 										<a href=""  class="dropdown-item delete"><i class="icon-trash"></i> Delete User</a>
 									</div>
 								</div>
