@@ -111,7 +111,7 @@ def route_template(template):
             template += '.html'
 
         if 'reset_instructions' in template:
-            return render_template( f"security/email/{template}" )
+            return render_template( f"base/email/{template}" )
         return render_template( f"base/{template}" )
 
     except TemplateNotFound:

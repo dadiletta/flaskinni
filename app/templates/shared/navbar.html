@@ -21,7 +21,7 @@
         </a>
         <!-- Dropdown - Alerts -->
         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-            {% include "security/_messages.html" %}
+            {% include "shared/_messages.html" %}
         </div>
         </li>
 
@@ -61,19 +61,19 @@
             Activity Log
             </a>
             {% else %}
-            <a class="dropdown-item" href="{{ url_for_security('register') }}">
+            <a class="dropdown-item" href="{{ url_for('base.register') }}">
             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
             Register
             </a>
             {% endif %}
             <div class="dropdown-divider"></div>
             {% if current_user.is_authenticated %}
-            <a class="dropdown-item" href="{{ url_for_security('logout') }}">
+            <a class="dropdown-item" href="{{ url_for('base.logout') }}">
             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
             Logout
             </a>
             {% else %}
-            <a class="dropdown-item" href="{{ url_for_security('login') }}">
+            <a class="dropdown-item" href="{{ url_for('base.login') }}">
             <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
             Login
             </a>                

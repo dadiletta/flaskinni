@@ -7,7 +7,7 @@
 
 {% block body_classes %}bg-gradient-primary{% endblock %}
 
-{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% from "shared/_macros.html" import render_field_with_errors, render_field %}
 
 {% block content %}
 
@@ -30,11 +30,11 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Login</h1>
                   </div>
-                  <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form" class="user login-form">
-                    {{ login_user_form.hidden_tag() }}
-                    {{ render_field_with_errors(login_user_form.email, class="form-control form-control-user", placeholder="Email")}}
-                    {{ render_field_with_errors(login_user_form.password, class="form-control form-control-user", placeholder="Password")}}
-                    {{ render_field(login_user_form.next) }}
+                  <form action="{{ url_for('base.login') }}" method="POST" name="login_user_form" class="user login-form">
+                    {{ form.hidden_tag() }}
+                    {{ render_field_with_errors(form.email, class="form-control form-control-user", placeholder="Email")}}
+                    {{ render_field_with_errors(form.password, class="form-control form-control-user", placeholder="Password")}}
+                    {{ render_field(form.next) }}
                     <button type="submit" class="btn btn-primary btn-user btn-block">
                       Login
                     </button>
@@ -45,10 +45,10 @@
                   </form>
                   <hr>
                   <div class="text-center">
-                    <a class="small" href="{{ url_for_security('forgot_password') }}">Forgot Password?</a>
+                    <a class="small" href="{{ url_for('base.forgot_password') }}">Forgot Password?</a>
                   </div>
                   <div class="text-center">
-                    <a class="small" href="{{ url_for_security('register') }}">Create an Account</a>
+                    <a class="small" href="{{ url_for('base.register') }}">Create an Account</a>
                   </div>
                 </div>
               </div>

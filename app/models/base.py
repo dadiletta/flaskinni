@@ -12,6 +12,7 @@ import sqlalchemy as sa
 from .. import db
 import humanize
 
+
 roles_users = db.Table(
     'roles_users',
     db.Column('user_id', db.UUID(), db.ForeignKey('user.id')),

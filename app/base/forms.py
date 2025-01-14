@@ -1,3 +1,4 @@
+# app/base/forms.py
 """
 Base Forms
 ================
@@ -17,11 +18,19 @@ def tags():
     """Query factory for all available tags."""
     return Tag.query
 
+
+# SUBMIT HELP FORM: send email for password or resend confirmation
+class SubmitHelpForm(FlaskForm):
+    email = EmailField('Email', validators=[validators.DataRequired(), validators.Email()])
+    submit = SubmitField('Submit')
+    
+    
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('New Password', validators=[validators.DataRequired(), validators.Length(min=8)])
     password2 = PasswordField('Repeat Password', 
         validators=[validators.DataRequired(), validators.EqualTo('password')])
     submit = SubmitField('Reset Password')
+
 
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField('Current Password', validators=[validators.DataRequired()])
@@ -30,12 +39,15 @@ class ChangePasswordForm(FlaskForm):
         validators=[validators.DataRequired(), validators.EqualTo('password')])
     submit = SubmitField('Change Password')
     
+
 class LoginForm(FlaskForm):
     """User login form."""
-    username = StringField('Username', validators=[validators.DataRequired()])
+    email = StringField('Email', validators=[validators.DataRequired()])
     password = PasswordField('Password', validators=[validators.DataRequired()])
     remember_me = BooleanField('Remember Me')
+    next = StringField('Next')
     submit = SubmitField('Sign In')
+
 
 class RegistrationForm(FlaskForm):
     """User registration form with custom validation."""
@@ -65,6 +77,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise validators.ValidationError('Please use a different email address.')
 
+
 class PostForm(FlaskForm):
     """Blog post creation/editing form."""
     image = FileField('Image', validators=[
@@ -84,6 +97,7 @@ class PostForm(FlaskForm):
                                   validators=[validators.DataRequired()])
     new_tag = StringField('New Tag')
 
+
 class ContactForm(FlaskForm):
     """Contact form with custom name length validation."""
     def check_name_length(form, field):
@@ -98,6 +112,7 @@ class ContactForm(FlaskForm):
     message = TextAreaField('Your message:', [validators.DataRequired()])
     submit = SubmitField('Send Message')
 
+
 class SettingsForm(FlaskForm):
     """User settings form."""
     first_name = StringField('First name', [validators.DataRequired()])
@@ -109,6 +124,7 @@ class SettingsForm(FlaskForm):
         FileAllowed(['jpg', 'png'], 'Images only!')
     ])
     public_profile = BooleanField('Public profile')
+
 
 class BuzzForm(FlaskForm):
     """Simple form for creating buzz objects."""

@@ -6,13 +6,12 @@ the app factory pattern.
 from datetime import datetime, timedelta, timezone
 from flask import Flask, render_template, make_response, jsonify, request, current_app
 from flask_login import LoginManager, current_user
-from flask_principal import Principal, identity_loaded, UserNeed, RoleNeed
+from flask_principal import identity_loaded, UserNeed, RoleNeed
 from werkzeug.local import LocalProxy
 from flask_restful import Api
 from supabase import create_client, Client
 
 from .extensions import db, mail, migrate, moment, principal
-from .base.forms import LoginForm, RegistrationForm
 from .utils import Anonymous
 
 # relay for logger
@@ -49,11 +48,6 @@ def create_app():
     # Flask init
     app = Flask(__name__)
     app.config.from_object('settings')
-
-        # print markers for easy reading
-    print("###################")
-    print("###################")
-    print(f"SQLALCHEMY_DATABASE_URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     # Initialize Supabase
     supabase: Client = create_client(

@@ -1,3 +1,4 @@
+# app/base/views_login.py
 """
 Authentication Routes
 ===================
@@ -11,16 +12,15 @@ from flask import (
     session, request, current_app
     )
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.urls import url_parse
+from urllib.parse import urlparse as url_parse
 
 from . import base_blueprint as app
 from .. import db
 from .forms import (
-    LoginForm, RegistrationForm, ForgotPasswordForm,
-    ResetPasswordForm, ChangePasswordForm, ResendConfirmationForm
+    LoginForm, RegistrationForm, SubmitHelpForm,
+    ResetPasswordForm, ChangePasswordForm
     )
 from ..models import User, Buzz
-from ..utils import send_email
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -75,7 +75,7 @@ def login():
             current_app.logger.error(f"Login error: {e}")
             flash('Invalid email or password', 'danger')
             
-    return render_template('security/login_user.html', title='Sign In', form=form)
+    return render_template('base/login/login_user.html', title='Sign In', form=form)
 
 @app.route('/logout')
 def logout():
@@ -144,7 +144,7 @@ def register():
             flash('Registration failed. This email may already be registered.', 'danger')
             db.session.rollback()
             
-    return render_template('security/register_user.html', title='Register', form=form)
+    return render_template('base/login/register_user.html', title='Register', form=form)
 
 @app.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
@@ -152,7 +152,7 @@ def forgot_password():
     if current_user.is_authenticated:
         return redirect(url_for('base.index'))
         
-    form = ForgotPasswordForm()
+    form = SubmitHelpForm()
     if form.validate_on_submit():
         try:
             # Request password reset through Supabase
@@ -164,7 +164,7 @@ def forgot_password():
             current_app.logger.error(f"Password reset request failed: {e}")
             flash('Error sending reset instructions. Please try again.', 'danger')
             
-    return render_template('security/forgot_password.html', 
+    return render_template('base/login/forgot_password.html', 
                          title='Reset Password', form=form)
 
 @app.route('/reset-password/<token>', methods=['GET', 'POST'])
@@ -189,7 +189,7 @@ def reset_password(token):
             current_app.logger.error(f"Password reset failed: {e}")
             flash('Invalid or expired reset link. Please try again.', 'danger')
             
-    return render_template('security/reset_password.html', 
+    return render_template('base/login/reset_password.html', 
                          title='Reset Password', form=form)
 
 @app.route('/change-password', methods=['GET', 'POST'])
@@ -227,7 +227,7 @@ def change_password():
             current_app.logger.error(f"Password change failed: {e}")
             flash('Current password is incorrect or new password is invalid.', 'danger')
             
-    return render_template('security/change_password.html', 
+    return render_template('base/login/change_password.html', 
                          title='Change Password', form=form)
 
 @app.route('/resend-confirmation', methods=['GET', 'POST'])
@@ -236,7 +236,7 @@ def resend_confirmation():
     if current_user.is_authenticated:
         return redirect(url_for('base.index'))
         
-    form = ResendConfirmationForm()
+    form = SubmitHelpForm()
     if form.validate_on_submit():
         try:
             # Resend verification email through Supabase
@@ -251,5 +251,5 @@ def resend_confirmation():
             current_app.logger.error(f"Resend confirmation failed: {e}")
             flash('Error sending confirmation email. Please try again.', 'danger')
             
-    return render_template('security/send_confirmation.html', 
+    return render_template('base/login/send_confirmation.html', 
                          title='Resend Confirmation', form=form)

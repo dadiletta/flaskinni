@@ -3,7 +3,7 @@
 ###################
 FLASK_ENV=development
 FLASK_APP=main
-DEBUG=True
+FLASK_DEBUG=1
 SECRET_KEY='my-gitbook-explains-how-to-generate-a-decent-secret-key'
 PASSWORD_SALT='my-gitbook-explains-how-to-generate-a-decent-secret-key'
 
@@ -26,11 +26,11 @@ SUPABASE_SERVICE_KEY='[LONG_KEY_PROVIDED_BY_SUPABASE]'
 ###################
 ##  SQLAlchemy 
 ###################
-DB_HOST=postgres.[PROJECT_REF]
+DB_USERNAME=postgres.[PROJECT_REF]
 DB_PASSWORD='you-set-it-up-during-project-config-on-supabase'
-DB_PORT=5432
+DB_HOST=postgres.[PROJECT_REF]
 DB_NAME=postgres
-SQLALCHEMY_TRACK_MODIFICATIONS=False
+DB_PORT=5432
 
 ###################
 ##  EMAIL SETUP 
